@@ -1,36 +1,83 @@
-# SOS Service
-# Handles emergency blood request logic
+# =========================
+# TEMPORARY SOS DATA
+# =========================
+
+sos_requests = []
 
 
-def create_sos_request(request):
-    """Create a new SOS request."""
-    return request
+# =========================
+# CREATE SOS REQUEST
+# =========================
 
+def create_sos(data: dict):
 
-def get_sos_request(request_id):
-    """Get SOS request by ID."""
-    return {"request_id": request_id}
+    new_id = len(sos_requests) + 1
 
-
-def find_matching_blood_groups(blood_group):
-    """Find compatible blood groups for an SOS request."""
-
-    compatibility = {
-        "O-": ["O-"],
-        "O+": ["O-", "O+"],
-        "A-": ["O-", "A-"],
-        "A+": ["O-", "O+", "A-", "A+"],
-        "B-": ["O-", "B-"],
-        "B+": ["O-", "O+", "B-", "B+"],
-        "AB-": ["O-", "A-", "B-", "AB-"],
-        "AB+": ["O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+"]
+    sos = {
+        "sos_id": new_id,
+        "patient_name": data["patient_name"],
+        "blood_group": data["blood_group"],
+        "units": data["units"],
+        "urgency": data["urgency"],
+        "hospital": data["hospital"],
+        "city": data["city"],
+        "contact_name": data["contact_name"],
+        "contact_phone": data["contact_phone"],
+        "notes": data.get("notes"),
+        "status": "open"
     }
 
-    return compatibility.get(blood_group, [])
+    sos_requests.append(sos)
+
+    return sos
 
 
-def update_sos_status(request, status):
-    """Update SOS request status."""
+# =========================
+# GET ALL SOS REQUESTS
+# =========================
 
-    request["status"] = status
-    return request
+def get_sos_requests():
+
+    return sos_requests
+
+
+# =========================
+# GET SINGLE SOS REQUEST
+# =========================
+
+def get_sos(sos_id: int):
+
+    for sos in sos_requests:
+
+        if sos["sos_id"] == sos_id:
+            return sos
+
+    raise ValueError("SOS request not found")
+
+
+# =========================
+# UPDATE SOS STATUS
+# =========================
+
+def update_sos_status(
+    sos_id: int,
+    status: str
+):
+
+    allowed_statuses = [
+        "open",
+        "fulfilled",
+        "cancelled"
+    ]
+
+    if status not in allowed_statuses:
+        raise ValueError(
+            "Invalid SOS status. "
+            "Use: open, fulfilled or cancelled"
+        )
+
+    sos = get_sos(sos_id)
+
+    sos["status"] = status
+
+    return sos

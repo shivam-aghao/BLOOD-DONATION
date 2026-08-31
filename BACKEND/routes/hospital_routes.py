@@ -1,11 +1,15 @@
 from fastapi import APIRouter, HTTPException
 
-from schemas.hospital_schema import HospitalCreate, HospitalUpdate
+from schemas.hospital_schema import (
+    HospitalCreate,
+    HospitalUpdate
+)
+
 from services.hospital_service import (
-    add_hospital,
+    get_hospitals,
     get_hospital,
-    update_hospital,
-    get_all_hospitals
+    create_hospital,
+    update_hospital
 )
 
 
@@ -15,31 +19,43 @@ router = APIRouter(
 )
 
 
-@router.post("/")
-def create_hospital(hospital: HospitalCreate):
-
-    return add_hospital(hospital.model_dump())
-
-
 @router.get("/")
-def hospitals():
-
-    return get_all_hospitals()
+def list_hospitals():
+    return get_hospitals()
 
 
 @router.get("/{hospital_id}")
-def hospital(hospital_id: int):
+def get_hospital_details(hospital_id: int):
+    try:
+        return get_hospital(hospital_id)
 
-    return get_hospital(hospital_id)
+    except ValueError as error:
+        raise HTTPException(
+            status_code=404,
+            detail=str(error)
+        )
+
+
+@router.post("/")
+def register_hospital(data: HospitalCreate):
+    return create_hospital(
+        data.model_dump()
+    )
 
 
 @router.put("/{hospital_id}")
-def edit_hospital(
+def update_hospital_details(
     hospital_id: int,
-    hospital: HospitalUpdate
+    data: HospitalUpdate
 ):
+    try:
+        return update_hospital(
+            hospital_id,
+            data.model_dump()
+        )
 
-    return update_hospital(
-        hospital_id,
-        hospital.model_dump()
-    )
+    except ValueError as error:
+        raise HTTPException(
+            status_code=404,
+            detail=str(error)
+        )

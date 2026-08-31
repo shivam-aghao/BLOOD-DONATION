@@ -1,14 +1,13 @@
 from fastapi import APIRouter, HTTPException
 
 from schemas.inventory_schema import (
-    InventoryUpdate,
-    RestockRequest
+    InventoryUpdate
 )
 
 from services.inventory_service import (
-    update_stock,
-    restock_all,
-    get_total_stock
+    get_inventory,
+    get_stock,
+    update_inventory
 )
 
 
@@ -18,16 +17,36 @@ router = APIRouter(
 )
 
 
-@router.put("/update")
-def update_inventory(data: InventoryUpdate):
+@router.get("/{hospital_id}")
+def hospital_inventory(hospital_id: int):
+    return get_inventory(hospital_id)
 
-    inventory = {
-        data.blood_group: data.units
-    }
 
+@router.get("/{hospital_id}/{blood_group}")
+def blood_stock(
+    hospital_id: int,
+    blood_group: str
+):
     try:
-        return update_stock(
-            inventory,
+        return get_stock(
+            hospital_id,
+            blood_group
+        )
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=404,
+            detail=str(error)
+        )
+
+
+@router.put("/")
+def update_blood_inventory(
+    data: InventoryUpdate
+):
+    try:
+        return update_inventory(
+            data.hospital_id,
             data.blood_group,
             data.units
         )
@@ -37,31 +56,3 @@ def update_inventory(data: InventoryUpdate):
             status_code=400,
             detail=str(error)
         )
-
-
-@router.post("/restock")
-def restock_inventory(data: RestockRequest):
-
-    inventory = {
-        "A+": 0,
-        "A-": 0,
-        "B+": 0,
-        "B-": 0,
-        "AB+": 0,
-        "AB-": 0,
-        "O+": 0,
-        "O-": 0
-    }
-
-    return restock_all(
-        inventory,
-        data.amount
-    )
-
-
-@router.post("/total")
-def total_inventory(inventory: dict):
-
-    return {
-        "total_stock": get_total_stock(inventory)
-    }

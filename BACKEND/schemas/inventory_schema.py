@@ -2,11 +2,12 @@ from pydantic import BaseModel, Field
 
 
 class InventoryUpdate(BaseModel):
-    hospital_id: int
-    blood_group: str
-    units: int = Field(ge=0)
+    hospital_id: int = Field(..., description="Hospital ID")
+    blood_group: str = Field(..., description="Blood group e.g. A+, O-, B+")
+    units: int = Field(..., ge=0, description="Available blood units")
 
 
-class RestockRequest(BaseModel):
-    hospital_id: int
-    amount: int = Field(default=5, ge=1)
+class InventoryCreate(BaseModel):
+    hospital_id: int = Field(..., description="Hospital ID")
+    blood_group: str = Field(..., description="Blood group e.g. A+, O-, B+")
+    units: int = Field(..., ge=0, description="Available blood units")
