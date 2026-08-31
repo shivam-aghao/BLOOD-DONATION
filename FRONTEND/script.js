@@ -1,11 +1,23 @@
 /**
  * ===================================================================
  * BloodConnect - Full Functional Client-Side Application
+ * With Supabase & FastAPI Integration
  * ===================================================================
  */
 
 (function () {
   'use strict';
+
+  // ==========================================
+  // 0. API & SUPABASE CONFIGURATION
+  // ==========================================
+  
+  // Supabase Configuration
+  const SUPABASE_URL = 'https://uojujyjhoaxermhxkwqu.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVvanVqeWpob2F4ZXJtaHhrd3F1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxNjIzNjMsImV4cCI6MjEwMzczODM2M30.sJNjJ38RI3O2eE29LwVkUVnEu7WAd3hAiOWQrwJht7E';
+  
+  // FastAPI Backend URL
+  const API_BASE_URL = 'http://127.0.0.1:8000';
 
   // ==========================================
   // 1. DATA STORAGE & SEED INITIALIZATION
@@ -15,7 +27,8 @@
     DONORS: 'bc_donors_data',
     SOS_REQUESTS: 'bc_sos_requests',
     BOOKINGS: 'bc_patient_bookings',
-    CURRENT_HOSPITAL: 'bc_active_hospital_id'
+    CURRENT_HOSPITAL: 'bc_active_hospital_id',
+    USE_API: 'bc_use_api' // Flag to switch between local and API
   };
 
   const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -64,7 +77,7 @@
     }
   };
 
-  // Seed Hospitals
+  // Seed Hospitals (Local fallback)
   const DEFAULT_HOSPITALS = [
     {
       id: 'hosp-1',
@@ -284,7 +297,7 @@
       contactPhone: '+1 (212) 555-0199',
       notes: 'Emergency vascular trauma surgery in Room 304. Immediate donor matching needed.',
       status: 'open',
-      createdAt: new Date(Date.now() - 45 * 60 * 1000).toISOString() // 45m ago
+      createdAt: new Date(Date.now() - 45 * 60 * 1000).toISOString()
     },
     {
       id: 'SOS-1048',
@@ -298,7 +311,7 @@
       contactPhone: '+1 (718) 555-9876',
       notes: 'Scheduled bypass operation requiring B- buffer stock.',
       status: 'open',
-      createdAt: new Date(Date.now() - 3 * 3600 * 1000).toISOString() // 3h ago
+      createdAt: new Date(Date.now() - 3 * 3600 * 1000).toISOString()
     },
     {
       id: 'SOS-1045',
@@ -312,7 +325,7 @@
       contactPhone: '+1 (312) 555-3321',
       notes: 'Post-chemotherapy transfusion needed before tomorrow noon.',
       status: 'open',
-      createdAt: new Date(Date.now() - 8 * 3600 * 1000).toISOString() // 8h ago
+      createdAt: new Date(Date.now() - 8 * 3600 * 1000).toISOString()
     },
     {
       id: 'SOS-1040',
@@ -330,9 +343,94 @@
     }
   ];
 
-  // Storage Helpers
-  function getStored(key, fallback) {
+  // ==========================================
+  // 1.1 API INTEGRATION FUNCTIONS
+  // ==========================================
+  
+  const useApi = localStorage.getItem(STORAGE_KEYS.USE_API) === 'true' || false;
+
+  // Hospital API Functions
+  async function fetchHospitalsFromAPI() {
     try {
+      const response = await fetch(`${API_BASE_URL}/hospitals/`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const hospitals = await response.json();
+      return hospitals;
+    } catch (error) {
+      console.error('Error fetching hospitals from API:', error);
+      return null;
+    }
+  }
+
+  async function createHospitalInAPI(hospitalData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/hospitals/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: hospitalData.name,
+          city: hospitalData.city,
+          address: hospitalData.address,
+          contact: hospitalData.contact,
+          email: hospitalData.email,
+          hours: hospitalData.operatingHours || '24/7 Emergency Blood Bank'
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('Error creating hospital in API:', error);
+      return null;
+    }
+  }
+
+  async function updateHospitalInAPI(hospitalId, hospitalData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/hospitals/${hospitalId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: hospitalData.name,
+          city: hospitalData.city,
+          address: hospitalData.address,
+          contact: hospitalData.contact,
+          email: hospitalData.email,
+          hours: hospitalData.operatingHours || '24/7 Emergency Blood Bank'
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('Error updating hospital in API:', error);
+      return null;
+    }
+  }
+
+  // Storage Helpers (with API sync)
+  async function getStored(key, fallback) {
+    try {
+      // If using API, fetch from backend first
+      if (key === STORAGE_KEYS.HOSPITALS && useApi) {
+        const apiData = await fetchHospitalsFromAPI();
+        if (apiData) {
+          return apiData;
+        }
+      }
+      
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : fallback;
     } catch (e) {
@@ -377,11 +475,34 @@
     ]);
   }
 
-  let hospitals = getStored(STORAGE_KEYS.HOSPITALS, DEFAULT_HOSPITALS);
+  // Initialize with API or localStorage
+  let hospitals = [];
   let donors = getStored(STORAGE_KEYS.DONORS, DEFAULT_DONORS);
   let sosRequests = getStored(STORAGE_KEYS.SOS_REQUESTS, DEFAULT_SOS);
   let patientBookings = getStored(STORAGE_KEYS.BOOKINGS, []);
-  let activeHospitalId = getStored(STORAGE_KEYS.CURRENT_HOSPITAL, hospitals[0]?.id || 'hosp-1');
+  let activeHospitalId = getStored(STORAGE_KEYS.CURRENT_HOSPITAL, 'hosp-1');
+
+  // Load hospitals (async)
+  async function loadHospitals() {
+    if (useApi) {
+      const apiHospitals = await fetchHospitalsFromAPI();
+      if (apiHospitals) {
+        // Map API response to match our data structure
+        hospitals = apiHospitals.map(h => ({
+          ...h,
+          id: String(h.id),
+          operatingHours: h.hours || '24/7',
+          inventory: h.inventory || {
+            'A+': 10, 'A-': 5, 'B+': 8, 'B-': 3,
+            'AB+': 4, 'AB-': 2, 'O+': 15, 'O-': 4
+          }
+        }));
+        setStored(STORAGE_KEYS.HOSPITALS, hospitals);
+        return;
+      }
+    }
+    hospitals = getStored(STORAGE_KEYS.HOSPITALS, DEFAULT_HOSPITALS);
+  }
 
   // ==========================================
   // 2. UI UTILITIES (TOASTS, FORMATTERS, STATUS)
@@ -529,7 +650,7 @@
   // ==========================================
   // 5. PAGE 1: FIND BLOOD & SEARCH SYSTEM
   // ==========================================
-  let currentSearchTab = 'hospitals'; // 'hospitals' or 'donors'
+  let currentSearchTab = 'hospitals';
 
   const tabHospitalsBtn = document.getElementById('tabHospitalsBtn');
   const tabDonorsBtn = document.getElementById('tabDonorsBtn');
@@ -1056,18 +1177,31 @@
   // Hospital Profile Form Update
   const hospitalInfoForm = document.getElementById('hospitalInfoForm');
   if (hospitalInfoForm) {
-    hospitalInfoForm.addEventListener('submit', function (e) {
+    hospitalInfoForm.addEventListener('submit', async function (e) {
       e.preventDefault();
       const currentHosp = hospitals.find(h => h.id === activeHospitalId);
       if (!currentHosp) return;
 
-      currentHosp.name = document.getElementById('hospName').value.trim();
-      currentHosp.city = document.getElementById('hospCity').value.trim();
-      currentHosp.address = document.getElementById('hospAddress').value.trim();
-      currentHosp.contact = document.getElementById('hospContact').value.trim();
-      currentHosp.email = document.getElementById('hospEmail').value.trim();
-      currentHosp.operatingHours = document.getElementById('hospHours').value.trim();
+      const updatedData = {
+        name: document.getElementById('hospName').value.trim(),
+        city: document.getElementById('hospCity').value.trim(),
+        address: document.getElementById('hospAddress').value.trim(),
+        contact: document.getElementById('hospContact').value.trim(),
+        email: document.getElementById('hospEmail').value.trim(),
+        operatingHours: document.getElementById('hospHours').value.trim()
+      };
+
+      // Update local data
+      Object.assign(currentHosp, updatedData);
       currentHosp.lastUpdated = new Date().toISOString();
+
+      // Sync with API if enabled
+      if (useApi && currentHosp.id && !isNaN(currentHosp.id)) {
+        const apiResult = await updateHospitalInAPI(currentHosp.id, updatedData);
+        if (apiResult) {
+          showToast('Hospital profile synced with API!', 'success');
+        }
+      }
 
       setStored(STORAGE_KEYS.HOSPITALS, hospitals);
       renderHospitalDashboard();
@@ -1367,7 +1501,7 @@
   if (cancelAddHospBtn) cancelAddHospBtn.addEventListener('click', closeAddHospitalModal);
 
   if (addHospitalForm) {
-    addHospitalForm.addEventListener('submit', function (e) {
+    addHospitalForm.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const name = document.getElementById('newHospName').value.trim();
@@ -1393,6 +1527,15 @@
         inventory: initialInventory,
         lastUpdated: new Date().toISOString()
       };
+
+      // Try to create via API first
+      if (useApi) {
+        const apiResult = await createHospitalInAPI(newHospital);
+        if (apiResult) {
+          newHospital.id = String(apiResult.id || newHospital.id);
+          showToast(`Hospital "${name}" created in API!`, 'success');
+        }
+      }
 
       hospitals.push(newHospital);
       setStored(STORAGE_KEYS.HOSPITALS, hospitals);
@@ -1585,13 +1728,25 @@
       } else {
         prompt('Copy SOS alert text below:', shareText);
       }
+    },
+
+    // API Toggle
+    toggleApiMode() {
+      const current = localStorage.getItem(STORAGE_KEYS.USE_API) === 'true';
+      localStorage.setItem(STORAGE_KEYS.USE_API, String(!current));
+      showToast(`API Mode ${!current ? 'Enabled' : 'Disabled'} - Reload to apply`, 'info');
+      setTimeout(() => location.reload(), 1000);
     }
   };
 
   // ==========================================
   // 12. BOOTSTRAP APPLICATION
   // ==========================================
-  function initApp() {
+  async function initApp() {
+    // Load hospitals first
+    await loadHospitals();
+    
+    // Update UI
     updateHeroStats();
     initCompatibilityWidget();
     performSearch();
@@ -1600,6 +1755,13 @@
     // Default Seed Donor Card init
     if (donors.length > 0) {
       updateDonorCardDisplay(donors[0]);
+    }
+
+    // Add API status indicator to UI
+    const apiStatus = document.getElementById('apiStatus');
+    if (apiStatus) {
+      apiStatus.textContent = useApi ? '🔗 API Connected' : '📦 Local Storage';
+      apiStatus.style.color = useApi ? '#10B981' : '#F59E0B';
     }
 
     // Default start page
