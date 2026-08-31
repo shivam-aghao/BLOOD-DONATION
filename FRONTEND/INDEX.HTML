@@ -2,23 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BloodConnect | Shegaon · Akola · Maharashtra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BloodConnect | Donate & Find Blood</title>
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- style.css is kept but content is replaced with local data; no JS/CSS changes -->
-   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ========== TOAST CONTAINER ========== -->
+<!-- ========== TOAST NOTIFICATION CONTAINER ========== -->
 <div id="toastContainer" class="toast-container"></div>
 
 <!-- ========== NAVBAR ========== -->
 <nav class="navbar">
   <div class="container">
     <div class="logo" role="button" data-page="find" style="cursor:pointer;">
-      <i class="fas fa-droplet"></i> BloodConnect · Shegaon
+      <i class="fas fa-droplet"></i> BloodConnect
     </div>
     <div class="hamburger" id="hamburger" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></div>
     <div class="nav-links" id="navLinks">
@@ -36,19 +35,19 @@
 <section class="hero">
   <div class="container hero-grid">
     <div class="hero-text">
-      <div class="hero-badge"><i class="fas fa-shield-heart"></i> Shegaon · Akola · Verified Network</div>
-      <h1>Every Drop Counts. <br /><span>Shegaon Cares.</span></h1>
-      <p>Connect patients in Shegaon, Akola, and nearby towns with verified hospital blood banks and voluntary donors in real time.</p>
+      <div class="hero-badge"><i class="fas fa-shield-heart"></i> Verified Medical Network</div>
+      <h1>Every Drop Counts. <br /><span>Every Donation Saves a Life.</span></h1>
+      <p>Connect patients in urgent need with verified hospital blood banks and voluntary donors in real time.</p>
       <div class="cta-group">
         <button class="btn-primary" data-page="find"><i class="fas fa-search"></i> Find Blood Now</button>
         <button class="btn-emergency" id="heroEmergencyBtn"><i class="fas fa-truck-medical"></i> Post SOS Request</button>
         <button class="btn-outline" data-page="donor"><i class="fas fa-hand-holding-heart"></i> Become a Donor</button>
       </div>
       <div class="hero-stats">
-        <div class="stat-item"><h3 id="statDonors">420+</h3><p>Registered Donors</p></div>
-        <div class="stat-item"><h3 id="statHospitals">6</h3><p>Partner Hospitals</p></div>
-        <div class="stat-item"><h3 id="statUnits">95+</h3><p>Units in Stock</p></div>
-        <div class="stat-item"><h3 id="statLives">180+</h3><p>Lives Supported</p></div>
+        <div class="stat-item"><h3 id="statDonors">12,400+</h3><p>Registered Donors</p></div>
+        <div class="stat-item"><h3 id="statHospitals">68</h3><p>Partner Hospitals</p></div>
+        <div class="stat-item"><h3 id="statUnits">840+</h3><p>Units in Stock</p></div>
+        <div class="stat-item"><h3 id="statLives">2,100+</h3><p>Lives Supported</p></div>
       </div>
     </div>
     <div class="hero-visual">
@@ -72,8 +71,8 @@
   <section id="page-find" class="page">
     <div class="page-header">
       <div>
-        <h2 class="section-title"><i class="fas fa-search-location" style="color:var(--primary-red);"></i> Find Blood & Donors in Shegaon · Akola</h2>
-        <p class="section-desc">Search real‑time stock across local hospital blood banks and voluntary donors from Shegaon, Akola, Khamgaon, and nearby areas.</p>
+        <h2 class="section-title"><i class="fas fa-search-location" style="color:var(--primary-red);"></i> Find Blood & Donors Near You</h2>
+        <p class="section-desc">Search real-time stock across hospital blood banks and voluntary donors.</p>
       </div>
       <button class="emergency-btn" id="openEmergencyModalBtn"><i class="fas fa-phone-volume"></i> Request Emergency Blood (SOS)</button>
     </div>
@@ -95,7 +94,7 @@
       </div>
       <div class="field">
         <label for="cityInput"><i class="fas fa-location-dot"></i> City / Region</label>
-        <input type="text" id="cityInput" placeholder="e.g. Shegaon, Akola, Khamgaon, or 'All'" value="Shegaon">
+        <input type="text" id="cityInput" placeholder="e.g. New York, Brooklyn, Chicago, or 'All'" value="All">
       </div>
       <div class="field compatibility-checkbox">
         <label class="checkbox-label" title="Show blood groups that are medically safe to receive">
@@ -130,7 +129,7 @@
 
     <!-- Results Container -->
     <div id="resultsContainer" class="results-grid">
-      <!-- dynamically populated with Shegaon/Akola data -->
+      <!-- dynamically populated -->
     </div>
 
     <!-- Interactive Blood Compatibility Tool -->
@@ -161,8 +160,8 @@
   <section id="page-emergency" class="page hidden">
     <div class="page-header">
       <div>
-        <h2 class="section-title"><i class="fas fa-bullhorn" style="color:var(--primary-red);"></i> Urgent SOS Blood Requests – Shegaon & Akola</h2>
-        <p class="section-desc">Critical, real‑time blood needs submitted by local families and partner hospitals.</p>
+        <h2 class="section-title"><i class="fas fa-bullhorn" style="color:var(--primary-red);"></i> Urgent SOS Blood Requests</h2>
+        <p class="section-desc">Critical, real-time blood needs submitted by families and partner hospitals.</p>
       </div>
       <button class="btn-emergency" id="pageSosBtn"><i class="fas fa-plus-circle"></i> Create New SOS Request</button>
     </div>
@@ -179,7 +178,7 @@
 
     <!-- Emergency Cards Grid -->
     <div id="emergencyFeedContainer" class="emergency-feed-grid">
-      <!-- dynamically populated with Shegaon/Akola SOS -->
+      <!-- dynamically populated -->
     </div>
   </section>
 
@@ -187,8 +186,8 @@
   <section id="page-dashboard" class="page hidden">
     <div class="dashboard-header">
       <div>
-        <h2 class="section-title"><i class="fas fa-hospital" style="color:var(--primary-red);"></i> Hospital Blood Inventory – Shegaon · Akola</h2>
-        <p class="section-desc">Manage local blood reserves, update real‑time availability, and fulfill incoming patient requests.</p>
+        <h2 class="section-title"><i class="fas fa-hospital" style="color:var(--primary-red);"></i> Hospital Blood Inventory Portal</h2>
+        <p class="section-desc">Manage blood reserves, update real-time availability, and fulfill incoming patient requests.</p>
       </div>
       <div class="dashboard-actions">
         <button class="btn-outline" id="addNewHospitalBtn"><i class="fas fa-plus"></i> Add New Hospital</button>
@@ -201,7 +200,7 @@
       <div class="field" style="max-width:340px;flex:1;">
         <label for="hospitalSelect"><i class="fas fa-building"></i> Select Hospital / Blood Bank</label>
         <select id="hospitalSelect">
-          <!-- Populated from storage (Shegaon/Akola hospitals) -->
+          <!-- Populated from storage -->
         </select>
       </div>
       <div class="quick-stock-actions">
@@ -270,8 +269,8 @@
   <!-- ===== PAGE 4: DONOR REGISTRATION ===== -->
   <section id="page-donor" class="page hidden">
     <div class="donor-hero-intro">
-      <h2>Become a Lifesaver ❤️ – Shegaon · Akola</h2>
-      <p>Register as a voluntary blood donor in the Shegaon–Akola region. One donation can save up to three lives.</p>
+      <h2>Become a Lifesaver ❤️</h2>
+      <p>Register as a voluntary blood donor. One donation can save up to three lives.</p>
     </div>
 
     <div class="donor-layout">
@@ -282,11 +281,11 @@
           <div class="form-row">
             <div>
               <label for="dFullName">Full Name *</label>
-              <input type="text" placeholder="e.g. Rajesh Patil" id="dFullName" required>
+              <input type="text" placeholder="e.g. Sarah Jenkins" id="dFullName" required>
             </div>
             <div>
               <label for="dAge">Age (Years) * <span class="input-hint">(18 - 65)</span></label>
-              <input type="number" placeholder="32" id="dAge" min="18" max="65" required>
+              <input type="number" placeholder="28" id="dAge" min="18" max="65" required>
             </div>
           </div>
           <div class="form-row">
@@ -317,21 +316,21 @@
           <div class="form-row">
             <div>
               <label for="dMobile">Mobile Number *</label>
-              <input type="tel" placeholder="e.g. +91 98765 43210" id="dMobile" required>
+              <input type="tel" placeholder="e.g. +1 555 123 4567" id="dMobile" required>
             </div>
             <div>
               <label for="dEmail">Email Address *</label>
-              <input type="email" placeholder="rajesh.p@example.com" id="dEmail" required>
+              <input type="email" placeholder="sarah.j@example.com" id="dEmail" required>
             </div>
           </div>
           <div class="form-row">
             <div>
               <label for="dCity">City / Area *</label>
-              <input type="text" placeholder="e.g. Shegaon, Akola, Khamgaon" id="dCity" required>
+              <input type="text" placeholder="e.g. New York, Brooklyn, Queens" id="dCity" required>
             </div>
             <div>
               <label for="dAddress">Full Address / Street</label>
-              <input type="text" placeholder="e.g. Ward No. 5, Shegaon" id="dAddress">
+              <input type="text" placeholder="e.g. 742 Evergreen Terrace" id="dAddress">
             </div>
           </div>
 
@@ -361,7 +360,7 @@
             </div>
             <div>
               <label for="dPreferredHospital">Preferred Hospital / Area</label>
-              <input type="text" placeholder="e.g. Shegaon General Hospital" id="dPreferredHospital">
+              <input type="text" placeholder="e.g. City General Hospital" id="dPreferredHospital">
             </div>
           </div>
 
@@ -397,9 +396,9 @@
             <div class="id-card-body">
               <div class="id-avatar"><i class="fas fa-user"></i></div>
               <div class="id-details">
-                <h4 id="cardName">Rajesh Patil</h4>
-                <div class="id-row"><span class="lbl">ID:</span> <span class="val" id="cardId">BC-4420</span></div>
-                <div class="id-row"><span class="lbl">City:</span> <span class="val" id="cardCity">Shegaon</span></div>
+                <h4 id="cardName">Sarah Jenkins</h4>
+                <div class="id-row"><span class="lbl">ID:</span> <span class="val" id="cardId">BC-84920</span></div>
+                <div class="id-row"><span class="lbl">City:</span> <span class="val" id="cardCity">New York</span></div>
                 <div class="id-row"><span class="lbl">Status:</span> <span class="val text-success">Active Lifesaver</span></div>
                 <div class="id-row"><span class="lbl">Registered:</span> <span class="val" id="cardDate">Today</span></div>
               </div>
@@ -432,32 +431,32 @@
   <section id="page-about" class="page hidden">
     <div class="page-header">
       <div>
-        <h2 class="section-title"><i class="fas fa-circle-info" style="color:var(--primary-red);"></i> About BloodConnect – Shegaon · Akola</h2>
-        <p class="section-desc">Empowering local communities with transparent, real‑time blood connectivity in the Vidarbha region.</p>
+        <h2 class="section-title"><i class="fas fa-circle-info" style="color:var(--primary-red);"></i> About BloodConnect</h2>
+        <p class="section-desc">Empowering healthcare communities with transparent, real-time blood connectivity.</p>
       </div>
     </div>
     
     <div class="mission-text">
       <h3 style="color:var(--primary-red);"><i class="fas fa-bullseye"></i> Our Mission</h3>
       <p style="font-size:1.1rem; margin-top:8px; line-height:1.7;">
-        To eliminate deaths caused by the unavailability of blood in Shegaon, Akola, and surrounding towns. BloodConnect bridges patients, hospital blood banks, and voluntary donors through an intuitive real‑time platform that makes finding and donating blood frictionless, transparent, and immediate.
+        To eliminate deaths caused by the unavailability of blood. BloodConnect bridges patients, hospital blood banks, and voluntary donors through an intuitive real-time platform that makes finding and donating blood frictionless, transparent, and immediate.
       </p>
     </div>
 
     <div class="about-grid">
       <div class="about-card">
         <i class="fas fa-heart-pulse"></i>
-        <h4 id="aboutDonorsCount">420+ Donors</h4>
+        <h4 id="aboutDonorsCount">12,400+ Donors</h4>
         <p>Verified voluntary heroes ready to answer urgent calls.</p>
       </div>
       <div class="about-card">
         <i class="fas fa-hospital-user"></i>
-        <h4 id="aboutHospitalsCount">6 Partner Hospitals</h4>
+        <h4 id="aboutHospitalsCount">68 Partner Hospitals</h4>
         <p>Hospitals & certified blood banks with live stock feeds.</p>
       </div>
       <div class="about-card">
         <i class="fas fa-people-carry-box"></i>
-        <h4>180+ Lives</h4>
+        <h4>2,100+ Lives</h4>
         <p>Directly supported through emergency and planned donations.</p>
       </div>
       <div class="about-card">
@@ -468,7 +467,7 @@
     </div>
 
     <div class="about-features-card">
-      <h3 style="color:var(--dark-red); margin-bottom:16px;"><i class="fas fa-star" style="color:#F59E0B;"></i> Why BloodConnect Shegaon?</h3>
+      <h3 style="color:var(--dark-red); margin-bottom:16px;"><i class="fas fa-star" style="color:#F59E0B;"></i> Why BloodConnect?</h3>
       <div class="features-list-grid">
         <div class="feature-item"><i class="fas fa-check-circle"></i> Real-time blood units stock query</div>
         <div class="feature-item"><i class="fas fa-check-circle"></i> Direct hospital dashboard management</div>
@@ -480,7 +479,7 @@
     </div>
 
     <div class="quote-card">
-      <p><i class="fas fa-quote-left" style="color:var(--primary-red);font-size:1.4rem;margin-right:8px;"></i> Blood donation is an act of solidarity. Join the Shegaon–Akola movement and be a lifeline for someone in need today.</p>
+      <p><i class="fas fa-quote-left" style="color:var(--primary-red);font-size:1.4rem;margin-right:8px;"></i> Blood donation is an act of solidarity. Join the movement and be a lifeline for someone in need today.</p>
     </div>
   </section>
 
@@ -492,16 +491,16 @@
 <div id="emergencyModal" class="modal-backdrop hidden">
   <div class="modal-card">
     <div class="modal-header">
-      <h3><i class="fas fa-triangle-exclamation" style="color:var(--primary-red);"></i> Post Emergency Blood Request (SOS) – Shegaon</h3>
+      <h3><i class="fas fa-triangle-exclamation" style="color:var(--primary-red);"></i> Post Emergency Blood Request (SOS)</h3>
       <button class="modal-close-btn" id="closeEmergencyModalBtn">&times;</button>
     </div>
     <div class="modal-body">
-      <p class="modal-intro-text">This will broadcast an urgent alert to registered donors and participating hospitals in Shegaon, Akola, and nearby areas.</p>
+      <p class="modal-intro-text">This will broadcast an urgent alert to registered donors and participating hospitals.</p>
       <form id="emergencyRequestForm">
         <div class="form-row">
           <div>
             <label for="sosPatientName">Patient Full Name *</label>
-            <input type="text" id="sosPatientName" placeholder="e.g. Sunil Waghmare" required>
+            <input type="text" id="sosPatientName" placeholder="e.g. Michael Smith" required>
           </div>
           <div>
             <label for="sosBloodGroup">Blood Group Required *</label>
@@ -534,21 +533,21 @@
         <div class="form-row">
           <div>
             <label for="sosHospital">Hospital / Facility Name *</label>
-            <input type="text" id="sosHospital" placeholder="e.g. Shegaon General Hospital" required>
+            <input type="text" id="sosHospital" placeholder="e.g. New York General Hospital" required>
           </div>
           <div>
             <label for="sosCity">City / Location *</label>
-            <input type="text" id="sosCity" placeholder="e.g. Shegaon, Akola" required>
+            <input type="text" id="sosCity" placeholder="e.g. New York" required>
           </div>
         </div>
         <div class="form-row">
           <div>
             <label for="sosContactName">Contact Person Name *</label>
-            <input type="text" id="sosContactName" placeholder="e.g. Dr. Deshmukh / Family" required>
+            <input type="text" id="sosContactName" placeholder="e.g. Dr. Adams / Family Member" required>
           </div>
           <div>
             <label for="sosContactPhone">Contact Mobile / Phone *</label>
-            <input type="tel" id="sosContactPhone" placeholder="e.g. +91 98765 43210" required>
+            <input type="tel" id="sosContactPhone" placeholder="e.g. +1 555 987 6543" required>
           </div>
         </div>
         <div>
@@ -581,7 +580,7 @@
         <div class="form-row">
           <div>
             <label for="bookPatientName">Patient Full Name *</label>
-            <input type="text" id="bookPatientName" placeholder="e.g. Anil Kale" required>
+            <input type="text" id="bookPatientName" placeholder="e.g. David Miller" required>
           </div>
           <div>
             <label for="bookUnits">Units Required *</label>
@@ -591,16 +590,16 @@
         <div class="form-row">
           <div>
             <label for="bookDoctorName">Doctor / Department</label>
-            <input type="text" id="bookDoctorName" placeholder="e.g. Dr. Gokhale / ICU">
+            <input type="text" id="bookDoctorName" placeholder="e.g. Dr. Watson / ICU">
           </div>
           <div>
             <label for="bookContact">Contact Phone *</label>
-            <input type="tel" id="bookContact" placeholder="e.g. +91 98765 43210" required>
+            <input type="tel" id="bookContact" placeholder="e.g. +1 555 333 4444" required>
           </div>
         </div>
         <div>
           <label for="bookNotes">Hospital File / Case Number or Notes</label>
-          <input type="text" id="bookNotes" placeholder="e.g. Case #SG-2201">
+          <input type="text" id="bookNotes" placeholder="e.g. Case #NY-9482">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn-outline" id="cancelBookingBtn">Cancel</button>
@@ -628,7 +627,7 @@
 <div id="addHospitalModal" class="modal-backdrop hidden">
   <div class="modal-card">
     <div class="modal-header">
-      <h3><i class="fas fa-square-plus" style="color:var(--primary-red);"></i> Register Partner Hospital / Blood Bank – Shegaon/Akola</h3>
+      <h3><i class="fas fa-square-plus" style="color:var(--primary-red);"></i> Register Partner Hospital / Blood Bank</h3>
       <button class="modal-close-btn" id="closeAddHospitalBtn">&times;</button>
     </div>
     <div class="modal-body">
@@ -636,27 +635,27 @@
         <div class="form-row">
           <div>
             <label for="newHospName">Hospital Name *</label>
-            <input type="text" id="newHospName" placeholder="e.g. Shegaon Civil Hospital" required>
+            <input type="text" id="newHospName" placeholder="e.g. St. Jude Memorial Hospital" required>
           </div>
           <div>
             <label for="newHospCity">City *</label>
-            <input type="text" id="newHospCity" placeholder="e.g. Shegaon, Akola" required>
+            <input type="text" id="newHospCity" placeholder="e.g. Chicago" required>
           </div>
         </div>
         <div class="form-row">
           <div>
             <label for="newHospAddress">Address *</label>
-            <input type="text" id="newHospAddress" placeholder="e.g. Main Road, Shegaon" required>
+            <input type="text" id="newHospAddress" placeholder="e.g. 500 Medical Center Blvd" required>
           </div>
           <div>
             <label for="newHospContact">Phone / Emergency Contact *</label>
-            <input type="tel" id="newHospContact" placeholder="e.g. +91 724 555 0888" required>
+            <input type="tel" id="newHospContact" placeholder="e.g. +1 312 555 0888" required>
           </div>
         </div>
         <div class="form-row">
           <div>
             <label for="newHospEmail">Email *</label>
-            <input type="email" id="newHospEmail" placeholder="bloodbank@shegaonhospital.in" required>
+            <input type="email" id="newHospEmail" placeholder="bloodbank@stjude.org" required>
           </div>
           <div>
             <label for="newHospInitialStock">Default Initial Stock per Group</label>
@@ -677,10 +676,10 @@
   <div class="container footer-grid">
     <div>
       <div class="logo" style="color:white; margin-bottom:12px;">
-        <i class="fas fa-droplet" style="color:var(--primary-red);"></i> BloodConnect · Shegaon
+        <i class="fas fa-droplet" style="color:var(--primary-red);"></i> BloodConnect
       </div>
       <p style="font-size:0.9rem; line-height:1.6; color:#9CA3AF;">
-        A real‑time humanitarian blood donation and inventory network connecting patients, donors, and hospital banks in Shegaon, Akola, and surrounding Vidarbha region.
+        A real-time humanitarian blood donation and inventory network connecting patients, donors, and hospital banks.
       </p>
     </div>
     <div>
@@ -697,13 +696,13 @@
       <h5>Emergency Helpline</h5>
       <p style="font-size:0.9rem; color:#9CA3AF; margin-bottom:8px;">Available 24 hours / 7 days for urgent blood needs:</p>
       <div style="font-size:1.2rem; font-weight:700; color:var(--primary-red);">
-        <i class="fas fa-phone-volume"></i> +91 724 123 4567
+        <i class="fas fa-phone-volume"></i> 1-800-BLOOD-HELP
       </div>
-      <p style="font-size:0.85rem; color:#6B7280; margin-top:6px;">info@bloodconnect-shegaon.in</p>
+      <p style="font-size:0.85rem; color:#6B7280; margin-top:6px;">info@bloodconnect.org</p>
     </div>
     <div>
       <h5>Stay Connected</h5>
-      <p style="font-size:0.9rem; color:#9CA3AF; margin-bottom:12px;">Join 420+ lifesavers in Shegaon–Akola.</p>
+      <p style="font-size:0.9rem; color:#9CA3AF; margin-bottom:12px;">Join over 12,000+ lifesavers in your community.</p>
       <div class="social-links">
         <a href="#" title="Facebook" onclick="event.preventDefault()"><i class="fab fa-facebook-f"></i></a>
         <a href="#" title="Twitter" onclick="event.preventDefault()"><i class="fab fa-twitter"></i></a>
@@ -713,12 +712,11 @@
     </div>
   </div>
   <div class="container footer-bottom">
-    <div>© 2026 BloodConnect Network — Shegaon · Akola · Every Drop Counts. Every Donation Saves a Life.</div>
-    <div style="font-size:0.8rem; color:#6B7280; margin-top:4px;">Built with modern accessible web standards & real‑time client persistence.</div>
+    <div>© 2026 BloodConnect Network — Every Drop Counts. Every Donation Saves a Life.</div>
+    <div style="font-size:0.8rem; color:#6B7280; margin-top:4px;">Built with modern accessible web standards & real-time client persistence.</div>
   </div>
 </footer>
 
-<!-- script.js is kept but not modified; only HTML data context changed to Shegaon/Akola/Maharashtra -->
 <script src="script.js"></script>
 </body>
 </html>
