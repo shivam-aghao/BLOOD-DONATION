@@ -2,10 +2,11 @@
   (function() {
     // ----- NAVIGATION -----
     const pages = {
-      find: document.getElementById('page-find'),
-      dashboard: document.getElementById('page-dashboard'),
-      donor: document.getElementById('page-donor')
-    };
+  find: document.getElementById('page-find'),
+  dashboard: document.getElementById('page-dashboard'),
+  donor: document.getElementById('page-donor'),
+  about: document.getElementById('page-about')  // ADD THIS LINE
+};
     const navLinks = document.querySelectorAll('.nav-link, [data-page]');
     function showPage(pageId) {
       Object.keys(pages).forEach(key => {
