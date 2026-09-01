@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hospital Dashboard | BloodConnect</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar">
+  <div class="container">
+    <div class="logo" role="button" onclick="window.location.href='index.html'" style="cursor:pointer;">
+      <i class="fas fa-droplet"></i> BloodConnect
+    </div>
+    <div class="hamburger" id="hamburger" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></div>
+    <div class="nav-links" id="navLinks">
+      <a href="find-blood.html" class="nav-link"><i class="fas fa-search-location"></i> Find Blood</a>
+      <a href="sos-requests.html" class="nav-link"><i class="fas fa-bullhorn"></i> SOS Requests</a>
+      <a href="hospital-dashboard.html" class="nav-link active"><i class="fas fa-hospital"></i> Hospital Dashboard</a>
+      <a href="about.html" class="nav-link"><i class="fas fa-circle-info"></i> About</a>
+      <a href="donor-registration.html" class="donate-btn"><i class="fas fa-heart"></i> Register as Donor</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="container main-content">
+
+  <section id="page-dashboard" class="page">
+    <div class="dashboard-header">
+      <div>
+        <h2 class="section-title"><i class="fas fa-hospital" style="color:var(--primary-red);"></i> Hospital Blood Inventory Portal</h2>
+        <p class="section-desc">Manage blood reserves, update real-time availability, and fulfill incoming patient requests.</p>
+      </div>
+      <div class="dashboard-actions">
+        <button class="btn-outline" id="addNewHospitalBtn"><i class="fas fa-plus"></i> Add New Hospital</button>
+        <button class="btn-primary" id="saveInventoryBtn"><i class="fas fa-floppy-disk"></i> Save Stock Updates</button>
+      </div>
+    </div>
+
+    <!-- Hospital Selection Banner -->
+    <div class="hospital-selector-bar">
+      <div class="field" style="max-width:340px;flex:1;">
+        <label for="hospitalSelect"><i class="fas fa-building"></i> Select Hospital / Blood Bank</label>
+        <select id="hospitalSelect">
+          <!-- Populated from storage -->
+        </select>
+      </div>
+      <div class="quick-stock-actions">
+        <button class="btn-sm-action" id="restockAllBtn" title="Add 5 units to all blood groups"><i class="fas fa-plus-circle"></i> Restock All (+5)</button>
+        <button class="btn-sm-action" id="resetToDefaultBtn" title="Reset this hospital stock to baseline"><i class="fas fa-arrows-rotate"></i> Reset Baseline</button>
+      </div>
+    </div>
+
+    <!-- Live Inventory Cards Grid -->
+    <div class="card-grid" id="inventoryGrid">
+      <!-- dynamically populated -->
+    </div>
+
+    <!-- Hospital Details Editor -->
+    <div class="dashboard-sub-section">
+      <h3><i class="fas fa-pen-to-square"></i> Hospital Profile & Contact Information</h3>
+      <form id="hospitalInfoForm" class="hospital-info-form">
+        <div class="form-row">
+          <div>
+            <label for="hospName">Hospital Name</label>
+            <input type="text" id="hospName" required>
+          </div>
+          <div>
+            <label for="hospCity">City</label>
+            <input type="text" id="hospCity" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="hospAddress">Address</label>
+            <input type="text" id="hospAddress" required>
+          </div>
+          <div>
+            <label for="hospContact">Direct Phone / Hotline</label>
+            <input type="text" id="hospContact" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="hospEmail">Official Email</label>
+            <input type="email" id="hospEmail" required>
+          </div>
+          <div>
+            <label for="hospHours">Operating Hours</label>
+            <input type="text" id="hospHours" value="24/7 Emergency Blood Bank">
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:14px;">
+          <button type="submit" class="btn-primary"><i class="fas fa-check"></i> Update Hospital Profile</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Hospital Incoming Patient Requests Queue -->
+    <div class="dashboard-sub-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3><i class="fas fa-inbox"></i> Incoming Patient Blood Bookings (<span id="incomingRequestsCount">0</span>)</h3>
+        <button class="btn-sm-action" id="clearFulfilledRequestsBtn"><i class="fas fa-trash-can"></i> Clear Completed</button>
+      </div>
+      <div id="hospitalRequestsQueue" class="requests-queue-container">
+        <!-- populated dynamically -->
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ========== MODALS ========== -->
+
+<!-- Add Hospital Modal -->
+<div id="addHospitalModal" class="modal-backdrop hidden">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3><i class="fas fa-square-plus" style="color:var(--primary-red);"></i> Register Partner Hospital / Blood Bank</h3>
+      <button class="modal-close-btn" id="closeAddHospitalBtn">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="addHospitalForm">
+        <div class="form-row">
+          <div>
+            <label for="newHospName">Hospital Name *</label>
+            <input type="text" id="newHospName" placeholder="e.g. St. Jude Memorial Hospital" required>
+          </div>
+          <div>
+            <label for="newHospCity">City *</label>
+            <input type="text" id="newHospCity" placeholder="e.g. Chicago" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="newHospAddress">Address *</label>
+            <input type="text" id="newHospAddress" placeholder="e.g. 500 Medical Center Blvd" required>
+          </div>
+          <div>
+            <label for="newHospContact">Phone / Emergency Contact *</label>
+            <input type="tel" id="newHospContact" placeholder="e.g. +1 312 555 0888" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="newHospEmail">Email *</label>
+            <input type="email" id="newHospEmail" placeholder="bloodbank@stjude.org" required>
+          </div>
+          <div>
+            <label for="newHospInitialStock">Default Initial Stock per Group</label>
+            <input type="number" id="newHospInitialStock" value="5" min="0" max="25">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-outline" id="cancelAddHospBtn">Cancel</button>
+          <button type="submit" class="btn-primary"><i class="fas fa-plus"></i> Register Hospital</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="logo" style="color:white; margin-bottom:12px;">
+        <i class="fas fa-droplet" style="color:var(--primary-red);"></i> BloodConnect
+      </div>
+      <p style="font-size:0.9rem; line-height:1.6; color:#9CA3AF;">
+        A real-time humanitarian blood donation and inventory network.
+      </p>
+    </div>
+    <div>
+      <h5>Quick Links</h5>
+      <ul class="footer-links">
+        <li><a href="find-blood.html"><i class="fas fa-chevron-right"></i> Find Blood Stock</a></li>
+        <li><a href="sos-requests.html"><i class="fas fa-chevron-right"></i> SOS Emergency Requests</a></li>
+        <li><a href="hospital-dashboard.html"><i class="fas fa-chevron-right"></i> Hospital Dashboard</a></li>
+        <li><a href="donor-registration.html"><i class="fas fa-chevron-right"></i> Register as Donor</a></li>
+        <li><a href="about.html"><i class="fas fa-chevron-right"></i> About BloodConnect</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Emergency Helpline</h5>
+      <div style="font-size:1.2rem; font-weight:700; color:var(--primary-red);">
+        <i class="fas fa-phone-volume"></i> 1-800-BLOOD-HELP
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
