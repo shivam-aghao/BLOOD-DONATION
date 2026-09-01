@@ -1,6 +1,11 @@
 /**
  * ===================================================================
  * BloodConnect - Full Functional Client-Side Application
+<<<<<<< HEAD
+ * With Supabase & FastAPI Integration (Database Only Mode)
+ * NO LOCAL STORAGE - All data from database
+=======
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
  * ===================================================================
  */
 
@@ -8,6 +13,21 @@
   'use strict';
 
   // ==========================================
+<<<<<<< HEAD
+  // 0. API & SUPABASE CONFIGURATION
+  // ==========================================
+  
+  const SUPABASE_URL = 'https://uojujyjhoaxermhxkwqu.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVvanVqeWpob2F4ZXJtaHhrd3F1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxNjIzNjMsImV4cCI6MjEwMzczODM2M30.sJNjJ38RI3O2eE29LwVkUVnEu7WAd3hAiOWQrwJht7E';
+  
+  const API_BASE_URL = 'http://127.0.0.1:8000';
+
+  // ==========================================
+  // 1. DATA STORAGE - NO LOCAL STORAGE
+  // ==========================================
+  // ⚠️ REMOVED: All localStorage keys and functions
+  // Data is stored ONLY in the database
+=======
   // 1. DATA STORAGE & SEED INITIALIZATION
   // ==========================================
   const STORAGE_KEYS = {
@@ -17,6 +37,7 @@
     BOOKINGS: 'bc_patient_bookings',
     CURRENT_HOSPITAL: 'bc_active_hospital_id'
   };
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
 
   const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -64,6 +85,109 @@
     }
   };
 
+<<<<<<< HEAD
+  // ==========================================
+  // 2. API INTEGRATION FUNCTIONS
+  // ==========================================
+  
+  let isBackendOnline = false;
+  let hospitals = [];
+  let donors = [];
+  let sosRequests = [];
+  let patientBookings = [];
+  let activeHospitalId = null;
+
+  // ⚠️ REMOVED: getStored() and setStored() functions
+  // Data is ONLY from database
+
+  async function checkBackendHealth() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/health`, { signal: AbortSignal.timeout(2000) });
+      if (response.ok) {
+        isBackendOnline = true;
+        return true;
+      }
+    } catch (e) {
+      console.warn('⚠️ Backend not running. Database-only mode requires FastAPI server.');
+    }
+    isBackendOnline = false;
+    return false;
+  }
+
+  // ==========================================
+  // 3. API DATA FETCHING FUNCTIONS (DATABASE ONLY)
+  // ==========================================
+
+  // ---------- HOSPITAL API ----------
+  async function fetchHospitalsFromAPI() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/hospitals/`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      return data.hospitals || data;
+    } catch (error) {
+      console.error('Backend hospitals fetch error:', error);
+      return null;
+    }
+  }
+
+  async function createHospitalInAPI(hospitalData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/hospitals/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          hospital_name: hospitalData.name || hospitalData.hospital_name,
+          city: hospitalData.city,
+          address: hospitalData.address,
+          contact_number: hospitalData.contact || hospitalData.contact_number,
+          email: hospitalData.email,
+          operating_hours: hospitalData.operatingHours || '24/7 Emergency Blood Bank'
+        })
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Backend hospital create error:', error);
+      return null;
+    }
+  }
+
+  async function updateHospitalInAPI(hospitalId, hospitalData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/hospitals/${hospitalId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          hospital_name: hospitalData.name || hospitalData.hospital_name,
+          city: hospitalData.city,
+          address: hospitalData.address,
+          contact_number: hospitalData.contact || hospitalData.contact_number,
+          email: hospitalData.email,
+          operating_hours: hospitalData.operatingHours || '24/7 Emergency Blood Bank'
+        })
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Backend hospital update error:', error);
+      return null;
+    }
+  }
+
+  async function updateHospitalInventoryInAPI(hospitalId, inventory) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/hospitals/${hospitalId}/inventory`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inventory })
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Backend inventory update error:', error);
+      return null;
+=======
   // Seed Hospitals
   const DEFAULT_HOSPITALS = [
     {
@@ -338,17 +462,231 @@
     } catch (e) {
       console.warn('Storage read error:', e);
       return fallback;
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
     }
   }
 
-  function setStored(key, data) {
+  async function deleteHospitalFromAPI(hospitalId) {
     try {
-      localStorage.setItem(key, JSON.stringify(data));
-    } catch (e) {
-      console.error('Storage write error:', e);
+      const response = await fetch(`${API_BASE_URL}/hospitals/${hospitalId}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Backend hospital delete error:', error);
+      return null;
     }
   }
 
+<<<<<<< HEAD
+  // ---------- DONOR API ----------
+  async function fetchDonorsFromAPI() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/donors/`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      return data.donors || data;
+    } catch (error) {
+      console.error('Backend donors fetch error:', error);
+      return null;
+    }
+  }
+
+  async function registerDonorInAPI(donorData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/donors/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(donorData)
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      return data.donor || data;
+    } catch (error) {
+      console.error('Backend donor register error:', error);
+      return null;
+    }
+  }
+
+  async function updateDonorInAPI(donorId, donorData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/donors/${donorId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(donorData)
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Backend donor update error:', error);
+      return null;
+    }
+  }
+
+  async function deleteDonorFromAPI(donorId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/donors/${donorId}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Backend donor delete error:', error);
+      return null;
+    }
+  }
+
+  async function searchDonorsFromAPI(bloodGroup, city) {
+    try {
+      let url = `${API_BASE_URL}/search/blood?blood_group=${encodeURIComponent(bloodGroup)}`;
+      if (city && city.toLowerCase() !== 'all') {
+        url += `&city=${encodeURIComponent(city)}`;
+      }
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      return data.available_donors || [];
+    } catch (error) {
+      console.error('Backend donor search error:', error);
+      return null;
+    }
+  }
+
+  // ---------- SOS API ----------
+  async function fetchSOSFromAPI() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/sos/`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      return data.sos_requests || data;
+    } catch (error) {
+      console.error('Backend SOS fetch error:', error);
+      return null;
+    }
+  }
+
+  async function createSOSInAPI(sosData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/sos/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patient_name: sosData.patientName,
+          blood_group: sosData.bloodGroup,
+          units: sosData.units,
+          urgency: sosData.urgency,
+          hospital: sosData.hospital,
+          city: sosData.city,
+          contact_name: sosData.contactName,
+          contact_phone: sosData.contactPhone,
+          notes: sosData.notes
+        })
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Backend SOS create error:', error);
+      return null;
+    }
+  }
+
+  async function updateSOSInAPI(sosId, sosData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/sos/${sosId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          status: sosData.status
+        })
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Backend SOS update error:', error);
+      return null;
+    }
+  }
+
+  async function deleteSOSFromAPI(sosId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/sos/${sosId}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Backend SOS delete error:', error);
+      return null;
+    }
+  }
+
+  // ---------- BOOKING API ----------
+  async function fetchBookingsFromAPI() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/bookings/`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      return data.bookings || data;
+    } catch (error) {
+      console.error('Backend bookings fetch error:', error);
+      return null;
+    }
+  }
+
+  async function createBookingInAPI(bookingData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/bookings/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          hospital_id: bookingData.hospitalId,
+          patient_name: bookingData.patientName,
+          blood_group: bookingData.bloodGroup,
+          units: bookingData.units,
+          doctor: bookingData.doctor,
+          contact: bookingData.contact,
+          notes: bookingData.notes
+        })
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Backend booking create error:', error);
+      return null;
+    }
+  }
+
+  async function updateBookingInAPI(bookingId, bookingData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/bookings/${bookingId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          status: bookingData.status
+        })
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Backend booking update error:', error);
+      return null;
+    }
+  }
+
+  async function deleteBookingFromAPI(bookingId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/bookings/${bookingId}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Backend booking delete error:', error);
+      return null;
+    }
+  }
+=======
   // Initialize data if not present
   if (!localStorage.getItem(STORAGE_KEYS.HOSPITALS)) {
     setStored(STORAGE_KEYS.HOSPITALS, DEFAULT_HOSPITALS);
@@ -382,13 +720,141 @@
   let sosRequests = getStored(STORAGE_KEYS.SOS_REQUESTS, DEFAULT_SOS);
   let patientBookings = getStored(STORAGE_KEYS.BOOKINGS, []);
   let activeHospitalId = getStored(STORAGE_KEYS.CURRENT_HOSPITAL, hospitals[0]?.id || 'hosp-1');
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
 
   // ==========================================
-  // 2. UI UTILITIES (TOASTS, FORMATTERS, STATUS)
+  // 4. DATA LOADING FUNCTIONS (DATABASE ONLY)
+  // ⚠️ REMOVED: All localStorage caching
+  // ==========================================
+
+  async function loadHospitals() {
+    if (!isBackendOnline) {
+      console.warn('⚠️ Backend not available. Database-only mode requires FastAPI server.');
+      hospitals = [];
+      return;
+    }
+
+    const apiHospitals = await fetchHospitalsFromAPI();
+    if (apiHospitals && Array.isArray(apiHospitals) && apiHospitals.length > 0) {
+      hospitals = apiHospitals.map(h => ({
+        id: String(h.hospital_id || h.id),
+        hospital_id: String(h.hospital_id || h.id),
+        name: h.hospital_name || h.name,
+        hospital_name: h.hospital_name || h.name,
+        city: h.city,
+        address: h.address,
+        contact: h.contact_number || h.contact || '',
+        email: h.email || '',
+        operatingHours: h.operating_hours || h.operatingHours || '24/7 Emergency Blood Bank',
+        inventory: h.inventory || {
+          'A+': 0, 'A-': 0, 'B+': 0, 'B-': 0,
+          'AB+': 0, 'AB-': 0, 'O+': 0, 'O-': 0
+        },
+        createdAt: h.created_at || new Date().toISOString(),
+        updatedAt: h.updated_at || new Date().toISOString()
+      }));
+    } else {
+      hospitals = [];
+    }
+  }
+
+  async function loadDonors() {
+    if (!isBackendOnline) {
+      console.warn('⚠️ Backend not available. Database-only mode requires FastAPI server.');
+      donors = [];
+      return;
+    }
+
+    const apiDonors = await fetchDonorsFromAPI();
+    if (apiDonors && Array.isArray(apiDonors) && apiDonors.length > 0) {
+      donors = apiDonors.map(d => ({
+        id: String(d.id || d.donar_id || 'BC-' + Math.floor(10000 + Math.random() * 90000)),
+        fullName: d.full_name || d.name || 'Anonymous',
+        age: d.age || 25,
+        gender: d.gender || 'Other',
+        bloodGroup: d.blood_group || 'O+',
+        mobile: d.mobile || d.phone || '',
+        email: d.email || '',
+        city: d.city || '',
+        address: d.address || '',
+        donatedBefore: d.donated_before || 'No',
+        lastDonation: d.last_donation || '',
+        availability: d.availability || 'Anytime',
+        preferredHospital: d.preferred_hospital || '',
+        registeredAt: d.registered_at || new Date().toISOString().split('T')[0],
+        updatedAt: d.updated_at || new Date().toISOString()
+      }));
+    } else {
+      donors = [];
+    }
+  }
+
+  async function loadSOSRequests() {
+    if (!isBackendOnline) {
+      console.warn('⚠️ Backend not available. Database-only mode requires FastAPI server.');
+      sosRequests = [];
+      return;
+    }
+
+    const apiSOS = await fetchSOSFromAPI();
+    if (apiSOS && Array.isArray(apiSOS) && apiSOS.length > 0) {
+      sosRequests = apiSOS.map(s => ({
+        id: String(s.sos_id || s.id || 'SOS-' + Math.floor(1000 + Math.random() * 9000)),
+        patientName: s.patient_name || 'Patient',
+        bloodGroup: s.blood_group || 'O+',
+        units: s.units || 1,
+        urgency: s.urgency || 'Standard',
+        hospital: s.hospital || 'Hospital',
+        city: s.city || '',
+        contactName: s.contact_name || '',
+        contactPhone: s.contact_phone || '',
+        notes: s.notes || '',
+        status: s.status || 'open',
+        createdAt: s.created_at || new Date().toISOString(),
+        updatedAt: s.updated_at || new Date().toISOString()
+      }));
+    } else {
+      sosRequests = [];
+    }
+  }
+
+  async function loadBookings() {
+    if (!isBackendOnline) {
+      console.warn('⚠️ Backend not available. Database-only mode requires FastAPI server.');
+      patientBookings = [];
+      return;
+    }
+
+    const apiBookings = await fetchBookingsFromAPI();
+    if (apiBookings && Array.isArray(apiBookings) && apiBookings.length > 0) {
+      patientBookings = apiBookings.map(b => ({
+        id: String(b.booking_id || b.id || 'BK-' + Math.floor(100 + Math.random() * 900)),
+        hospitalId: String(b.hospital_id || ''),
+        hospitalName: b.hospital_name || 'Hospital',
+        patientName: b.patient_name || 'Patient',
+        bloodGroup: b.blood_group || 'O+',
+        units: b.units || 1,
+        doctor: b.doctor || 'Attending Physician',
+        contact: b.contact || '',
+        notes: b.notes || '',
+        status: b.status || 'pending',
+        createdAt: b.created_at || new Date().toISOString(),
+        updatedAt: b.updated_at || new Date().toISOString()
+      }));
+    } else {
+      patientBookings = [];
+    }
+  }
+
+  // ==========================================
+  // 5. UI UTILITIES (TOASTS, FORMATTERS, STATUS)
   // ==========================================
   function showToast(message, type = 'success', duration = 3500) {
     const container = document.getElementById('toastContainer');
-    if (!container) return;
+    if (!container) {
+      alert(message);
+      return;
+    }
 
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
@@ -430,7 +896,7 @@
   }
 
   // ==========================================
-  // 3. NAVIGATION & ROUTING
+  // 6. NAVIGATION & ROUTING
   // ==========================================
   const pages = {
     find: document.getElementById('page-find'),
@@ -440,21 +906,43 @@
     about: document.getElementById('page-about')
   };
 
+  function detectCurrentPage() {
+    const path = window.location.pathname.toLowerCase();
+    if (path.includes('donor-registration')) return 'donor';
+    if (path.includes('find-blood')) return 'find';
+    if (path.includes('hospital-dashboard')) return 'dashboard';
+    if (path.includes('sos-requests')) return 'emergency';
+    if (path.includes('about')) return 'about';
+
+    if (document.getElementById('page-donor') && !document.getElementById('page-find')) return 'donor';
+    if (document.getElementById('page-dashboard') && !document.getElementById('page-find')) return 'dashboard';
+    if (document.getElementById('page-emergency') && !document.getElementById('page-find')) return 'emergency';
+    if (document.getElementById('page-about') && !document.getElementById('page-find')) return 'about';
+    return 'find';
+  }
+
   function showPage(pageId) {
-    if (!pages[pageId]) pageId = 'find';
+    if (!pages[pageId]) pageId = detectCurrentPage();
+
+    const availablePages = Object.keys(pages).filter(key => pages[key] !== null);
+    const isStandalone = availablePages.length === 1;
 
     Object.keys(pages).forEach(key => {
       if (pages[key]) {
-        pages[key].classList.toggle('hidden', key !== pageId);
+        if (!isStandalone) {
+          pages[key].classList.toggle('hidden', key !== pageId);
+        } else {
+          pages[key].classList.remove('hidden');
+        }
       }
     });
 
-    // Update nav links active styling
     document.querySelectorAll('.nav-link').forEach(link => {
-      link.classList.toggle('tab-active', link.dataset.page === pageId);
+      if (link.dataset.page) {
+        link.classList.toggle('tab-active', link.dataset.page === pageId);
+      }
     });
 
-    // Specific on-page-enter renders
     if (pageId === 'find') {
       performSearch();
     } else if (pageId === 'emergency') {
@@ -465,23 +953,19 @@
       updateAboutStats();
     }
 
-    // Scroll to top of content
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Attach navigation triggers
   document.querySelectorAll('[data-page]').forEach(el => {
     el.addEventListener('click', function (e) {
       e.preventDefault();
       const targetPage = this.dataset.page;
       showPage(targetPage);
-      // Close mobile menu
       const navLinks = document.getElementById('navLinks');
       if (navLinks) navLinks.classList.remove('open');
     });
   });
 
-  // Hamburger Toggle
   const hamburger = document.getElementById('hamburger');
   if (hamburger) {
     hamburger.addEventListener('click', () => {
@@ -491,10 +975,10 @@
   }
 
   // ==========================================
-  // 4. HERO STATS DYNAMIC CALCULATION
+  // 7. HERO STATS DYNAMIC CALCULATION
   // ==========================================
   function updateHeroStats() {
-    const totalDonorsCount = 12400 + donors.length;
+    const totalDonorsCount = donors.length;
     const totalHospitalsCount = hospitals.length;
     let totalUnits = 0;
 
@@ -514,7 +998,7 @@
     if (elDonors) elDonors.textContent = `${totalDonorsCount.toLocaleString()}+`;
     if (elHospitals) elHospitals.textContent = `${totalHospitalsCount}`;
     if (elUnits) elUnits.textContent = `${totalUnits.toLocaleString()}+`;
-    if (elLives) elLives.textContent = `${(2100 + donors.length * 3).toLocaleString()}+`;
+    if (elLives) elLives.textContent = `${(totalDonorsCount * 3).toLocaleString()}+`;
 
     updateAboutStats();
   }
@@ -522,12 +1006,12 @@
   function updateAboutStats() {
     const elAboutDonors = document.getElementById('aboutDonorsCount');
     const elAboutHospitals = document.getElementById('aboutHospitalsCount');
-    if (elAboutDonors) elAboutDonors.textContent = `${(12400 + donors.length).toLocaleString()}+ Donors`;
+    if (elAboutDonors) elAboutDonors.textContent = `${donors.length.toLocaleString()}+ Donors`;
     if (elAboutHospitals) elAboutHospitals.textContent = `${hospitals.length} Partner Hospitals`;
   }
 
   // ==========================================
-  // 5. PAGE 1: FIND BLOOD & SEARCH SYSTEM
+  // 8. PAGE 1: FIND BLOOD & SEARCH SYSTEM
   // ==========================================
   let currentSearchTab = 'hospitals'; // 'hospitals' or 'donors'
 
@@ -576,21 +1060,29 @@
     });
   }
 
+  const cityInput = document.getElementById('cityInput');
+  if (cityInput) {
+    cityInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        performSearch();
+      }
+    });
+  }
+
   function performSearch() {
     const selectedGroup = document.getElementById('bloodGroup')?.value || 'A+';
     const cityQuery = (document.getElementById('cityInput')?.value || '').trim().toLowerCase();
     const includeCompatible = document.getElementById('includeCompatibleCheck')?.checked ?? true;
     const sortBy = document.getElementById('sortResults')?.value || 'stock-desc';
     const container = document.getElementById('resultsContainer');
-    const activeFilterDisplay = document.getElementById('activeFilterDisplay');
 
     if (!container) return;
 
-    // Determine compatible groups for receiving
     const compatibleGroups = COMPATIBILITY[selectedGroup]?.receive || [selectedGroup];
     const targetGroups = includeCompatible ? compatibleGroups : [selectedGroup];
 
-    // Filter Chips Display
+    const activeFilterDisplay = document.getElementById('activeFilterDisplay');
     if (activeFilterDisplay) {
       activeFilterDisplay.innerHTML = `
         <span class="filter-badge"><i class="fas fa-droplet"></i> Target: ${selectedGroup}</span>
@@ -599,32 +1091,30 @@
       `;
     }
 
-    // Refresh Hospitals Count
     let filteredHospitals = hospitals.filter(h => {
       if (cityQuery !== '' && cityQuery !== 'all') {
-        const matchesCity = h.city.toLowerCase().includes(cityQuery) || h.address.toLowerCase().includes(cityQuery);
+        const matchesCity = h.city.toLowerCase().includes(cityQuery) || 
+                           (h.address && h.address.toLowerCase().includes(cityQuery));
         if (!matchesCity) return false;
       }
       return true;
     });
 
-    // Refresh Donors Count
     let filteredDonors = donors.filter(d => {
       if (cityQuery !== '' && cityQuery !== 'all') {
-        const matchesCity = d.city.toLowerCase().includes(cityQuery) || (d.address && d.address.toLowerCase().includes(cityQuery));
+        const matchesCity = d.city.toLowerCase().includes(cityQuery) || 
+                           (d.address && d.address.toLowerCase().includes(cityQuery));
         if (!matchesCity) return false;
       }
       const matchesBlood = targetGroups.includes(d.bloodGroup);
       return matchesBlood;
     });
 
-    // Update Count Badges
     const hospBadge = document.getElementById('hospitalCountBadge');
     const donorBadge = document.getElementById('donorCountBadge');
     if (hospBadge) hospBadge.textContent = filteredHospitals.length;
     if (donorBadge) donorBadge.textContent = filteredDonors.length;
 
-    // Render based on active tab
     if (currentSearchTab === 'hospitals') {
       renderHospitalSearchResults(filteredHospitals, selectedGroup, targetGroups, sortBy, container);
     } else {
@@ -639,13 +1129,14 @@
           <i class="fas fa-hospital-slash"></i>
           <h3>No Partner Hospitals Found</h3>
           <p>We couldn't find hospitals matching your location filter. Try searching for "All" or a nearby city.</p>
-          <button class="btn-emergency" onclick="document.getElementById('openEmergencyModalBtn').click()"><i class="fas fa-bullhorn"></i> Post Urgent SOS Request</button>
+          <button class="btn-emergency" onclick="document.getElementById('openEmergencyModalBtn')?.click()">
+            <i class="fas fa-bullhorn"></i> Post Urgent SOS Request
+          </button>
         </div>
       `;
       return;
     }
 
-    // Process each hospital to calculate stock for target blood group & total compatible stock
     const hospitalCardsData = hospitalList.map(h => {
       const exactUnits = (h.inventory && h.inventory[selectedGroup]) ? Number(h.inventory[selectedGroup]) : 0;
       let compatibleUnits = 0;
@@ -657,7 +1148,6 @@
       return { hospital: h, exactUnits, compatibleUnits };
     });
 
-    // Sort
     if (sortBy === 'stock-desc') {
       hospitalCardsData.sort((a, b) => b.exactUnits - a.exactUnits);
     } else if (sortBy === 'name-asc') {
@@ -670,7 +1160,6 @@
     hospitalCardsData.forEach(item => {
       const h = item.hospital;
       const exactStatus = getStockStatus(item.exactUnits);
-      const isLowOrOut = item.exactUnits <= 0;
 
       html += `
         <div class="result-card">
@@ -729,14 +1218,12 @@
           <button class="btn-primary" data-page="donor"><i class="fas fa-heart"></i> Register as a Donor</button>
         </div>
       `;
-      // Re-attach data-page click for newly inserted button
       container.querySelectorAll('[data-page]').forEach(b => {
         b.addEventListener('click', () => showPage('donor'));
       });
       return;
     }
 
-    // Sort
     if (sortBy === 'name-asc') {
       donorList.sort((a, b) => a.fullName.localeCompare(b.fullName));
     } else if (sortBy === 'city-asc') {
@@ -804,7 +1291,7 @@
   }
 
   // ==========================================
-  // 6. INTERACTIVE BLOOD COMPATIBILITY TOOL
+  // 9. INTERACTIVE BLOOD COMPATIBILITY TOOL
   // ==========================================
   function initCompatibilityWidget() {
     const selector = document.getElementById('compatSelector');
@@ -851,7 +1338,7 @@
   }
 
   // ==========================================
-  // 7. PAGE 2: EMERGENCY SOS REQUESTS
+  // 10. PAGE 2: EMERGENCY SOS REQUESTS
   // ==========================================
   function renderEmergencyFeed(filterStatus = 'all') {
     const feedContainer = document.getElementById('emergencyFeedContainer');
@@ -878,7 +1365,8 @@
     let html = '';
     filtered.forEach(req => {
       const isFulfilled = req.status === 'fulfilled';
-      const urgencyBadgeClass = req.urgency.includes('Critical') ? 'badge-red' : (req.urgency.includes('Urgent') ? 'badge-yellow' : 'badge-blue');
+      const urgencyBadgeClass = req.urgency.includes('Critical') ? 'badge-red' : 
+                                (req.urgency.includes('Urgent') ? 'badge-yellow' : 'badge-blue');
 
       html += `
         <div class="sos-card ${isFulfilled ? 'fulfilled' : ''}">
@@ -932,7 +1420,6 @@
     feedContainer.innerHTML = html;
   }
 
-  // Filter chips in Emergency Page
   document.querySelectorAll('.emergency-filter-bar .filter-chip').forEach(chip => {
     chip.addEventListener('click', function () {
       document.querySelectorAll('.emergency-filter-bar .filter-chip').forEach(c => c.classList.remove('active'));
@@ -943,7 +1430,7 @@
   });
 
   // ==========================================
-  // 8. PAGE 3: HOSPITAL DASHBOARD & INVENTORY
+  // 11. PAGE 3: HOSPITAL DASHBOARD & INVENTORY
   // ==========================================
   function renderHospitalDashboard() {
     const select = document.getElementById('hospitalSelect');
@@ -953,13 +1440,16 @@
 
     if (!select || !grid) return;
 
-    // Populate hospital selector
-    select.innerHTML = hospitals.map(h => `<option value="${h.id}" ${h.id === activeHospitalId ? 'selected' : ''}>${h.name} (${h.city})</option>`).join('');
+    select.innerHTML = hospitals.map(h => 
+      `<option value="${h.id}" ${h.id === activeHospitalId ? 'selected' : ''}>${h.name} (${h.city})</option>`
+    ).join('');
 
     const currentHosp = hospitals.find(h => h.id === activeHospitalId) || hospitals[0];
-    if (!currentHosp) return;
+    if (!currentHosp) {
+      grid.innerHTML = `<div class="empty-state-box"><p>No hospital data available. Please add a hospital.</p></div>`;
+      return;
+    }
 
-    // Populate Profile Form
     const nameInput = document.getElementById('hospName');
     const cityInput = document.getElementById('hospCity');
     const addressInput = document.getElementById('hospAddress');
@@ -974,7 +1464,6 @@
     if (emailInput) emailInput.value = currentHosp.email || '';
     if (hoursInput) hoursInput.value = currentHosp.operatingHours || '24/7 Emergency Blood Bank';
 
-    // Render Inventory Cards
     grid.innerHTML = BLOOD_GROUPS.map(group => {
       const units = (currentHosp.inventory && currentHosp.inventory[group] !== undefined) ? currentHosp.inventory[group] : 0;
       const status = getStockStatus(units);
@@ -995,7 +1484,6 @@
       `;
     }).join('');
 
-    // Render Incoming Hospital Bookings Queue
     const hospitalBookings = patientBookings.filter(b => b.hospitalId === currentHosp.id);
     if (requestsCountBadge) requestsCountBadge.textContent = hospitalBookings.length;
 
@@ -1029,7 +1517,9 @@
                     <i class="fas fa-check"></i> Fulfill & Deduct Stock
                   </button>
                 ` : `
-                  <span style="font-size:0.85rem;color:var(--success-green);font-weight:700;"><i class="fas fa-circle-check"></i> Completed</span>
+                  <span style="font-size:0.85rem;color:var(--success-green);font-weight:700;">
+                    <i class="fas fa-circle-check"></i> Completed
+                  </span>
                 `}
                 <button class="btn-outline btn-sm" onclick="window.BloodConnectApp.removeHospitalBooking('${b.id}')" title="Dismiss">
                   <i class="fas fa-times"></i>
@@ -1042,18 +1532,15 @@
     }
   }
 
-  // Hospital Selector Change
   const hospitalSelect = document.getElementById('hospitalSelect');
   if (hospitalSelect) {
     hospitalSelect.addEventListener('change', function () {
       activeHospitalId = this.value;
-      setStored(STORAGE_KEYS.CURRENT_HOSPITAL, activeHospitalId);
       renderHospitalDashboard();
       showToast('Switched active hospital view', 'info');
     });
   }
 
-  // Hospital Profile Form Update
   const hospitalInfoForm = document.getElementById('hospitalInfoForm');
   if (hospitalInfoForm) {
     hospitalInfoForm.addEventListener('submit', function (e) {
@@ -1061,6 +1548,29 @@
       const currentHosp = hospitals.find(h => h.id === activeHospitalId);
       if (!currentHosp) return;
 
+<<<<<<< HEAD
+      const updatedData = {
+        name: document.getElementById('hospName').value.trim(),
+        city: document.getElementById('hospCity').value.trim(),
+        address: document.getElementById('hospAddress').value.trim(),
+        contact: document.getElementById('hospContact').value.trim(),
+        email: document.getElementById('hospEmail').value.trim(),
+        operatingHours: document.getElementById('hospHours').value.trim()
+      };
+
+      Object.assign(currentHosp, updatedData);
+      currentHosp.updatedAt = new Date().toISOString();
+
+      if (isBackendOnline && currentHosp.id) {
+        const apiResult = await updateHospitalInAPI(currentHosp.id, updatedData);
+        if (apiResult) {
+          showToast('Hospital profile synced with database!', 'success');
+        } else {
+          showToast('Failed to sync with database.', 'warning');
+        }
+      }
+
+=======
       currentHosp.name = document.getElementById('hospName').value.trim();
       currentHosp.city = document.getElementById('hospCity').value.trim();
       currentHosp.address = document.getElementById('hospAddress').value.trim();
@@ -1070,26 +1580,36 @@
       currentHosp.lastUpdated = new Date().toISOString();
 
       setStored(STORAGE_KEYS.HOSPITALS, hospitals);
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
       renderHospitalDashboard();
       updateHeroStats();
       showToast('Hospital profile updated successfully!', 'success');
     });
   }
 
-  // Save Stock Updates Button
   const saveInventoryBtn = document.getElementById('saveInventoryBtn');
   if (saveInventoryBtn) {
-    saveInventoryBtn.addEventListener('click', () => {
-      setStored(STORAGE_KEYS.HOSPITALS, hospitals);
+    saveInventoryBtn.addEventListener('click', async () => {
+      const currentHosp = hospitals.find(h => h.id === activeHospitalId);
+      if (!currentHosp) return;
+
+      if (isBackendOnline && currentHosp.id) {
+        const apiResult = await updateHospitalInventoryInAPI(currentHosp.id, currentHosp.inventory);
+        if (apiResult) {
+          showToast('Inventory synced with database!', 'success');
+        } else {
+          showToast('Failed to sync inventory with database.', 'warning');
+        }
+      }
+      
       updateHeroStats();
       showToast('Blood stock inventory saved to database!', 'success');
     });
   }
 
-  // Restock All (+5)
   const restockAllBtn = document.getElementById('restockAllBtn');
   if (restockAllBtn) {
-    restockAllBtn.addEventListener('click', () => {
+    restockAllBtn.addEventListener('click', async () => {
       const currentHosp = hospitals.find(h => h.id === activeHospitalId);
       if (!currentHosp) return;
       if (!currentHosp.inventory) currentHosp.inventory = {};
@@ -1098,49 +1618,42 @@
         currentHosp.inventory[g] = (Number(currentHosp.inventory[g]) || 0) + 5;
       });
 
-      setStored(STORAGE_KEYS.HOSPITALS, hospitals);
+      if (isBackendOnline && currentHosp.id) {
+        await updateHospitalInventoryInAPI(currentHosp.id, currentHosp.inventory);
+      }
+      
       renderHospitalDashboard();
       updateHeroStats();
-      showToast('Added +5 units to all blood groups!', 'success');
+      showToast('Added +5 units to all blood groups in database!', 'success');
     });
   }
 
-  // Reset Baseline
   const resetToDefaultBtn = document.getElementById('resetToDefaultBtn');
   if (resetToDefaultBtn) {
-    resetToDefaultBtn.addEventListener('click', () => {
-      const currentHosp = hospitals.find(h => h.id === activeHospitalId);
-      if (!currentHosp) return;
-
-      currentHosp.inventory = {
-        'A+': 10, 'A-': 3, 'B+': 8, 'B-': 2,
-        'AB+': 5, 'AB-': 2, 'O+': 15, 'O-': 4
-      };
-
-      setStored(STORAGE_KEYS.HOSPITALS, hospitals);
+    resetToDefaultBtn.addEventListener('click', async () => {
+      showToast('Refreshing stock directly from database...', 'info');
+      await loadHospitals();
       renderHospitalDashboard();
       updateHeroStats();
-      showToast('Reset hospital stock to baseline levels', 'info');
+      showToast('Hospital stock refreshed from database', 'success');
     });
   }
 
-  // Clear Completed Requests
   const clearFulfilledRequestsBtn = document.getElementById('clearFulfilledRequestsBtn');
   if (clearFulfilledRequestsBtn) {
     clearFulfilledRequestsBtn.addEventListener('click', () => {
       patientBookings = patientBookings.filter(b => !(b.hospitalId === activeHospitalId && b.status === 'fulfilled'));
-      setStored(STORAGE_KEYS.BOOKINGS, patientBookings);
       renderHospitalDashboard();
       showToast('Cleared completed booking requests', 'info');
     });
   }
 
   // ==========================================
-  // 9. PAGE 4: DONOR REGISTRATION & ID CARD
+  // 12. PAGE 4: DONOR REGISTRATION & ID CARD
   // ==========================================
   const donorRegistrationForm = document.getElementById('donorRegistrationForm');
   if (donorRegistrationForm) {
-    donorRegistrationForm.addEventListener('submit', function (e) {
+    donorRegistrationForm.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const fullName = document.getElementById('dFullName').value.trim();
@@ -1161,39 +1674,52 @@
         return;
       }
 
-      // Generate Unique ID
-      const newDonorId = 'BC-' + Math.floor(10000 + Math.random() * 90000);
-
-      const newDonor = {
-        id: newDonorId,
-        fullName,
-        age,
-        gender,
-        bloodGroup,
-        mobile,
-        email,
-        city,
-        address,
-        donatedBefore,
-        lastDonation,
-        availability,
-        preferredHospital: preferredHospital || 'Any Local Center',
-        registeredAt: new Date().toISOString().split('T')[0]
+      const donorPayload = {
+        name: fullName,
+        age: age,
+        gender: gender,
+        blood_group: bloodGroup,
+        phone: mobile,
+        email: email,
+        city: city,
+        address: address,
+        donated_before: donatedBefore,
+        last_donation: lastDonation || null,
+        availability: availability,
+        preferred_hospital: preferredHospital || null,
+        agreement: true
       };
 
-      donors.unshift(newDonor);
-      setStored(STORAGE_KEYS.DONORS, donors);
+      if (!isBackendOnline) {
+        showToast('⚠️ Backend database is offline. Please start the FastAPI server to register.', 'error', 5000);
+        return;
+      }
 
-      // Update Digital Donor Card Preview
-      updateDonorCardDisplay(newDonor);
-
-      // Update Hero Stats
-      updateHeroStats();
-
-      showToast(`Thank you ${fullName}! You are registered as a Lifesaver.`, 'success', 5000);
-
-      // Scroll to card
-      document.getElementById('donorCardContainer')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast('Registering donor in database...', 'info');
+      const result = await registerDonorInAPI(donorPayload);
+      if (result) {
+        await loadDonors();
+        const registered = donors.find(d => d.email === email || d.fullName === fullName) || {
+          id: 'BC-' + (result.id || result.donar_id || Math.floor(10000 + Math.random() * 90000)),
+          fullName,
+          age,
+          gender,
+          bloodGroup,
+          mobile,
+          email,
+          city,
+          address,
+          registeredAt: new Date().toISOString().split('T')[0]
+        };
+        updateDonorCardDisplay(registered);
+        updateHeroStats();
+        performSearch();
+        showToast(`🎉 Registered in database! Thank you, ${fullName}!`, 'success', 5000);
+        donorRegistrationForm.reset();
+        document.getElementById('donorCardContainer')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        showToast('❌ Failed to register donor in database. Please check your backend connection.', 'error', 5000);
+      }
     });
   }
 
@@ -1219,7 +1745,7 @@
   }
 
   // ==========================================
-  // 10. MODALS & FORMS HANDLING
+  // 13. MODALS & FORMS HANDLING
   // ==========================================
   
   // A. Emergency SOS Modal
@@ -1245,7 +1771,7 @@
   if (cancelSosBtn) cancelSosBtn.addEventListener('click', closeEmergencyModal);
 
   if (emergencyRequestForm) {
-    emergencyRequestForm.addEventListener('submit', function (e) {
+    emergencyRequestForm.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const patientName = document.getElementById('sosPatientName').value.trim();
@@ -1258,8 +1784,7 @@
       const contactPhone = document.getElementById('sosContactPhone').value.trim();
       const notes = document.getElementById('sosNotes').value.trim();
 
-      const newSos = {
-        id: 'SOS-' + Math.floor(1000 + Math.random() * 9000),
+      const newSosData = {
         patientName,
         bloodGroup,
         units,
@@ -1268,21 +1793,25 @@
         city,
         contactName,
         contactPhone,
-        notes,
-        status: 'open',
-        createdAt: new Date().toISOString()
+        notes
       };
 
-      sosRequests.unshift(newSos);
-      setStored(STORAGE_KEYS.SOS_REQUESTS, sosRequests);
+      if (!isBackendOnline) {
+        showToast('⚠️ Backend database is offline. Please start the FastAPI server to broadcast SOS.', 'error', 5000);
+        return;
+      }
 
-      closeEmergencyModal();
-      emergencyRequestForm.reset();
-
-      showToast(`🚨 SOS Broadcasted for ${patientName} (${bloodGroup})!`, 'error', 6000);
-
-      // Navigate to Emergency SOS page to see the request
-      showPage('emergency');
+      showToast('Broadcasting SOS to database...', 'info');
+      const result = await createSOSInAPI(newSosData);
+      if (result) {
+        await loadSOSRequests();
+        closeEmergencyModal();
+        emergencyRequestForm.reset();
+        showToast(`🚨 SOS Broadcasted for ${patientName} (${bloodGroup})!`, 'error', 6000);
+        showPage('emergency');
+      } else {
+        showToast('❌ Failed to broadcast SOS to database.', 'error', 5000);
+      }
     });
   }
 
@@ -1292,6 +1821,37 @@
   const cancelBookingBtn = document.getElementById('cancelBookingBtn');
   const bloodBookingForm = document.getElementById('bloodBookingForm');
 
+  function openBookingModal(hospitalId, bloodGroup) {
+    const targetHosp = hospitals.find(h => h.id === hospitalId);
+    if (!targetHosp) {
+      showToast('Hospital not found', 'error');
+      return;
+    }
+
+    const summaryBox = document.getElementById('bookingSummaryBox');
+    const hospIdInput = document.getElementById('bookHospitalId');
+    const groupInput = document.getElementById('bookBloodGroup');
+
+    if (hospIdInput) hospIdInput.value = hospitalId;
+    if (groupInput) groupInput.value = bloodGroup;
+
+    const availableUnits = targetHosp.inventory ? (targetHosp.inventory[bloodGroup] || 0) : 0;
+
+    if (summaryBox) {
+      summaryBox.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <strong><i class="fas fa-hospital" style="color:var(--primary-red);"></i> ${targetHosp.name}</strong>
+          <span class="blood-type-chip">${bloodGroup}</span>
+        </div>
+        <div style="font-size:0.85rem;color:var(--muted-text);margin-top:4px;">
+          Location: ${targetHosp.address}, ${targetHosp.city} · In Stock: <strong>${availableUnits} units</strong>
+        </div>
+      `;
+    }
+
+    if (bookingModal) bookingModal.classList.remove('hidden');
+  }
+
   function closeBookingModal() {
     if (bookingModal) bookingModal.classList.add('hidden');
   }
@@ -1300,7 +1860,7 @@
   if (cancelBookingBtn) cancelBookingBtn.addEventListener('click', closeBookingModal);
 
   if (bloodBookingForm) {
-    bloodBookingForm.addEventListener('submit', function (e) {
+    bloodBookingForm.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const hospitalId = document.getElementById('bookHospitalId').value;
@@ -1314,8 +1874,7 @@
       const targetHosp = hospitals.find(h => h.id === hospitalId);
       const hospitalName = targetHosp ? targetHosp.name : 'Partner Hospital';
 
-      const newBooking = {
-        id: 'BK-' + Math.floor(100 + Math.random() * 900),
+      const bookingData = {
         hospitalId,
         hospitalName,
         patientName,
@@ -1323,24 +1882,75 @@
         units,
         doctor: doctor || 'Attending Physician',
         contact,
-        notes,
-        status: 'pending',
-        createdAt: new Date().toISOString()
+        notes
       };
 
-      patientBookings.unshift(newBooking);
-      setStored(STORAGE_KEYS.BOOKINGS, patientBookings);
+      if (!isBackendOnline) {
+        showToast('⚠️ Backend database is offline. Please start the FastAPI server to submit booking.', 'error', 5000);
+        return;
+      }
 
-      closeBookingModal();
-      bloodBookingForm.reset();
-
-      showToast(`Booking reference #${newBooking.id} submitted to ${hospitalName}!`, 'success', 5000);
+      showToast('Submitting booking to database...', 'info');
+      const result = await createBookingInAPI(bookingData);
+      if (result) {
+        await loadBookings();
+        closeBookingModal();
+        bloodBookingForm.reset();
+        const bkId = result.booking?.id || result.booking_id || result.id || 'BK-CONFIRMED';
+        showToast(`Booking reference #${bkId} submitted to ${hospitalName}!`, 'success', 5000);
+      } else {
+        showToast('❌ Failed to submit booking to database.', 'error', 5000);
+      }
     });
   }
 
   // C. Contact Donor Modal
   const contactDonorModal = document.getElementById('contactDonorModal');
   const closeContactDonorBtn = document.getElementById('closeContactDonorBtn');
+
+  function openContactDonorModal(donorId) {
+    const donor = donors.find(d => d.id === donorId);
+    if (!donor) {
+      showToast('Donor not found', 'error');
+      return;
+    }
+
+    const body = document.getElementById('contactDonorModalBody');
+    if (!body) return;
+
+    const sampleMsg = encodeURIComponent(`Hello ${donor.fullName}, we found your profile on BloodConnect. We urgently require ${donor.bloodGroup} blood. Are you available to donate?`);
+
+    body.innerHTML = `
+      <div style="display:flex;gap:16px;align-items:center;margin-bottom:20px;">
+        <div class="donor-avatar-circle" style="width:60px;height:60px;font-size:1.6rem;">${donor.fullName.charAt(0)}</div>
+        <div>
+          <h4 style="font-size:1.2rem;font-weight:700;">${donor.fullName}</h4>
+          <div style="font-size:0.9rem;color:var(--muted-text);">${donor.city} · ${donor.age} yrs (${donor.gender})</div>
+          <div style="margin-top:4px;"><span class="blood-type-chip">${donor.bloodGroup}</span> <span class="badge badge-green">Ready to Donate</span></div>
+        </div>
+      </div>
+
+      <div style="background:var(--light-bg);padding:14px;border-radius:var(--radius);margin-bottom:20px;font-size:0.88rem;">
+        <div><i class="fas fa-phone" style="color:var(--primary-red);width:20px;"></i> Phone: <strong>${donor.mobile}</strong></div>
+        <div style="margin-top:6px;"><i class="fas fa-envelope" style="color:var(--primary-red);width:20px;"></i> Email: <strong>${donor.email}</strong></div>
+        <div style="margin-top:6px;"><i class="fas fa-clock" style="color:var(--primary-red);width:20px;"></i> Availability: <strong>${donor.availability}</strong></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <a href="https://wa.me/${donor.mobile.replace(/[^0-9]/g, '')}?text=${sampleMsg}" target="_blank" class="btn-primary" style="justify-content:center;background:#25D366;box-shadow:none;">
+          <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+        </a>
+        <a href="tel:${donor.mobile}" class="btn-outline" style="justify-content:center;">
+          <i class="fas fa-phone"></i> Call Donor Directly
+        </a>
+        <a href="sms:${donor.mobile}?body=${sampleMsg}" class="btn-outline" style="justify-content:center;">
+          <i class="fas fa-comment-sms"></i> Send SMS Message
+        </a>
+      </div>
+    `;
+
+    if (contactDonorModal) contactDonorModal.classList.remove('hidden');
+  }
 
   function closeContactDonorModal() {
     if (contactDonorModal) contactDonorModal.classList.add('hidden');
@@ -1391,9 +2001,30 @@
         email,
         operatingHours: '24/7 Emergency Blood Bank',
         inventory: initialInventory,
-        lastUpdated: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString()
       };
 
+<<<<<<< HEAD
+      if (!isBackendOnline) {
+        showToast('⚠️ Backend database is offline. Please start the FastAPI server to add a hospital.', 'error', 5000);
+        return;
+      }
+
+      showToast('Registering hospital in database...', 'info');
+      const apiResult = await createHospitalInAPI(newHospital);
+      if (apiResult) {
+        await loadHospitals();
+        activeHospitalId = String(apiResult.hospital?.id || apiResult.id || newHospital.id);
+        closeAddHospitalModal();
+        addHospitalForm.reset();
+        renderHospitalDashboard();
+        updateHeroStats();
+        showToast(`Hospital "${name}" registered in database successfully!`, 'success');
+      } else {
+        showToast(`❌ Failed to register hospital in database.`, 'error', 5000);
+      }
+=======
       hospitals.push(newHospital);
       setStored(STORAGE_KEYS.HOSPITALS, hospitals);
 
@@ -1407,10 +2038,10 @@
       updateHeroStats();
 
       showToast(`Registered "${name}" successfully!`, 'success');
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
     });
   }
 
-  // Close modals on clicking backdrop
   document.querySelectorAll('.modal-backdrop').forEach(modal => {
     modal.addEventListener('click', function (e) {
       if (e.target === this) {
@@ -1420,84 +2051,18 @@
   });
 
   // ==========================================
-  // 11. GLOBAL INTERACTION HANDLERS (EXPOSED ON window.BloodConnectApp)
+  // 14. GLOBAL INTERACTION HANDLERS
   // ==========================================
   window.BloodConnectApp = {
-    // Open Booking Modal for Hospital
-    openBookingModal(hospitalId, bloodGroup) {
-      const targetHosp = hospitals.find(h => h.id === hospitalId);
-      if (!targetHosp) return;
+    openBookingModal: openBookingModal,
+    openContactDonorModal: openContactDonorModal,
 
-      const summaryBox = document.getElementById('bookingSummaryBox');
-      const hospIdInput = document.getElementById('bookHospitalId');
-      const groupInput = document.getElementById('bookBloodGroup');
-
-      if (hospIdInput) hospIdInput.value = hospitalId;
-      if (groupInput) groupInput.value = bloodGroup;
-
-      const availableUnits = targetHosp.inventory ? (targetHosp.inventory[bloodGroup] || 0) : 0;
-
-      if (summaryBox) {
-        summaryBox.innerHTML = `
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <strong><i class="fas fa-hospital" style="color:var(--primary-red);"></i> ${targetHosp.name}</strong>
-            <span class="blood-type-chip">${bloodGroup}</span>
-          </div>
-          <div style="font-size:0.85rem;color:var(--muted-text);margin-top:4px;">
-            Location: ${targetHosp.address}, ${targetHosp.city} · In Stock: <strong>${availableUnits} units</strong>
-          </div>
-        `;
-      }
-
-      if (bookingModal) bookingModal.classList.remove('hidden');
-    },
-
-    // Open Contact Donor Modal
-    openContactDonorModal(donorId) {
-      const donor = donors.find(d => d.id === donorId);
-      if (!donor) return;
-
-      const body = document.getElementById('contactDonorModalBody');
-      if (!body) return;
-
-      const sampleMsg = encodeURIComponent(`Hello ${donor.fullName}, we found your profile on BloodConnect. We urgently require ${donor.bloodGroup} blood. Are you available to donate?`);
-
-      body.innerHTML = `
-        <div style="display:flex;gap:16px;align-items:center;margin-bottom:20px;">
-          <div class="donor-avatar-circle" style="width:60px;height:60px;font-size:1.6rem;">${donor.fullName.charAt(0)}</div>
-          <div>
-            <h4 style="font-size:1.2rem;font-weight:700;">${donor.fullName}</h4>
-            <div style="font-size:0.9rem;color:var(--muted-text);">${donor.city} · ${donor.age} yrs (${donor.gender})</div>
-            <div style="margin-top:4px;"><span class="blood-type-chip">${donor.bloodGroup}</span> <span class="badge badge-green">Ready to Donate</span></div>
-          </div>
-        </div>
-
-        <div style="background:var(--light-bg);padding:14px;border-radius:var(--radius);margin-bottom:20px;font-size:0.88rem;">
-          <div><i class="fas fa-phone" style="color:var(--primary-red);width:20px;"></i> Phone: <strong>${donor.mobile}</strong></div>
-          <div style="margin-top:6px;"><i class="fas fa-envelope" style="color:var(--primary-red);width:20px;"></i> Email: <strong>${donor.email}</strong></div>
-          <div style="margin-top:6px;"><i class="fas fa-clock" style="color:var(--primary-red);width:20px;"></i> Availability: <strong>${donor.availability}</strong></div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <a href="https://wa.me/${donor.mobile.replace(/[^0-9]/g, '')}?text=${sampleMsg}" target="_blank" class="btn-primary" style="justify-content:center;background:#25D366;box-shadow:none;">
-            <i class="fab fa-whatsapp"></i> Chat on WhatsApp
-          </a>
-          <a href="tel:${donor.mobile}" class="btn-outline" style="justify-content:center;">
-            <i class="fas fa-phone"></i> Call Donor Directly
-          </a>
-          <a href="sms:${donor.mobile}?body=${sampleMsg}" class="btn-outline" style="justify-content:center;">
-            <i class="fas fa-comment-sms"></i> Send SMS Message
-          </a>
-        </div>
-      `;
-
-      if (contactDonorModal) contactDonorModal.classList.remove('hidden');
-    },
-
-    // Stock Control in Hospital Dashboard
-    changeStock(group, delta, setToZero = false) {
+    changeStock: async function(group, delta, setToZero = false) {
       const currentHosp = hospitals.find(h => h.id === activeHospitalId);
-      if (!currentHosp) return;
+      if (!currentHosp) {
+        showToast('No hospital selected', 'warning');
+        return;
+      }
       if (!currentHosp.inventory) currentHosp.inventory = {};
 
       if (setToZero) {
@@ -1507,15 +2072,20 @@
         currentHosp.inventory[group] = Math.max(0, current + delta);
       }
 
-      setStored(STORAGE_KEYS.HOSPITALS, hospitals);
+      if (isBackendOnline && currentHosp.id) {
+        await updateHospitalInventoryInAPI(currentHosp.id, currentHosp.inventory);
+      }
+      
       renderHospitalDashboard();
       updateHeroStats();
     },
 
-    // Fulfill Hospital Booking Request & Deduct Inventory
-    fulfillHospitalBooking(bookingId) {
+    fulfillHospitalBooking: async function(bookingId) {
       const booking = patientBookings.find(b => b.id === bookingId);
-      if (!booking) return;
+      if (!booking) {
+        showToast('Booking not found', 'error');
+        return;
+      }
 
       const currentHosp = hospitals.find(h => h.id === booking.hospitalId);
       if (currentHosp && currentHosp.inventory) {
@@ -1528,29 +2098,38 @@
         }
 
         currentHosp.inventory[group] = Math.max(0, currentUnits - deduct);
-        setStored(STORAGE_KEYS.HOSPITALS, hospitals);
+        
+        if (isBackendOnline && currentHosp.id) {
+          await updateHospitalInventoryInAPI(currentHosp.id, currentHosp.inventory);
+        }
       }
 
       booking.status = 'fulfilled';
-      setStored(STORAGE_KEYS.BOOKINGS, patientBookings);
+      booking.updatedAt = new Date().toISOString();
+      
+      if (isBackendOnline) {
+        await updateBookingInAPI(booking.id, { status: 'fulfilled' });
+      }
 
       renderHospitalDashboard();
       updateHeroStats();
       showToast(`Booking #${booking.id} dispatched! Stock updated.`, 'success');
     },
 
-    // Remove Hospital Booking Request
-    removeHospitalBooking(bookingId) {
+    removeHospitalBooking: function(bookingId) {
+      if (!confirm('Remove this booking request?')) return;
+      
       patientBookings = patientBookings.filter(b => b.id !== bookingId);
-      setStored(STORAGE_KEYS.BOOKINGS, patientBookings);
       renderHospitalDashboard();
       showToast('Booking dismissed', 'info');
     },
 
-    // Respond to Emergency SOS
-    respondToSos(sosId) {
+    respondToSos: function(sosId) {
       const req = sosRequests.find(s => s.id === sosId);
-      if (!req) return;
+      if (!req) {
+        showToast('SOS request not found', 'error');
+        return;
+      }
 
       showToast(`Connecting to ${req.contactName} at ${req.hospital}...`, 'info');
       setTimeout(() => {
@@ -1558,21 +2137,31 @@
       }, 500);
     },
 
-    // Toggle Fulfilled Status of SOS
-    toggleFulfillSos(sosId) {
+    toggleFulfillSos: async function(sosId) {
       const req = sosRequests.find(s => s.id === sosId);
-      if (!req) return;
+      if (!req) {
+        showToast('SOS request not found', 'error');
+        return;
+      }
 
-      req.status = req.status === 'open' ? 'fulfilled' : 'open';
-      setStored(STORAGE_KEYS.SOS_REQUESTS, sosRequests);
+      const newStatus = req.status === 'open' ? 'fulfilled' : 'open';
+      req.status = newStatus;
+      req.updatedAt = new Date().toISOString();
+      
+      if (isBackendOnline) {
+        await updateSOSInAPI(req.id, { status: newStatus });
+      }
+      
       renderEmergencyFeed('all');
       showToast(`SOS #${req.id} marked as ${req.status === 'fulfilled' ? 'Fulfilled' : 'Open'}`, 'success');
     },
 
-    // Share SOS Alert
-    shareSos(sosId) {
+    shareSos: function(sosId) {
       const req = sosRequests.find(s => s.id === sosId);
-      if (!req) return;
+      if (!req) {
+        showToast('SOS request not found', 'error');
+        return;
+      }
 
       const shareText = `🚨 URGENT BLOOD NEED (SOS): ${req.units} units of ${req.bloodGroup} needed for ${req.patientName} at ${req.hospital}, ${req.city}. Contact: ${req.contactName} (${req.contactPhone}). Please share or donate via BloodConnect!`;
 
@@ -1585,28 +2174,215 @@
       } else {
         prompt('Copy SOS alert text below:', shareText);
       }
+<<<<<<< HEAD
+    },
+
+    refreshData: async function() {
+      showToast('Refreshing data from database...', 'info');
+      await loadHospitals();
+      await loadDonors();
+      await loadSOSRequests();
+      await loadBookings();
+      
+      if (activeHospitalId === null && hospitals.length > 0) {
+        activeHospitalId = hospitals[0].id;
+      }
+      
+      updateHeroStats();
+      performSearch();
+      renderHospitalDashboard();
+      renderEmergencyFeed('all');
+      showToast('Data refreshed from database!', 'success');
+    },
+
+    deleteHospital: async function(hospitalId) {
+      if (!confirm('Are you sure you want to delete this hospital? This action cannot be undone.')) {
+        return;
+      }
+
+      const hospital = hospitals.find(h => h.id === hospitalId);
+      if (!hospital) {
+        showToast('Hospital not found', 'error');
+        return;
+      }
+
+      if (isBackendOnline) {
+        const result = await deleteHospitalFromAPI(hospitalId);
+        if (result) {
+          showToast(`Hospital "${hospital.name}" deleted from database`, 'success');
+        } else {
+          showToast('Failed to delete from database', 'warning');
+        }
+      }
+
+      hospitals = hospitals.filter(h => h.id !== hospitalId);
+
+      if (activeHospitalId === hospitalId) {
+        activeHospitalId = hospitals.length > 0 ? hospitals[0].id : null;
+      }
+
+      renderHospitalDashboard();
+      updateHeroStats();
+      showToast(`Hospital "${hospital.name}" removed`, 'success');
+    },
+
+    deleteDonor: async function(donorId) {
+      if (!confirm('Are you sure you want to delete this donor?')) {
+        return;
+      }
+
+      const donor = donors.find(d => d.id === donorId);
+      if (!donor) {
+        showToast('Donor not found', 'error');
+        return;
+      }
+
+      if (isBackendOnline) {
+        const result = await deleteDonorFromAPI(donorId);
+        if (result) {
+          showToast(`Donor "${donor.fullName}" deleted from database`, 'success');
+        }
+      }
+
+      donors = donors.filter(d => d.id !== donorId);
+      updateHeroStats();
+      performSearch();
+      showToast(`Donor "${donor.fullName}" removed`, 'success');
+    },
+
+    deleteSOS: async function(sosId) {
+      if (!confirm('Delete this SOS request?')) {
+        return;
+      }
+
+      const sos = sosRequests.find(s => s.id === sosId);
+      if (!sos) {
+        showToast('SOS request not found', 'error');
+        return;
+      }
+
+      if (isBackendOnline) {
+        const result = await deleteSOSFromAPI(sosId);
+        if (result) {
+          showToast('SOS deleted from database', 'success');
+        }
+      }
+
+      sosRequests = sosRequests.filter(s => s.id !== sosId);
+      renderEmergencyFeed('all');
+      showToast('SOS request removed', 'success');
+    },
+
+    getState: function() {
+      return {
+        isBackendOnline,
+        hospitals: hospitals.length,
+        donors: donors.length,
+        sosRequests: sosRequests.length,
+        patientBookings: patientBookings.length,
+        activeHospitalId
+      };
+=======
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
     }
   };
 
   // ==========================================
-  // 12. BOOTSTRAP APPLICATION
+  // 15. BOOTSTRAP APPLICATION
   // ==========================================
+<<<<<<< HEAD
+  function updateApiStatusBadge() {
+    let badge = document.getElementById('backendStatusBadge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.id = 'backendStatusBadge';
+      badge.className = 'badge';
+      badge.style.marginLeft = '12px';
+      badge.style.fontSize = '0.78rem';
+      badge.style.verticalAlign = 'middle';
+      
+      const logo = document.querySelector('.navbar .logo');
+      if (logo) {
+        logo.appendChild(badge);
+      }
+    }
+    
+    if (isBackendOnline) {
+      badge.className = 'badge badge-green';
+      badge.innerHTML = '<i class="fas fa-circle-check"></i> Database Connected';
+    } else {
+      badge.className = 'badge badge-red';
+      badge.innerHTML = '<i class="fas fa-circle-exclamation"></i> Database Offline';
+    }
+  }
+
+  async function initApp() {
+    await checkBackendHealth();
+
+    if (!isBackendOnline) {
+      showToast('⚠️ Database server not connected. Please start the FastAPI server.', 'error', 5000);
+      const apiStatus = document.getElementById('apiStatus');
+      if (apiStatus) {
+        apiStatus.textContent = '📡 Database Offline - Please start server';
+        apiStatus.style.color = '#DC2626';
+      }
+    }
+
+    await loadHospitals();
+    await loadDonors();
+    await loadSOSRequests();
+    await loadBookings();
+    
+    if (activeHospitalId === null && hospitals.length > 0) {
+      activeHospitalId = hospitals[0].id;
+    }
+    
+=======
   function initApp() {
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
     updateHeroStats();
     initCompatibilityWidget();
     performSearch();
     renderHospitalDashboard();
+    renderEmergencyFeed('all');
 
-    // Default Seed Donor Card init
     if (donors.length > 0) {
       updateDonorCardDisplay(donors[0]);
     }
 
+<<<<<<< HEAD
+    const apiStatus = document.getElementById('apiStatus');
+    if (apiStatus) {
+      apiStatus.textContent = isBackendOnline ? '🔗 Database Connected' : '📡 Database Offline';
+      apiStatus.style.color = isBackendOnline ? '#10B981' : '#DC2626';
+    }
+
+    updateApiStatusBadge();
+
+    const curPage = detectCurrentPage();
+    showPage(curPage);
+    
+    const navRight = document.querySelector('.navbar .nav-right');
+    if (navRight && isBackendOnline) {
+      if (!document.getElementById('refreshDataBtn')) {
+        const refreshBtn = document.createElement('button');
+        refreshBtn.id = 'refreshDataBtn';
+        refreshBtn.className = 'btn-outline btn-sm';
+        refreshBtn.innerHTML = '<i class="fas fa-sync"></i> Refresh';
+        refreshBtn.style.marginLeft = '10px';
+        refreshBtn.onclick = window.BloodConnectApp.refreshData;
+        navRight.appendChild(refreshBtn);
+      }
+    }
+
+    console.log('✅ BloodConnect initialized in Database-Only Mode (NO LOCAL STORAGE)');
+    console.log('📊 Current state:', window.BloodConnectApp.getState());
+=======
     // Default start page
     showPage('find');
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
   }
 
-  // Run when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApp);
   } else {
