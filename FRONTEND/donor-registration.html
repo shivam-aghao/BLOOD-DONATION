@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donor Registration | BloodConnect</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar">
+  <div class="container">
+    <div class="logo" role="button" onclick="window.location.href='index.html'" style="cursor:pointer;">
+      <i class="fas fa-droplet"></i> BloodConnect
+    </div>
+    <div class="hamburger" id="hamburger" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></div>
+    <div class="nav-links" id="navLinks">
+      <a href="find-blood.html" class="nav-link"><i class="fas fa-search-location"></i> Find Blood</a>
+      <a href="sos-requests.html" class="nav-link"><i class="fas fa-bullhorn"></i> SOS Requests</a>
+      <a href="hospital-dashboard.html" class="nav-link"><i class="fas fa-hospital"></i> Hospital Dashboard</a>
+      <a href="about.html" class="nav-link"><i class="fas fa-circle-info"></i> About</a>
+      <a href="donor-registration.html" class="donate-btn active"><i class="fas fa-heart"></i> Register as Donor</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="container main-content">
+
+  <section id="page-donor" class="page">
+    <div class="donor-hero-intro">
+      <h2>Become a Lifesaver ❤️</h2>
+      <p>Register as a voluntary blood donor. One donation can save up to three lives.</p>
+    </div>
+
+    <div class="donor-layout">
+      <!-- Registration Form -->
+      <div class="donor-form-wrapper">
+        <form class="donor-form" id="donorRegistrationForm">
+          <div class="form-section-title"><i class="fas fa-user"></i> Personal Details</div>
+          <div class="form-row">
+            <div>
+              <label for="dFullName">Full Name *</label>
+              <input type="text" placeholder="e.g. Sarah Jenkins" id="dFullName" required>
+            </div>
+            <div>
+              <label for="dAge">Age (Years) * <span class="input-hint">(18 - 65)</span></label>
+              <input type="number" placeholder="28" id="dAge" min="18" max="65" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label for="dGender">Gender *</label>
+              <select id="dGender">
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Non-Binary/Other">Non-Binary / Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="dBloodGroup">Blood Group *</label>
+              <select id="dBloodGroup" required>
+                <option value="O+">O+ (O Positive)</option>
+                <option value="O-">O- (O Negative)</option>
+                <option value="A+">A+ (A Positive)</option>
+                <option value="A-">A- (A Negative)</option>
+                <option value="B+">B+ (B Positive)</option>
+                <option value="B-">B- (B Negative)</option>
+                <option value="AB+">AB+ (AB Positive)</option>
+                <option value="AB-">AB- (AB Negative)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-section-title" style="margin-top:20px;"><i class="fas fa-address-book"></i> Contact & Location</div>
+          <div class="form-row">
+            <div>
+              <label for="dMobile">Mobile Number *</label>
+              <input type="tel" placeholder="e.g. +1 555 123 4567" id="dMobile" required>
+            </div>
+            <div>
+              <label for="dEmail">Email Address *</label>
+              <input type="email" placeholder="sarah.j@example.com" id="dEmail" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label for="dCity">City / Area *</label>
+              <input type="text" placeholder="e.g. AKOLA" id="dCity" required>
+            </div>
+            <div>
+              <label for="dAddress">Full Address / Street</label>
+              <input type="text" placeholder="e.g. 742 Evergreen Terrace" id="dAddress">
+            </div>
+          </div>
+
+          <div class="form-section-title" style="margin-top:20px;"><i class="fas fa-notes-medical"></i> Donation History & Availability</div>
+          <div class="form-row">
+            <div>
+              <label for="dDonatedBefore">Donated Blood Before?</label>
+              <select id="dDonatedBefore">
+                <option value="Yes">Yes, regular donor</option>
+                <option value="No">No, first time donor</option>
+              </select>
+            </div>
+            <div>
+              <label for="dLastDonation">Last Donation Date (if applicable)</label>
+              <input type="date" id="dLastDonation">
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label for="dAvailability">Availability for Donations</label>
+              <select id="dAvailability">
+                <option value="Anytime (24/7 SOS)">Anytime (24/7 Urgent SOS)</option>
+                <option value="Weekends only">Weekends Only</option>
+                <option value="Evenings & Weekends">Evenings & Weekends</option>
+                <option value="Working Hours Only">Working Hours Only</option>
+              </select>
+            </div>
+            <div>
+              <label for="dPreferredHospital">Preferred Hospital / Area</label>
+              <input type="text" placeholder="e.g. City General Hospital" id="dPreferredHospital">
+            </div>
+          </div>
+
+          <div class="checkbox-group full-width">
+            <input type="checkbox" id="dAgree" checked required>
+            <label for="dAgree">I confirm I am healthy, weigh over 50kg, and agree to receive urgent alerts when my blood type is needed.</label>
+          </div>
+
+          <button type="submit" class="btn-primary btn-submit-donor" id="registerDonorBtn"><i class="fas fa-heart-circle-check"></i> Register as Voluntary Donor</button>
+        </form>
+      </div>
+
+      <!-- Live Donor ID Card Preview & Success Section -->
+      <div class="donor-card-side">
+        <div id="donorCardContainer" class="donor-card-wrapper">
+          <div class="card-preview-header">
+            <h3><i class="fas fa-id-card"></i> Digital Donor Card</h3>
+            <p>Your personalized official digital donor card is generated upon registration.</p>
+          </div>
+
+          <!-- Digital Card Box -->
+          <div class="donor-id-card" id="digitalDonorCard">
+            <div class="id-card-top">
+              <div class="id-brand">
+                <i class="fas fa-droplet"></i>
+                <div>
+                  <strong>BloodConnect</strong>
+                  <span>LifeSaver Member</span>
+                </div>
+              </div>
+              <div class="id-blood-badge" id="cardBloodGroup">O+</div>
+            </div>
+            <div class="id-card-body">
+              <div class="id-avatar"><i class="fas fa-user"></i></div>
+              <div class="id-details">
+                <h4 id="cardName">Your Name</h4>
+                <div class="id-row"><span class="lbl">ID:</span> <span class="val" id="cardId">BC-00000</span></div>
+                <div class="id-row"><span class="lbl">City:</span> <span class="val" id="cardCity">City</span></div>
+                <div class="id-row"><span class="lbl">Status:</span> <span class="val text-success">Active Lifesaver</span></div>
+                <div class="id-row"><span class="lbl">Registered:</span> <span class="val" id="cardDate">Today</span></div>
+              </div>
+            </div>
+            <div class="id-card-bottom">
+              <div class="id-barcode"><i class="fas fa-qrcode"></i> Verified Voluntary Donor</div>
+              <span class="emergency-flag"><i class="fas fa-phone-alt"></i> SOS Ready</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-outline btn-sm" id="printCardBtn"><i class="fas fa-print"></i> Print / Save Donor Card</button>
+            <a href="find-blood.html" class="btn-primary btn-sm"><i class="fas fa-search"></i> View In Donor Directory</a>
+          </div>
+
+          <div class="donor-faq-box">
+            <h4><i class="fas fa-circle-question"></i> Eligibility Guidelines</h4>
+            <ul>
+              <li><i class="fas fa-check"></i> Age between 18 and 65 years.</li>
+              <li><i class="fas fa-check"></i> Weight minimum 50 kg (110 lbs).</li>
+              <li><i class="fas fa-check"></i> 56 days minimum between whole blood donations.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="logo" style="color:white; margin-bottom:12px;">
+        <i class="fas fa-droplet" style="color:var(--primary-red);"></i> BloodConnect
+      </div>
+      <p style="font-size:0.9rem; line-height:1.6; color:#9CA3AF;">
+        A real-time humanitarian blood donation and inventory network.
+      </p>
+    </div>
+    <div>
+      <h5>Quick Links</h5>
+      <ul class="footer-links">
+        <li><a href="find-blood.html"><i class="fas fa-chevron-right"></i> Find Blood Stock</a></li>
+        <li><a href="sos-requests.html"><i class="fas fa-chevron-right"></i> SOS Emergency Requests</a></li>
+        <li><a href="hospital-dashboard.html"><i class="fas fa-chevron-right"></i> Hospital Dashboard</a></li>
+        <li><a href="donor-registration.html"><i class="fas fa-chevron-right"></i> Register as Donor</a></li>
+        <li><a href="about.html"><i class="fas fa-chevron-right"></i> About BloodConnect</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Emergency Helpline</h5>
+      <div style="font-size:1.2rem; font-weight:700; color:var(--primary-red);">
+        <i class="fas fa-phone-volume"></i> 1-800-BLOOD-HELP
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
