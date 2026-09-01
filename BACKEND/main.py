@@ -42,11 +42,20 @@ app.include_router(search_router)
 
 
 # =========================
-# HOME
+# HOME & HEALTH CHECKS
 # =========================
 
 @app.get("/")
 def home():
     return {
+        "status": "online",
         "message": "BloodConnect Backend is running successfully"
+    }
+
+
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy",
+        "service": "BloodConnect Backend"
     }
