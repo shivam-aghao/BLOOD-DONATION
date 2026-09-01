@@ -1,11 +1,8 @@
 /**
  * ===================================================================
  * BloodConnect - Full Functional Client-Side Application
-<<<<<<< HEAD
  * With Supabase & FastAPI Integration (Database Only Mode)
  * NO LOCAL STORAGE - All data from database
-=======
->>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
  * ===================================================================
  */
 
@@ -13,7 +10,6 @@
   'use strict';
 
   // ==========================================
-<<<<<<< HEAD
   // 0. API & SUPABASE CONFIGURATION
   // ==========================================
   
@@ -27,17 +23,6 @@
   // ==========================================
   // ⚠️ REMOVED: All localStorage keys and functions
   // Data is stored ONLY in the database
-=======
-  // 1. DATA STORAGE & SEED INITIALIZATION
-  // ==========================================
-  const STORAGE_KEYS = {
-    HOSPITALS: 'bc_hospitals_data',
-    DONORS: 'bc_donors_data',
-    SOS_REQUESTS: 'bc_sos_requests',
-    BOOKINGS: 'bc_patient_bookings',
-    CURRENT_HOSPITAL: 'bc_active_hospital_id'
-  };
->>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
 
   const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -85,7 +70,6 @@
     }
   };
 
-<<<<<<< HEAD
   // ==========================================
   // 2. API INTEGRATION FUNCTIONS
   // ==========================================
@@ -187,282 +171,6 @@
     } catch (error) {
       console.error('Backend inventory update error:', error);
       return null;
-=======
-  // Seed Hospitals
-  const DEFAULT_HOSPITALS = [
-    {
-      id: 'hosp-1',
-      name: 'City General Hospital & Trauma Center',
-      city: 'New York',
-      address: '420 East 70th Street, Manhattan',
-      contact: '+1 (212) 555-0199',
-      email: 'bloodbank@citygeneral.org',
-      operatingHours: '24/7 Emergency Blood Bank',
-      inventory: {
-        'A+': 14, 'A-': 4, 'B+': 9, 'B-': 2,
-        'AB+': 6, 'AB-': 3, 'O+': 22, 'O-': 5
-      },
-      lastUpdated: new Date().toISOString()
-    },
-    {
-      id: 'hosp-2',
-      name: "St. Mary's Regional Blood Center",
-      city: 'New York',
-      address: '1300 York Avenue, Manhattan',
-      contact: '+1 (212) 555-0234',
-      email: 'donations@stmarysblood.org',
-      operatingHours: '24/7 Emergency Service',
-      inventory: {
-        'A+': 8, 'A-': 0, 'B+': 12, 'B-': 1,
-        'AB+': 4, 'AB-': 0, 'O+': 18, 'O-': 2
-      },
-      lastUpdated: new Date().toISOString()
-    },
-    {
-      id: 'hosp-3',
-      name: 'Brooklyn Central Medical Center',
-      city: 'Brooklyn',
-      address: '506 6th Street, Brooklyn',
-      contact: '+1 (718) 555-0456',
-      email: 'bloodservice@brooklynmed.org',
-      operatingHours: 'Mon - Sun: 24 Hours',
-      inventory: {
-        'A+': 11, 'A-': 3, 'B+': 5, 'B-': 0,
-        'AB+': 7, 'AB-': 2, 'O+': 15, 'O-': 4
-      },
-      lastUpdated: new Date().toISOString()
-    },
-    {
-      id: 'hosp-4',
-      name: 'Queens Emergency Health Hospital',
-      city: 'Queens',
-      address: '82-68 164th St, Jamaica, Queens',
-      contact: '+1 (718) 555-0789',
-      email: 'blood@queenshealth.org',
-      operatingHours: '24 Hours Emergency Ward',
-      inventory: {
-        'A+': 6, 'A-': 2, 'B+': 7, 'B-': 3,
-        'AB+': 5, 'AB-': 1, 'O+': 9, 'O-': 1
-      },
-      lastUpdated: new Date().toISOString()
-    },
-    {
-      id: 'hosp-5',
-      name: 'Chicago Metropolitan Hospital',
-      city: 'Chicago',
-      address: '5841 S Maryland Ave, Chicago',
-      contact: '+1 (312) 555-0912',
-      email: 'bloodsupply@chicagometro.org',
-      operatingHours: '24/7 Rapid Response',
-      inventory: {
-        'A+': 16, 'A-': 5, 'B+': 10, 'B-': 4,
-        'AB+': 8, 'AB-': 3, 'O+': 25, 'O-': 6
-      },
-      lastUpdated: new Date().toISOString()
-    }
-  ];
-
-  // Seed Voluntary Donors
-  const DEFAULT_DONORS = [
-    {
-      id: 'BC-84920',
-      fullName: 'Sarah Jenkins',
-      age: 28,
-      gender: 'Female',
-      bloodGroup: 'O-',
-      mobile: '+1 (555) 234-5678',
-      email: 'sarah.j@example.com',
-      city: 'New York',
-      address: '742 Evergreen Terrace, Manhattan',
-      donatedBefore: 'Yes',
-      lastDonation: '2026-06-15',
-      availability: 'Anytime (24/7 SOS)',
-      preferredHospital: 'City General Hospital',
-      registeredAt: '2026-08-10'
-    },
-    {
-      id: 'BC-71822',
-      fullName: 'Marcus Vance',
-      age: 34,
-      gender: 'Male',
-      bloodGroup: 'A+',
-      mobile: '+1 (555) 345-6789',
-      email: 'marcus.v@example.com',
-      city: 'New York',
-      address: '120 West 44th St',
-      donatedBefore: 'Yes',
-      lastDonation: '2026-05-20',
-      availability: 'Evenings & Weekends',
-      preferredHospital: "St. Mary's Regional",
-      registeredAt: '2026-07-28'
-    },
-    {
-      id: 'BC-93014',
-      fullName: 'Elena Rostova',
-      age: 26,
-      gender: 'Female',
-      bloodGroup: 'B+',
-      mobile: '+1 (718) 555-7890',
-      email: 'elena.rostova@example.com',
-      city: 'Brooklyn',
-      address: '350 Ocean Parkway',
-      donatedBefore: 'No',
-      lastDonation: '',
-      availability: 'Anytime (24/7 SOS)',
-      preferredHospital: 'Brooklyn Central Medical Center',
-      registeredAt: '2026-08-20'
-    },
-    {
-      id: 'BC-48201',
-      fullName: 'David Chen',
-      age: 31,
-      gender: 'Male',
-      bloodGroup: 'AB+',
-      mobile: '+1 (718) 555-9123',
-      email: 'david.chen@example.com',
-      city: 'Queens',
-      address: '41-25 Main St, Flushing',
-      donatedBefore: 'Yes',
-      lastDonation: '2026-04-10',
-      availability: 'Weekends only',
-      preferredHospital: 'Queens Emergency Health',
-      registeredAt: '2026-08-01'
-    },
-    {
-      id: 'BC-65902',
-      fullName: 'Jessica Taylor',
-      age: 24,
-      gender: 'Female',
-      bloodGroup: 'O+',
-      mobile: '+1 (312) 555-8844',
-      email: 'jess.taylor@example.com',
-      city: 'Chicago',
-      address: '220 N Michigan Ave',
-      donatedBefore: 'Yes',
-      lastDonation: '2026-07-02',
-      availability: 'Anytime (24/7 SOS)',
-      preferredHospital: 'Chicago Metropolitan Hospital',
-      registeredAt: '2026-08-18'
-    },
-    {
-      id: 'BC-31940',
-      fullName: 'Alexander Wright',
-      age: 42,
-      gender: 'Male',
-      bloodGroup: 'A-',
-      mobile: '+1 (555) 678-1234',
-      email: 'a.wright@example.com',
-      city: 'New York',
-      address: '88 Greenwich St',
-      donatedBefore: 'Yes',
-      lastDonation: '2026-03-12',
-      availability: 'Working Hours Only',
-      preferredHospital: 'City General Hospital',
-      registeredAt: '2026-08-14'
-    },
-    {
-      id: 'BC-54219',
-      fullName: 'Amira Patel',
-      age: 29,
-      gender: 'Female',
-      bloodGroup: 'B-',
-      mobile: '+1 (718) 555-4433',
-      email: 'amira.p@example.com',
-      city: 'Brooklyn',
-      address: '85 Flatbush Ave',
-      donatedBefore: 'Yes',
-      lastDonation: '2026-06-25',
-      availability: 'Anytime (24/7 SOS)',
-      preferredHospital: 'Brooklyn Central Medical Center',
-      registeredAt: '2026-08-25'
-    },
-    {
-      id: 'BC-19483',
-      fullName: 'Carlos Rodriguez',
-      age: 38,
-      gender: 'Male',
-      bloodGroup: 'AB-',
-      mobile: '+1 (312) 555-1122',
-      email: 'carlos.r@example.com',
-      city: 'Chicago',
-      address: '1500 W Jackson Blvd',
-      donatedBefore: 'Yes',
-      lastDonation: '2026-05-18',
-      availability: 'Evenings & Weekends',
-      preferredHospital: 'Chicago Metropolitan Hospital',
-      registeredAt: '2026-08-29'
-    }
-  ];
-
-  // Seed Urgent SOS Requests
-  const DEFAULT_SOS = [
-    {
-      id: 'SOS-1049',
-      patientName: 'Michael Smith',
-      bloodGroup: 'O-',
-      units: 3,
-      urgency: 'Critical (Immediate)',
-      hospital: 'City General Hospital',
-      city: 'New York',
-      contactName: 'Dr. Katherine Adams (ICU)',
-      contactPhone: '+1 (212) 555-0199',
-      notes: 'Emergency vascular trauma surgery in Room 304. Immediate donor matching needed.',
-      status: 'open',
-      createdAt: new Date(Date.now() - 45 * 60 * 1000).toISOString() // 45m ago
-    },
-    {
-      id: 'SOS-1048',
-      patientName: 'Lucas Morales',
-      bloodGroup: 'B-',
-      units: 2,
-      urgency: 'Urgent (Today)',
-      hospital: 'Brooklyn Central Medical Center',
-      city: 'Brooklyn',
-      contactName: 'Maria Morales (Sister)',
-      contactPhone: '+1 (718) 555-9876',
-      notes: 'Scheduled bypass operation requiring B- buffer stock.',
-      status: 'open',
-      createdAt: new Date(Date.now() - 3 * 3600 * 1000).toISOString() // 3h ago
-    },
-    {
-      id: 'SOS-1045',
-      patientName: 'Sophia Reynolds',
-      bloodGroup: 'A-',
-      units: 2,
-      urgency: 'Standard (Within 24h)',
-      hospital: 'Chicago Metropolitan Hospital',
-      city: 'Chicago',
-      contactName: 'Robert Reynolds (Father)',
-      contactPhone: '+1 (312) 555-3321',
-      notes: 'Post-chemotherapy transfusion needed before tomorrow noon.',
-      status: 'open',
-      createdAt: new Date(Date.now() - 8 * 3600 * 1000).toISOString() // 8h ago
-    },
-    {
-      id: 'SOS-1040',
-      patientName: 'Daniel Vance',
-      bloodGroup: 'AB+',
-      units: 1,
-      urgency: 'Critical (Immediate)',
-      hospital: 'Queens Emergency Health',
-      city: 'Queens',
-      contactName: 'Dr. Gregory House',
-      contactPhone: '+1 (718) 555-0789',
-      notes: 'Trauma ward delivery.',
-      status: 'fulfilled',
-      createdAt: new Date(Date.now() - 24 * 3600 * 1000).toISOString()
-    }
-  ];
-
-  // Storage Helpers
-  function getStored(key, fallback) {
-    try {
-      const item = localStorage.getItem(key);
-      return item ? JSON.parse(item) : fallback;
-    } catch (e) {
-      console.warn('Storage read error:', e);
-      return fallback;
->>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
     }
   }
 
@@ -479,7 +187,6 @@
     }
   }
 
-<<<<<<< HEAD
   // ---------- DONOR API ----------
   async function fetchDonorsFromAPI() {
     try {
@@ -686,41 +393,6 @@
       return null;
     }
   }
-=======
-  // Initialize data if not present
-  if (!localStorage.getItem(STORAGE_KEYS.HOSPITALS)) {
-    setStored(STORAGE_KEYS.HOSPITALS, DEFAULT_HOSPITALS);
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.DONORS)) {
-    setStored(STORAGE_KEYS.DONORS, DEFAULT_DONORS);
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.SOS_REQUESTS)) {
-    setStored(STORAGE_KEYS.SOS_REQUESTS, DEFAULT_SOS);
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.BOOKINGS)) {
-    setStored(STORAGE_KEYS.BOOKINGS, [
-      {
-        id: 'BK-101',
-        hospitalId: 'hosp-1',
-        hospitalName: 'City General Hospital & Trauma Center',
-        patientName: 'Emily Clark',
-        bloodGroup: 'O+',
-        units: 2,
-        doctor: 'Dr. Adams / Surgical',
-        contact: '+1 (555) 777-8899',
-        notes: 'Room 210 pre-op reservation',
-        status: 'pending',
-        createdAt: new Date(Date.now() - 2 * 3600 * 1000).toISOString()
-      }
-    ]);
-  }
-
-  let hospitals = getStored(STORAGE_KEYS.HOSPITALS, DEFAULT_HOSPITALS);
-  let donors = getStored(STORAGE_KEYS.DONORS, DEFAULT_DONORS);
-  let sosRequests = getStored(STORAGE_KEYS.SOS_REQUESTS, DEFAULT_SOS);
-  let patientBookings = getStored(STORAGE_KEYS.BOOKINGS, []);
-  let activeHospitalId = getStored(STORAGE_KEYS.CURRENT_HOSPITAL, hospitals[0]?.id || 'hosp-1');
->>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
 
   // ==========================================
   // 4. DATA LOADING FUNCTIONS (DATABASE ONLY)
@@ -956,24 +628,6 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  document.querySelectorAll('[data-page]').forEach(el => {
-    el.addEventListener('click', function (e) {
-      e.preventDefault();
-      const targetPage = this.dataset.page;
-      showPage(targetPage);
-      const navLinks = document.getElementById('navLinks');
-      if (navLinks) navLinks.classList.remove('open');
-    });
-  });
-
-  const hamburger = document.getElementById('hamburger');
-  if (hamburger) {
-    hamburger.addEventListener('click', () => {
-      const navLinks = document.getElementById('navLinks');
-      if (navLinks) navLinks.classList.toggle('open');
-    });
-  }
-
   // ==========================================
   // 7. HERO STATS DYNAMIC CALCULATION
   // ==========================================
@@ -1013,71 +667,83 @@
   // ==========================================
   // 8. PAGE 1: FIND BLOOD & SEARCH SYSTEM
   // ==========================================
-  let currentSearchTab = 'hospitals'; // 'hospitals' or 'donors'
+  let currentSearchTab = 'hospitals';
 
-  const tabHospitalsBtn = document.getElementById('tabHospitalsBtn');
-  const tabDonorsBtn = document.getElementById('tabDonorsBtn');
-  const sortResultsSelect = document.getElementById('sortResults');
-  const includeCompatibleCheck = document.getElementById('includeCompatibleCheck');
+  function setupSearchEventListeners() {
+    const tabHospitalsBtn = document.getElementById('tabHospitalsBtn');
+    const tabDonorsBtn = document.getElementById('tabDonorsBtn');
+    const sortResultsSelect = document.getElementById('sortResults');
+    const includeCompatibleCheck = document.getElementById('includeCompatibleCheck');
+    const searchBtn = document.getElementById('searchBtn');
+    const resetSearchBtn = document.getElementById('resetSearchBtn');
+    const cityInput = document.getElementById('cityInput');
 
-  if (tabHospitalsBtn && tabDonorsBtn) {
-    tabHospitalsBtn.addEventListener('click', () => {
-      currentSearchTab = 'hospitals';
-      tabHospitalsBtn.classList.add('active');
-      tabDonorsBtn.classList.remove('active');
-      performSearch();
-    });
-
-    tabDonorsBtn.addEventListener('click', () => {
-      currentSearchTab = 'donors';
-      tabDonorsBtn.classList.add('active');
-      tabHospitalsBtn.classList.remove('active');
-      performSearch();
-    });
-  }
-
-  if (sortResultsSelect) {
-    sortResultsSelect.addEventListener('change', performSearch);
-  }
-  if (includeCompatibleCheck) {
-    includeCompatibleCheck.addEventListener('change', performSearch);
-  }
-
-  const searchBtn = document.getElementById('searchBtn');
-  if (searchBtn) {
-    searchBtn.addEventListener('click', performSearch);
-  }
-
-  const resetSearchBtn = document.getElementById('resetSearchBtn');
-  if (resetSearchBtn) {
-    resetSearchBtn.addEventListener('click', () => {
-      document.getElementById('bloodGroup').value = 'A+';
-      document.getElementById('cityInput').value = 'All';
-      document.getElementById('includeCompatibleCheck').checked = true;
-      document.getElementById('sortResults').value = 'stock-desc';
-      performSearch();
-      showToast('Search filters reset', 'info');
-    });
-  }
-
-  const cityInput = document.getElementById('cityInput');
-  if (cityInput) {
-    cityInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
+    if (tabHospitalsBtn && tabDonorsBtn) {
+      tabHospitalsBtn.addEventListener('click', () => {
+        currentSearchTab = 'hospitals';
+        tabHospitalsBtn.classList.add('active');
+        tabDonorsBtn.classList.remove('active');
         performSearch();
-      }
-    });
+      });
+
+      tabDonorsBtn.addEventListener('click', () => {
+        currentSearchTab = 'donors';
+        tabDonorsBtn.classList.add('active');
+        tabHospitalsBtn.classList.remove('active');
+        performSearch();
+      });
+    }
+
+    if (sortResultsSelect) {
+      sortResultsSelect.addEventListener('change', performSearch);
+    }
+    if (includeCompatibleCheck) {
+      includeCompatibleCheck.addEventListener('change', performSearch);
+    }
+
+    if (searchBtn) {
+      searchBtn.addEventListener('click', performSearch);
+    }
+
+    if (resetSearchBtn) {
+      resetSearchBtn.addEventListener('click', () => {
+        const bloodGroup = document.getElementById('bloodGroup');
+        const cityInput = document.getElementById('cityInput');
+        const includeCompatibleCheck = document.getElementById('includeCompatibleCheck');
+        const sortResults = document.getElementById('sortResults');
+        
+        if (bloodGroup) bloodGroup.value = 'A+';
+        if (cityInput) cityInput.value = 'All';
+        if (includeCompatibleCheck) includeCompatibleCheck.checked = true;
+        if (sortResults) sortResults.value = 'stock-desc';
+        performSearch();
+        showToast('Search filters reset', 'info');
+      });
+    }
+
+    if (cityInput) {
+      cityInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          performSearch();
+        }
+      });
+    }
   }
 
   function performSearch() {
-    const selectedGroup = document.getElementById('bloodGroup')?.value || 'A+';
-    const cityQuery = (document.getElementById('cityInput')?.value || '').trim().toLowerCase();
-    const includeCompatible = document.getElementById('includeCompatibleCheck')?.checked ?? true;
-    const sortBy = document.getElementById('sortResults')?.value || 'stock-desc';
+    const bloodGroupEl = document.getElementById('bloodGroup');
+    const cityInputEl = document.getElementById('cityInput');
+    const includeCompatibleCheck = document.getElementById('includeCompatibleCheck');
+    const sortResultsSelect = document.getElementById('sortResults');
     const container = document.getElementById('resultsContainer');
 
     if (!container) return;
+
+    const selectedGroup = bloodGroupEl ? bloodGroupEl.value : 'A+';
+    const cityQuery = cityInputEl ? (cityInputEl.value || '').trim().toLowerCase() : '';
+    const includeCompatible = includeCompatibleCheck ? includeCompatibleCheck.checked : true;
+    const sortBy = sortResultsSelect ? sortResultsSelect.value : 'stock-desc';
 
     const compatibleGroups = COMPATIBILITY[selectedGroup]?.receive || [selectedGroup];
     const targetGroups = includeCompatible ? compatibleGroups : [selectedGroup];
@@ -1129,11 +795,18 @@
           <i class="fas fa-hospital-slash"></i>
           <h3>No Partner Hospitals Found</h3>
           <p>We couldn't find hospitals matching your location filter. Try searching for "All" or a nearby city.</p>
-          <button class="btn-emergency" onclick="document.getElementById('openEmergencyModalBtn')?.click()">
+          <button class="btn-emergency" id="emptySosBtn">
             <i class="fas fa-bullhorn"></i> Post Urgent SOS Request
           </button>
         </div>
       `;
+      const emptySosBtn = document.getElementById('emptySosBtn');
+      if (emptySosBtn) {
+        emptySosBtn.addEventListener('click', () => {
+          const emergencyModal = document.getElementById('emergencyModal');
+          if (emergencyModal) emergencyModal.classList.remove('hidden');
+        });
+      }
       return;
     }
 
@@ -1194,7 +867,7 @@
           </div>
 
           <div class="result-card-actions">
-            <button class="btn-card-primary" onclick="window.BloodConnectApp.openBookingModal('${h.id}', '${selectedGroup}')">
+            <button class="btn-card-primary booking-btn" data-hospital-id="${h.id}" data-blood-group="${selectedGroup}">
               <i class="fas fa-file-medical"></i> Request Units
             </button>
             <a href="tel:${h.contact}" class="btn-card-secondary" title="Call Blood Bank">
@@ -1206,6 +879,15 @@
     });
 
     container.innerHTML = html;
+
+    // Add event listeners for booking buttons
+    container.querySelectorAll('.booking-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const hospitalId = this.dataset.hospitalId;
+        const bloodGroup = this.dataset.bloodGroup;
+        openBookingModal(hospitalId, bloodGroup);
+      });
+    });
   }
 
   function renderDonorSearchResults(donorList, selectedGroup, sortBy, container) {
@@ -1215,12 +897,13 @@
           <i class="fas fa-user-xmark"></i>
           <h3>No Voluntary Donors Matching</h3>
           <p>No registered voluntary donors found for blood type ${selectedGroup} in this location. Be the first lifesaver to register!</p>
-          <button class="btn-primary" data-page="donor"><i class="fas fa-heart"></i> Register as a Donor</button>
+          <button class="btn-primary" id="registerDonorBtn"><i class="fas fa-heart"></i> Register as a Donor</button>
         </div>
       `;
-      container.querySelectorAll('[data-page]').forEach(b => {
-        b.addEventListener('click', () => showPage('donor'));
-      });
+      const registerDonorBtn = document.getElementById('registerDonorBtn');
+      if (registerDonorBtn) {
+        registerDonorBtn.addEventListener('click', () => showPage('donor'));
+      }
       return;
     }
 
@@ -1276,7 +959,7 @@
           </div>
 
           <div class="result-card-actions">
-            <button class="btn-card-primary" onclick="window.BloodConnectApp.openContactDonorModal('${d.id}')">
+            <button class="btn-card-primary contact-donor-btn" data-donor-id="${d.id}">
               <i class="fas fa-comments"></i> Contact Donor
             </button>
             <a href="tel:${d.mobile}" class="btn-card-secondary">
@@ -1288,6 +971,14 @@
     });
 
     container.innerHTML = html;
+
+    // Add event listeners for contact donor buttons
+    container.querySelectorAll('.contact-donor-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const donorId = this.dataset.donorId;
+        openContactDonorModal(donorId);
+      });
+    });
   }
 
   // ==========================================
@@ -1398,10 +1089,10 @@
 
           <div class="sos-actions">
             ${!isFulfilled ? `
-              <button class="btn-card-primary" onclick="window.BloodConnectApp.respondToSos('${req.id}')">
+              <button class="btn-card-primary respond-sos-btn" data-sos-id="${req.id}">
                 <i class="fas fa-heart"></i> I Can Donate
               </button>
-              <button class="btn-card-secondary" onclick="window.BloodConnectApp.toggleFulfillSos('${req.id}')" title="Mark request as fulfilled">
+              <button class="btn-card-secondary fulfill-sos-btn" data-sos-id="${req.id}">
                 <i class="fas fa-check"></i> Fulfill
               </button>
             ` : `
@@ -1409,7 +1100,7 @@
                 <i class="fas fa-circle-check" style="color:var(--success-green);"></i> Request Fulfilled & Saved
               </button>
             `}
-            <button class="btn-card-secondary" onclick="window.BloodConnectApp.shareSos('${req.id}')" title="Share SOS Alert">
+            <button class="btn-card-secondary share-sos-btn" data-sos-id="${req.id}" title="Share SOS Alert">
               <i class="fas fa-share-nodes"></i> Share
             </button>
           </div>
@@ -1418,16 +1109,82 @@
     });
 
     feedContainer.innerHTML = html;
+
+    // Add event listeners for SOS actions
+    feedContainer.querySelectorAll('.respond-sos-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const sosId = this.dataset.sosId;
+        respondToSos(sosId);
+      });
+    });
+
+    feedContainer.querySelectorAll('.fulfill-sos-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const sosId = this.dataset.sosId;
+        toggleFulfillSos(sosId);
+      });
+    });
+
+    feedContainer.querySelectorAll('.share-sos-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const sosId = this.dataset.sosId;
+        shareSos(sosId);
+      });
+    });
   }
 
-  document.querySelectorAll('.emergency-filter-bar .filter-chip').forEach(chip => {
-    chip.addEventListener('click', function () {
-      document.querySelectorAll('.emergency-filter-bar .filter-chip').forEach(c => c.classList.remove('active'));
-      this.classList.add('active');
-      const status = this.dataset.status;
-      renderEmergencyFeed(status);
-    });
-  });
+  // SOS action functions
+  function respondToSos(sosId) {
+    const req = sosRequests.find(s => s.id === sosId);
+    if (!req) {
+      showToast('SOS request not found', 'error');
+      return;
+    }
+
+    showToast(`Connecting to ${req.contactName} at ${req.hospital}...`, 'info');
+    setTimeout(() => {
+      window.location.href = `tel:${req.contactPhone}`;
+    }, 500);
+  }
+
+  async function toggleFulfillSos(sosId) {
+    const req = sosRequests.find(s => s.id === sosId);
+    if (!req) {
+      showToast('SOS request not found', 'error');
+      return;
+    }
+
+    const newStatus = req.status === 'open' ? 'fulfilled' : 'open';
+    req.status = newStatus;
+    req.updatedAt = new Date().toISOString();
+    
+    if (isBackendOnline) {
+      await updateSOSInAPI(req.id, { status: newStatus });
+    }
+    
+    renderEmergencyFeed('all');
+    showToast(`SOS #${req.id} marked as ${req.status === 'fulfilled' ? 'Fulfilled' : 'Open'}`, 'success');
+  }
+
+  function shareSos(sosId) {
+    const req = sosRequests.find(s => s.id === sosId);
+    if (!req) {
+      showToast('SOS request not found', 'error');
+      return;
+    }
+
+    const shareText = `🚨 URGENT BLOOD NEED (SOS): ${req.units} units of ${req.bloodGroup} needed for ${req.patientName} at ${req.hospital}, ${req.city}. Contact: ${req.contactName} (${req.contactPhone}). Please share or donate via BloodConnect!`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(shareText).then(() => {
+        showToast('SOS details copied to clipboard! Share on WhatsApp / Socials.', 'success', 4000);
+      }).catch(() => {
+        prompt('Copy SOS alert text below:', shareText);
+      });
+    } else {
+      prompt('Copy SOS alert text below:', shareText);
+    }
+  }
 
   // ==========================================
   // 11. PAGE 3: HOSPITAL DASHBOARD & INVENTORY
@@ -1476,13 +1233,23 @@
           </div>
           <div><span class="badge ${status.badge}">${status.label}</span></div>
           <div class="inv-actions">
-            <button onclick="window.BloodConnectApp.changeStock('${group}', 1)" title="Add 1 unit">+</button>
-            <button onclick="window.BloodConnectApp.changeStock('${group}', -1)" title="Remove 1 unit">−</button>
-            <button onclick="window.BloodConnectApp.changeStock('${group}', 0, true)" title="Set to 0 (Out of stock)">✕</button>
+            <button class="stock-btn" data-group="${group}" data-delta="1" title="Add 1 unit">+</button>
+            <button class="stock-btn" data-group="${group}" data-delta="-1" title="Remove 1 unit">−</button>
+            <button class="stock-btn" data-group="${group}" data-delta="0" data-set-zero="true" title="Set to 0 (Out of stock)">✕</button>
           </div>
         </div>
       `;
     }).join('');
+
+    // Add stock button event listeners
+    grid.querySelectorAll('.stock-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const group = this.dataset.group;
+        const delta = parseInt(this.dataset.delta, 10);
+        const setToZero = this.dataset.setZero === 'true';
+        changeStock(group, delta, setToZero);
+      });
+    });
 
     const hospitalBookings = patientBookings.filter(b => b.hospitalId === currentHosp.id);
     if (requestsCountBadge) requestsCountBadge.textContent = hospitalBookings.length;
@@ -1513,7 +1280,7 @@
               </div>
               <div style="display:flex;gap:8px;">
                 ${!isFulfilled ? `
-                  <button class="btn-primary btn-sm" onclick="window.BloodConnectApp.fulfillHospitalBooking('${b.id}')">
+                  <button class="btn-primary btn-sm fulfill-booking-btn" data-booking-id="${b.id}">
                     <i class="fas fa-check"></i> Fulfill & Deduct Stock
                   </button>
                 ` : `
@@ -1521,206 +1288,186 @@
                     <i class="fas fa-circle-check"></i> Completed
                   </span>
                 `}
-                <button class="btn-outline btn-sm" onclick="window.BloodConnectApp.removeHospitalBooking('${b.id}')" title="Dismiss">
+                <button class="btn-outline btn-sm remove-booking-btn" data-booking-id="${b.id}" title="Dismiss">
                   <i class="fas fa-times"></i>
                 </button>
               </div>
             </div>
           `;
         }).join('');
+
+        // Add booking action event listeners
+        requestsQueue.querySelectorAll('.fulfill-booking-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const bookingId = this.dataset.bookingId;
+            fulfillHospitalBooking(bookingId);
+          });
+        });
+
+        requestsQueue.querySelectorAll('.remove-booking-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const bookingId = this.dataset.bookingId;
+            removeHospitalBooking(bookingId);
+          });
+        });
       }
     }
   }
 
-  const hospitalSelect = document.getElementById('hospitalSelect');
-  if (hospitalSelect) {
-    hospitalSelect.addEventListener('change', function () {
-      activeHospitalId = this.value;
-      renderHospitalDashboard();
-      showToast('Switched active hospital view', 'info');
-    });
+  // Stock management functions
+  async function changeStock(group, delta, setToZero = false) {
+    const currentHosp = hospitals.find(h => h.id === activeHospitalId);
+    if (!currentHosp) {
+      showToast('No hospital selected', 'warning');
+      return;
+    }
+    if (!currentHosp.inventory) currentHosp.inventory = {};
+
+    if (setToZero) {
+      currentHosp.inventory[group] = 0;
+    } else {
+      const current = Number(currentHosp.inventory[group]) || 0;
+      currentHosp.inventory[group] = Math.max(0, current + delta);
+    }
+
+    if (isBackendOnline && currentHosp.id && !isNaN(currentHosp.id)) {
+      await updateHospitalInventoryInAPI(currentHosp.id, currentHosp.inventory);
+    }
+    
+    renderHospitalDashboard();
+    updateHeroStats();
   }
 
-  const hospitalInfoForm = document.getElementById('hospitalInfoForm');
-  if (hospitalInfoForm) {
-    hospitalInfoForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const currentHosp = hospitals.find(h => h.id === activeHospitalId);
-      if (!currentHosp) return;
+  async function fulfillHospitalBooking(bookingId) {
+    const booking = patientBookings.find(b => b.id === bookingId);
+    if (!booking) {
+      showToast('Booking not found', 'error');
+      return;
+    }
 
-<<<<<<< HEAD
-      const updatedData = {
-        name: document.getElementById('hospName').value.trim(),
-        city: document.getElementById('hospCity').value.trim(),
-        address: document.getElementById('hospAddress').value.trim(),
-        contact: document.getElementById('hospContact').value.trim(),
-        email: document.getElementById('hospEmail').value.trim(),
-        operatingHours: document.getElementById('hospHours').value.trim()
-      };
+    const currentHosp = hospitals.find(h => h.id === booking.hospitalId);
+    if (currentHosp && currentHosp.inventory) {
+      const group = booking.bloodGroup;
+      const currentUnits = Number(currentHosp.inventory[group]) || 0;
+      const deduct = Number(booking.units) || 1;
 
-      Object.assign(currentHosp, updatedData);
-      currentHosp.updatedAt = new Date().toISOString();
-
-      if (isBackendOnline && currentHosp.id) {
-        const apiResult = await updateHospitalInAPI(currentHosp.id, updatedData);
-        if (apiResult) {
-          showToast('Hospital profile synced with database!', 'success');
-        } else {
-          showToast('Failed to sync with database.', 'warning');
-        }
+      if (currentUnits < deduct) {
+        showToast(`Warning: Only ${currentUnits} units of ${group} in stock, but dispatched ${deduct}.`, 'warning');
       }
 
-=======
-      currentHosp.name = document.getElementById('hospName').value.trim();
-      currentHosp.city = document.getElementById('hospCity').value.trim();
-      currentHosp.address = document.getElementById('hospAddress').value.trim();
-      currentHosp.contact = document.getElementById('hospContact').value.trim();
-      currentHosp.email = document.getElementById('hospEmail').value.trim();
-      currentHosp.operatingHours = document.getElementById('hospHours').value.trim();
-      currentHosp.lastUpdated = new Date().toISOString();
-
-      setStored(STORAGE_KEYS.HOSPITALS, hospitals);
->>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
-      renderHospitalDashboard();
-      updateHeroStats();
-      showToast('Hospital profile updated successfully!', 'success');
-    });
-  }
-
-  const saveInventoryBtn = document.getElementById('saveInventoryBtn');
-  if (saveInventoryBtn) {
-    saveInventoryBtn.addEventListener('click', async () => {
-      const currentHosp = hospitals.find(h => h.id === activeHospitalId);
-      if (!currentHosp) return;
-
-      if (isBackendOnline && currentHosp.id) {
-        const apiResult = await updateHospitalInventoryInAPI(currentHosp.id, currentHosp.inventory);
-        if (apiResult) {
-          showToast('Inventory synced with database!', 'success');
-        } else {
-          showToast('Failed to sync inventory with database.', 'warning');
-        }
-      }
+      currentHosp.inventory[group] = Math.max(0, currentUnits - deduct);
       
-      updateHeroStats();
-      showToast('Blood stock inventory saved to database!', 'success');
-    });
-  }
-
-  const restockAllBtn = document.getElementById('restockAllBtn');
-  if (restockAllBtn) {
-    restockAllBtn.addEventListener('click', async () => {
-      const currentHosp = hospitals.find(h => h.id === activeHospitalId);
-      if (!currentHosp) return;
-      if (!currentHosp.inventory) currentHosp.inventory = {};
-
-      BLOOD_GROUPS.forEach(g => {
-        currentHosp.inventory[g] = (Number(currentHosp.inventory[g]) || 0) + 5;
-      });
-
-      if (isBackendOnline && currentHosp.id) {
+      if (isBackendOnline && currentHosp.id && !isNaN(currentHosp.id)) {
         await updateHospitalInventoryInAPI(currentHosp.id, currentHosp.inventory);
       }
-      
-      renderHospitalDashboard();
-      updateHeroStats();
-      showToast('Added +5 units to all blood groups in database!', 'success');
-    });
+    }
+
+    booking.status = 'fulfilled';
+    booking.updatedAt = new Date().toISOString();
+    
+    if (isBackendOnline) {
+      await updateBookingInAPI(booking.id, { status: 'fulfilled' });
+    }
+
+    renderHospitalDashboard();
+    updateHeroStats();
+    showToast(`Booking #${booking.id} dispatched! Stock updated.`, 'success');
   }
 
-  const resetToDefaultBtn = document.getElementById('resetToDefaultBtn');
-  if (resetToDefaultBtn) {
-    resetToDefaultBtn.addEventListener('click', async () => {
-      showToast('Refreshing stock directly from database...', 'info');
-      await loadHospitals();
-      renderHospitalDashboard();
-      updateHeroStats();
-      showToast('Hospital stock refreshed from database', 'success');
-    });
-  }
-
-  const clearFulfilledRequestsBtn = document.getElementById('clearFulfilledRequestsBtn');
-  if (clearFulfilledRequestsBtn) {
-    clearFulfilledRequestsBtn.addEventListener('click', () => {
-      patientBookings = patientBookings.filter(b => !(b.hospitalId === activeHospitalId && b.status === 'fulfilled'));
-      renderHospitalDashboard();
-      showToast('Cleared completed booking requests', 'info');
-    });
+  function removeHospitalBooking(bookingId) {
+    if (!confirm('Remove this booking request?')) return;
+    
+    patientBookings = patientBookings.filter(b => b.id !== bookingId);
+    renderHospitalDashboard();
+    showToast('Booking dismissed', 'info');
   }
 
   // ==========================================
   // 12. PAGE 4: DONOR REGISTRATION & ID CARD
   // ==========================================
-  const donorRegistrationForm = document.getElementById('donorRegistrationForm');
-  if (donorRegistrationForm) {
-    donorRegistrationForm.addEventListener('submit', async function (e) {
-      e.preventDefault();
+  function setupDonorRegistration() {
+    const donorRegistrationForm = document.getElementById('donorRegistrationForm');
+    const printCardBtn = document.getElementById('printCardBtn');
 
-      const fullName = document.getElementById('dFullName').value.trim();
-      const age = parseInt(document.getElementById('dAge').value, 10);
-      const gender = document.getElementById('dGender').value;
-      const bloodGroup = document.getElementById('dBloodGroup').value;
-      const mobile = document.getElementById('dMobile').value.trim();
-      const email = document.getElementById('dEmail').value.trim();
-      const city = document.getElementById('dCity').value.trim();
-      const address = document.getElementById('dAddress').value.trim();
-      const donatedBefore = document.getElementById('dDonatedBefore').value;
-      const lastDonation = document.getElementById('dLastDonation').value;
-      const availability = document.getElementById('dAvailability').value;
-      const preferredHospital = document.getElementById('dPreferredHospital').value.trim();
+    if (donorRegistrationForm) {
+      donorRegistrationForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-      if (age < 18 || age > 65) {
-        showToast('Blood donors must be between 18 and 65 years old', 'error');
-        return;
-      }
+        const fullName = document.getElementById('dFullName').value.trim();
+        const age = parseInt(document.getElementById('dAge').value, 10);
+        const gender = document.getElementById('dGender').value;
+        const bloodGroup = document.getElementById('dBloodGroup').value;
+        const mobile = document.getElementById('dMobile').value.trim();
+        const email = document.getElementById('dEmail').value.trim();
+        const city = document.getElementById('dCity').value.trim();
+        const address = document.getElementById('dAddress').value.trim();
+        const donatedBefore = document.getElementById('dDonatedBefore').value;
+        const lastDonation = document.getElementById('dLastDonation').value;
+        const availability = document.getElementById('dAvailability').value;
+        const preferredHospital = document.getElementById('dPreferredHospital').value.trim();
 
-      const donorPayload = {
-        name: fullName,
-        age: age,
-        gender: gender,
-        blood_group: bloodGroup,
-        phone: mobile,
-        email: email,
-        city: city,
-        address: address,
-        donated_before: donatedBefore,
-        last_donation: lastDonation || null,
-        availability: availability,
-        preferred_hospital: preferredHospital || null,
-        agreement: true
-      };
+        if (age < 18 || age > 65) {
+          showToast('Blood donors must be between 18 and 65 years old', 'error');
+          return;
+        }
 
-      if (!isBackendOnline) {
-        showToast('⚠️ Backend database is offline. Please start the FastAPI server to register.', 'error', 5000);
-        return;
-      }
-
-      showToast('Registering donor in database...', 'info');
-      const result = await registerDonorInAPI(donorPayload);
-      if (result) {
-        await loadDonors();
-        const registered = donors.find(d => d.email === email || d.fullName === fullName) || {
-          id: 'BC-' + (result.id || result.donar_id || Math.floor(10000 + Math.random() * 90000)),
-          fullName,
-          age,
-          gender,
-          bloodGroup,
-          mobile,
-          email,
-          city,
-          address,
-          registeredAt: new Date().toISOString().split('T')[0]
+        const donorPayload = {
+          name: fullName,
+          age: age,
+          gender: gender,
+          blood_group: bloodGroup,
+          phone: mobile,
+          email: email,
+          city: city,
+          address: address,
+          donated_before: donatedBefore,
+          last_donation: lastDonation || null,
+          availability: availability,
+          preferred_hospital: preferredHospital || null,
+          agreement: true
         };
-        updateDonorCardDisplay(registered);
-        updateHeroStats();
-        performSearch();
-        showToast(`🎉 Registered in database! Thank you, ${fullName}!`, 'success', 5000);
-        donorRegistrationForm.reset();
-        document.getElementById('donorCardContainer')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      } else {
-        showToast('❌ Failed to register donor in database. Please check your backend connection.', 'error', 5000);
-      }
-    });
+
+        if (!isBackendOnline) {
+          showToast('⚠️ Backend database is offline. Please start the FastAPI server to register.', 'error', 5000);
+          return;
+        }
+
+        showToast('Registering donor in database...', 'info');
+        const result = await registerDonorInAPI(donorPayload);
+        if (result) {
+          await loadDonors();
+          const registered = donors.find(d => d.email === email || d.fullName === fullName) || {
+            id: 'BC-' + (result.id || result.donar_id || Math.floor(10000 + Math.random() * 90000)),
+            fullName,
+            age,
+            gender,
+            bloodGroup,
+            mobile,
+            email,
+            city,
+            address,
+            registeredAt: new Date().toISOString().split('T')[0]
+          };
+          updateDonorCardDisplay(registered);
+          updateHeroStats();
+          performSearch();
+          showToast(`🎉 Registered in database! Thank you, ${fullName}!`, 'success', 5000);
+          donorRegistrationForm.reset();
+          const cardContainer = document.getElementById('donorCardContainer');
+          if (cardContainer) {
+            cardContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        } else {
+          showToast('❌ Failed to register donor in database. Please check your backend connection.', 'error', 5000);
+        }
+      });
+    }
+
+    if (printCardBtn) {
+      printCardBtn.addEventListener('click', () => {
+        window.print();
+      });
+    }
   }
 
   function updateDonorCardDisplay(donor) {
@@ -1737,89 +1484,154 @@
     if (elDate) elDate.textContent = donor.registeredAt || 'Today';
   }
 
-  const printCardBtn = document.getElementById('printCardBtn');
-  if (printCardBtn) {
-    printCardBtn.addEventListener('click', () => {
-      window.print();
-    });
-  }
-
   // ==========================================
   // 13. MODALS & FORMS HANDLING
   // ==========================================
   
   // A. Emergency SOS Modal
-  const emergencyModal = document.getElementById('emergencyModal');
-  const closeEmergencyModalBtn = document.getElementById('closeEmergencyModalBtn');
-  const cancelSosBtn = document.getElementById('cancelSosBtn');
-  const openEmergencyModalBtn = document.getElementById('openEmergencyModalBtn');
-  const heroEmergencyBtn = document.getElementById('heroEmergencyBtn');
-  const pageSosBtn = document.getElementById('pageSosBtn');
-  const emergencyRequestForm = document.getElementById('emergencyRequestForm');
+  function setupEmergencyModal() {
+    const emergencyModal = document.getElementById('emergencyModal');
+    const closeEmergencyModalBtn = document.getElementById('closeEmergencyModalBtn');
+    const cancelSosBtn = document.getElementById('cancelSosBtn');
+    const openEmergencyModalBtn = document.getElementById('openEmergencyModalBtn');
+    const heroEmergencyBtn = document.getElementById('heroEmergencyBtn');
+    const pageSosBtn = document.getElementById('pageSosBtn');
+    const emergencyRequestForm = document.getElementById('emergencyRequestForm');
 
-  function openEmergencyModal() {
-    if (emergencyModal) emergencyModal.classList.remove('hidden');
-  }
-  function closeEmergencyModal() {
-    if (emergencyModal) emergencyModal.classList.add('hidden');
-  }
+    function openEmergencyModal() {
+      if (emergencyModal) emergencyModal.classList.remove('hidden');
+    }
+    function closeEmergencyModal() {
+      if (emergencyModal) emergencyModal.classList.add('hidden');
+    }
 
-  if (openEmergencyModalBtn) openEmergencyModalBtn.addEventListener('click', openEmergencyModal);
-  if (heroEmergencyBtn) heroEmergencyBtn.addEventListener('click', openEmergencyModal);
-  if (pageSosBtn) pageSosBtn.addEventListener('click', openEmergencyModal);
-  if (closeEmergencyModalBtn) closeEmergencyModalBtn.addEventListener('click', closeEmergencyModal);
-  if (cancelSosBtn) cancelSosBtn.addEventListener('click', closeEmergencyModal);
+    if (openEmergencyModalBtn) openEmergencyModalBtn.addEventListener('click', openEmergencyModal);
+    if (heroEmergencyBtn) heroEmergencyBtn.addEventListener('click', openEmergencyModal);
+    if (pageSosBtn) pageSosBtn.addEventListener('click', openEmergencyModal);
+    if (closeEmergencyModalBtn) closeEmergencyModalBtn.addEventListener('click', closeEmergencyModal);
+    if (cancelSosBtn) cancelSosBtn.addEventListener('click', closeEmergencyModal);
 
-  if (emergencyRequestForm) {
-    emergencyRequestForm.addEventListener('submit', async function (e) {
-      e.preventDefault();
+    if (emergencyModal) {
+      emergencyModal.addEventListener('click', function (e) {
+        if (e.target === this) {
+          this.classList.add('hidden');
+        }
+      });
+    }
 
-      const patientName = document.getElementById('sosPatientName').value.trim();
-      const bloodGroup = document.getElementById('sosBloodGroup').value;
-      const units = parseInt(document.getElementById('sosUnits').value, 10) || 1;
-      const urgency = document.getElementById('sosUrgency').value;
-      const hospital = document.getElementById('sosHospital').value.trim();
-      const city = document.getElementById('sosCity').value.trim();
-      const contactName = document.getElementById('sosContactName').value.trim();
-      const contactPhone = document.getElementById('sosContactPhone').value.trim();
-      const notes = document.getElementById('sosNotes').value.trim();
+    if (emergencyRequestForm) {
+      emergencyRequestForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-      const newSosData = {
-        patientName,
-        bloodGroup,
-        units,
-        urgency,
-        hospital,
-        city,
-        contactName,
-        contactPhone,
-        notes
-      };
+        const patientName = document.getElementById('sosPatientName').value.trim();
+        const bloodGroup = document.getElementById('sosBloodGroup').value;
+        const units = parseInt(document.getElementById('sosUnits').value, 10) || 1;
+        const urgency = document.getElementById('sosUrgency').value;
+        const hospital = document.getElementById('sosHospital').value.trim();
+        const city = document.getElementById('sosCity').value.trim();
+        const contactName = document.getElementById('sosContactName').value.trim();
+        const contactPhone = document.getElementById('sosContactPhone').value.trim();
+        const notes = document.getElementById('sosNotes').value.trim();
 
-      if (!isBackendOnline) {
-        showToast('⚠️ Backend database is offline. Please start the FastAPI server to broadcast SOS.', 'error', 5000);
-        return;
-      }
+        const newSosData = {
+          patientName,
+          bloodGroup,
+          units,
+          urgency,
+          hospital,
+          city,
+          contactName,
+          contactPhone,
+          notes
+        };
 
-      showToast('Broadcasting SOS to database...', 'info');
-      const result = await createSOSInAPI(newSosData);
-      if (result) {
-        await loadSOSRequests();
-        closeEmergencyModal();
-        emergencyRequestForm.reset();
-        showToast(`🚨 SOS Broadcasted for ${patientName} (${bloodGroup})!`, 'error', 6000);
-        showPage('emergency');
-      } else {
-        showToast('❌ Failed to broadcast SOS to database.', 'error', 5000);
-      }
-    });
+        if (!isBackendOnline) {
+          showToast('⚠️ Backend database is offline. Please start the FastAPI server to broadcast SOS.', 'error', 5000);
+          return;
+        }
+
+        showToast('Broadcasting SOS to database...', 'info');
+        const result = await createSOSInAPI(newSosData);
+        if (result) {
+          await loadSOSRequests();
+          closeEmergencyModal();
+          emergencyRequestForm.reset();
+          showToast(`🚨 SOS Broadcasted for ${patientName} (${bloodGroup})!`, 'error', 6000);
+          showPage('emergency');
+        } else {
+          showToast('❌ Failed to broadcast SOS to database.', 'error', 5000);
+        }
+      });
+    }
   }
 
   // B. Booking Modal
-  const bookingModal = document.getElementById('bookingModal');
-  const closeBookingModalBtn = document.getElementById('closeBookingModalBtn');
-  const cancelBookingBtn = document.getElementById('cancelBookingBtn');
-  const bloodBookingForm = document.getElementById('bloodBookingForm');
+  function setupBookingModal() {
+    const bookingModal = document.getElementById('bookingModal');
+    const closeBookingModalBtn = document.getElementById('closeBookingModalBtn');
+    const cancelBookingBtn = document.getElementById('cancelBookingBtn');
+    const bloodBookingForm = document.getElementById('bloodBookingForm');
+
+    function closeBookingModal() {
+      if (bookingModal) bookingModal.classList.add('hidden');
+    }
+
+    if (closeBookingModalBtn) closeBookingModalBtn.addEventListener('click', closeBookingModal);
+    if (cancelBookingBtn) cancelBookingBtn.addEventListener('click', closeBookingModal);
+
+    if (bookingModal) {
+      bookingModal.addEventListener('click', function (e) {
+        if (e.target === this) {
+          this.classList.add('hidden');
+        }
+      });
+    }
+
+    if (bloodBookingForm) {
+      bloodBookingForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const hospitalId = document.getElementById('bookHospitalId').value;
+        const bloodGroup = document.getElementById('bookBloodGroup').value;
+        const patientName = document.getElementById('bookPatientName').value.trim();
+        const units = parseInt(document.getElementById('bookUnits').value, 10) || 1;
+        const doctor = document.getElementById('bookDoctorName').value.trim();
+        const contact = document.getElementById('bookContact').value.trim();
+        const notes = document.getElementById('bookNotes').value.trim();
+
+        const targetHosp = hospitals.find(h => h.id === hospitalId);
+        const hospitalName = targetHosp ? targetHosp.name : 'Partner Hospital';
+
+        const bookingData = {
+          hospitalId,
+          hospitalName,
+          patientName,
+          bloodGroup,
+          units,
+          doctor: doctor || 'Attending Physician',
+          contact,
+          notes
+        };
+
+        if (!isBackendOnline) {
+          showToast('⚠️ Backend database is offline. Please start the FastAPI server to submit booking.', 'error', 5000);
+          return;
+        }
+
+        showToast('Submitting booking to database...', 'info');
+        const result = await createBookingInAPI(bookingData);
+        if (result) {
+          await loadBookings();
+          closeBookingModal();
+          bloodBookingForm.reset();
+          const bkId = result.booking?.id || result.booking_id || result.id || 'BK-CONFIRMED';
+          showToast(`Booking reference #${bkId} submitted to ${hospitalName}!`, 'success', 5000);
+        } else {
+          showToast('❌ Failed to submit booking to database.', 'error', 5000);
+        }
+      });
+    }
+  }
 
   function openBookingModal(hospitalId, bloodGroup) {
     const targetHosp = hospitals.find(h => h.id === hospitalId);
@@ -1849,64 +1661,29 @@
       `;
     }
 
+    const bookingModal = document.getElementById('bookingModal');
     if (bookingModal) bookingModal.classList.remove('hidden');
   }
 
-  function closeBookingModal() {
-    if (bookingModal) bookingModal.classList.add('hidden');
-  }
-
-  if (closeBookingModalBtn) closeBookingModalBtn.addEventListener('click', closeBookingModal);
-  if (cancelBookingBtn) cancelBookingBtn.addEventListener('click', closeBookingModal);
-
-  if (bloodBookingForm) {
-    bloodBookingForm.addEventListener('submit', async function (e) {
-      e.preventDefault();
-
-      const hospitalId = document.getElementById('bookHospitalId').value;
-      const bloodGroup = document.getElementById('bookBloodGroup').value;
-      const patientName = document.getElementById('bookPatientName').value.trim();
-      const units = parseInt(document.getElementById('bookUnits').value, 10) || 1;
-      const doctor = document.getElementById('bookDoctorName').value.trim();
-      const contact = document.getElementById('bookContact').value.trim();
-      const notes = document.getElementById('bookNotes').value.trim();
-
-      const targetHosp = hospitals.find(h => h.id === hospitalId);
-      const hospitalName = targetHosp ? targetHosp.name : 'Partner Hospital';
-
-      const bookingData = {
-        hospitalId,
-        hospitalName,
-        patientName,
-        bloodGroup,
-        units,
-        doctor: doctor || 'Attending Physician',
-        contact,
-        notes
-      };
-
-      if (!isBackendOnline) {
-        showToast('⚠️ Backend database is offline. Please start the FastAPI server to submit booking.', 'error', 5000);
-        return;
-      }
-
-      showToast('Submitting booking to database...', 'info');
-      const result = await createBookingInAPI(bookingData);
-      if (result) {
-        await loadBookings();
-        closeBookingModal();
-        bloodBookingForm.reset();
-        const bkId = result.booking?.id || result.booking_id || result.id || 'BK-CONFIRMED';
-        showToast(`Booking reference #${bkId} submitted to ${hospitalName}!`, 'success', 5000);
-      } else {
-        showToast('❌ Failed to submit booking to database.', 'error', 5000);
-      }
-    });
-  }
-
   // C. Contact Donor Modal
-  const contactDonorModal = document.getElementById('contactDonorModal');
-  const closeContactDonorBtn = document.getElementById('closeContactDonorBtn');
+  function setupContactDonorModal() {
+    const contactDonorModal = document.getElementById('contactDonorModal');
+    const closeContactDonorBtn = document.getElementById('closeContactDonorBtn');
+
+    if (closeContactDonorBtn) {
+      closeContactDonorBtn.addEventListener('click', () => {
+        if (contactDonorModal) contactDonorModal.classList.add('hidden');
+      });
+    }
+
+    if (contactDonorModal) {
+      contactDonorModal.addEventListener('click', function (e) {
+        if (e.target === this) {
+          this.classList.add('hidden');
+        }
+      });
+    }
+  }
 
   function openContactDonorModal(donorId) {
     const donor = donors.find(d => d.id === donorId);
@@ -1949,348 +1726,339 @@
       </div>
     `;
 
+    const contactDonorModal = document.getElementById('contactDonorModal');
     if (contactDonorModal) contactDonorModal.classList.remove('hidden');
   }
 
-  function closeContactDonorModal() {
-    if (contactDonorModal) contactDonorModal.classList.add('hidden');
-  }
-
-  if (closeContactDonorBtn) closeContactDonorBtn.addEventListener('click', closeContactDonorModal);
-
   // D. Add Hospital Modal
-  const addHospitalModal = document.getElementById('addHospitalModal');
-  const addNewHospitalBtn = document.getElementById('addNewHospitalBtn');
-  const closeAddHospitalBtn = document.getElementById('closeAddHospitalBtn');
-  const cancelAddHospBtn = document.getElementById('cancelAddHospBtn');
-  const addHospitalForm = document.getElementById('addHospitalForm');
+  function setupAddHospitalModal() {
+    const addHospitalModal = document.getElementById('addHospitalModal');
+    const addNewHospitalBtn = document.getElementById('addNewHospitalBtn');
+    const closeAddHospitalBtn = document.getElementById('closeAddHospitalBtn');
+    const cancelAddHospBtn = document.getElementById('cancelAddHospBtn');
+    const addHospitalForm = document.getElementById('addHospitalForm');
 
-  function openAddHospitalModal() {
-    if (addHospitalModal) addHospitalModal.classList.remove('hidden');
-  }
-  function closeAddHospitalModal() {
-    if (addHospitalModal) addHospitalModal.classList.add('hidden');
-  }
+    function openAddHospitalModal() {
+      if (addHospitalModal) addHospitalModal.classList.remove('hidden');
+    }
+    function closeAddHospitalModal() {
+      if (addHospitalModal) addHospitalModal.classList.add('hidden');
+    }
 
-  if (addNewHospitalBtn) addNewHospitalBtn.addEventListener('click', openAddHospitalModal);
-  if (closeAddHospitalBtn) closeAddHospitalBtn.addEventListener('click', closeAddHospitalModal);
-  if (cancelAddHospBtn) cancelAddHospBtn.addEventListener('click', closeAddHospitalModal);
+    if (addNewHospitalBtn) addNewHospitalBtn.addEventListener('click', openAddHospitalModal);
+    if (closeAddHospitalBtn) closeAddHospitalBtn.addEventListener('click', closeAddHospitalModal);
+    if (cancelAddHospBtn) cancelAddHospBtn.addEventListener('click', closeAddHospitalModal);
 
-  if (addHospitalForm) {
-    addHospitalForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const name = document.getElementById('newHospName').value.trim();
-      const city = document.getElementById('newHospCity').value.trim();
-      const address = document.getElementById('newHospAddress').value.trim();
-      const contact = document.getElementById('newHospContact').value.trim();
-      const email = document.getElementById('newHospEmail').value.trim();
-      const defaultStock = parseInt(document.getElementById('newHospInitialStock').value, 10) || 5;
-
-      const initialInventory = {};
-      BLOOD_GROUPS.forEach(g => {
-        initialInventory[g] = defaultStock;
+    if (addHospitalModal) {
+      addHospitalModal.addEventListener('click', function (e) {
+        if (e.target === this) {
+          this.classList.add('hidden');
+        }
       });
+    }
 
-      const newHospital = {
-        id: 'hosp-' + (hospitals.length + 1) + '-' + Date.now().toString().slice(-4),
-        name,
-        city,
-        address,
-        contact,
-        email,
-        operatingHours: '24/7 Emergency Blood Bank',
-        inventory: initialInventory,
-        updatedAt: new Date().toISOString(),
-        createdAt: new Date().toISOString()
-      };
+    if (addHospitalForm) {
+      addHospitalForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-<<<<<<< HEAD
-      if (!isBackendOnline) {
-        showToast('⚠️ Backend database is offline. Please start the FastAPI server to add a hospital.', 'error', 5000);
-        return;
-      }
+        const name = document.getElementById('newHospName').value.trim();
+        const city = document.getElementById('newHospCity').value.trim();
+        const address = document.getElementById('newHospAddress').value.trim();
+        const contact = document.getElementById('newHospContact').value.trim();
+        const email = document.getElementById('newHospEmail').value.trim();
+        const defaultStock = parseInt(document.getElementById('newHospInitialStock').value, 10) || 5;
 
-      showToast('Registering hospital in database...', 'info');
-      const apiResult = await createHospitalInAPI(newHospital);
-      if (apiResult) {
-        await loadHospitals();
-        activeHospitalId = String(apiResult.hospital?.id || apiResult.id || newHospital.id);
+        const initialInventory = {};
+        BLOOD_GROUPS.forEach(g => {
+          initialInventory[g] = defaultStock;
+        });
+
+        const newHospital = {
+          id: 'hosp-' + (hospitals.length + 1) + '-' + Date.now().toString().slice(-4),
+          name,
+          city,
+          address,
+          contact,
+          email,
+          operatingHours: '24/7 Emergency Blood Bank',
+          inventory: initialInventory,
+          updatedAt: new Date().toISOString(),
+          createdAt: new Date().toISOString()
+        };
+
+        if (isBackendOnline) {
+          const apiResult = await createHospitalInAPI(newHospital);
+          if (apiResult) {
+            newHospital.id = String(apiResult.id || newHospital.id);
+            showToast(`Hospital "${name}" created in database!`, 'success');
+          } else {
+            showToast(`Hospital "${name}" created locally (API unavailable).`, 'warning');
+          }
+        }
+
+        hospitals.push(newHospital);
+        activeHospitalId = newHospital.id;
         closeAddHospitalModal();
         addHospitalForm.reset();
         renderHospitalDashboard();
         updateHeroStats();
-        showToast(`Hospital "${name}" registered in database successfully!`, 'success');
-      } else {
-        showToast(`❌ Failed to register hospital in database.`, 'error', 5000);
-      }
-=======
-      hospitals.push(newHospital);
-      setStored(STORAGE_KEYS.HOSPITALS, hospitals);
-
-      activeHospitalId = newHospital.id;
-      setStored(STORAGE_KEYS.CURRENT_HOSPITAL, activeHospitalId);
-
-      closeAddHospitalModal();
-      addHospitalForm.reset();
-
-      renderHospitalDashboard();
-      updateHeroStats();
-
-      showToast(`Registered "${name}" successfully!`, 'success');
->>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
-    });
+        showToast(`Registered "${name}" successfully!`, 'success');
+      });
+    }
   }
 
-  document.querySelectorAll('.modal-backdrop').forEach(modal => {
-    modal.addEventListener('click', function (e) {
-      if (e.target === this) {
-        this.classList.add('hidden');
-      }
-    });
-  });
-
   // ==========================================
-  // 14. GLOBAL INTERACTION HANDLERS
+  // 14. DASHBOARD EVENT LISTENERS
   // ==========================================
-  window.BloodConnectApp = {
-    openBookingModal: openBookingModal,
-    openContactDonorModal: openContactDonorModal,
+  function setupDashboardEventListeners() {
+    const hospitalSelect = document.getElementById('hospitalSelect');
+    const hospitalInfoForm = document.getElementById('hospitalInfoForm');
+    const saveInventoryBtn = document.getElementById('saveInventoryBtn');
+    const restockAllBtn = document.getElementById('restockAllBtn');
+    const resetToDefaultBtn = document.getElementById('resetToDefaultBtn');
+    const clearFulfilledRequestsBtn = document.getElementById('clearFulfilledRequestsBtn');
 
-    changeStock: async function(group, delta, setToZero = false) {
-      const currentHosp = hospitals.find(h => h.id === activeHospitalId);
-      if (!currentHosp) {
-        showToast('No hospital selected', 'warning');
-        return;
-      }
-      if (!currentHosp.inventory) currentHosp.inventory = {};
+    if (hospitalSelect) {
+      hospitalSelect.addEventListener('change', function () {
+        activeHospitalId = this.value;
+        renderHospitalDashboard();
+        showToast('Switched active hospital view', 'info');
+      });
+    }
 
-      if (setToZero) {
-        currentHosp.inventory[group] = 0;
-      } else {
-        const current = Number(currentHosp.inventory[group]) || 0;
-        currentHosp.inventory[group] = Math.max(0, current + delta);
-      }
+    if (hospitalInfoForm) {
+      hospitalInfoForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const currentHosp = hospitals.find(h => h.id === activeHospitalId);
+        if (!currentHosp) return;
 
-      if (isBackendOnline && currentHosp.id) {
-        await updateHospitalInventoryInAPI(currentHosp.id, currentHosp.inventory);
-      }
-      
-      renderHospitalDashboard();
-      updateHeroStats();
-    },
+        const updatedData = {
+          name: document.getElementById('hospName').value.trim(),
+          city: document.getElementById('hospCity').value.trim(),
+          address: document.getElementById('hospAddress').value.trim(),
+          contact: document.getElementById('hospContact').value.trim(),
+          email: document.getElementById('hospEmail').value.trim(),
+          operatingHours: document.getElementById('hospHours').value.trim()
+        };
 
-    fulfillHospitalBooking: async function(bookingId) {
-      const booking = patientBookings.find(b => b.id === bookingId);
-      if (!booking) {
-        showToast('Booking not found', 'error');
-        return;
-      }
+        Object.assign(currentHosp, updatedData);
+        currentHosp.updatedAt = new Date().toISOString();
 
-      const currentHosp = hospitals.find(h => h.id === booking.hospitalId);
-      if (currentHosp && currentHosp.inventory) {
-        const group = booking.bloodGroup;
-        const currentUnits = Number(currentHosp.inventory[group]) || 0;
-        const deduct = Number(booking.units) || 1;
-
-        if (currentUnits < deduct) {
-          showToast(`Warning: Only ${currentUnits} units of ${group} in stock, but dispatched ${deduct}.`, 'warning');
+        if (isBackendOnline && currentHosp.id) {
+          const apiResult = await updateHospitalInAPI(currentHosp.id, updatedData);
+          if (apiResult) {
+            showToast('Hospital profile synced with database!', 'success');
+          } else {
+            showToast('Failed to sync with database.', 'warning');
+          }
         }
 
-        currentHosp.inventory[group] = Math.max(0, currentUnits - deduct);
+        renderHospitalDashboard();
+        updateHeroStats();
+        showToast('Hospital profile updated successfully!', 'success');
+      });
+    }
+
+    if (saveInventoryBtn) {
+      saveInventoryBtn.addEventListener('click', async () => {
+        const currentHosp = hospitals.find(h => h.id === activeHospitalId);
+        if (!currentHosp) return;
+
+        if (isBackendOnline && currentHosp.id) {
+          const apiResult = await updateHospitalInventoryInAPI(currentHosp.id, currentHosp.inventory);
+          if (apiResult) {
+            showToast('Inventory synced with database!', 'success');
+          } else {
+            showToast('Failed to sync inventory with database.', 'warning');
+          }
+        }
         
+        updateHeroStats();
+        showToast('Blood stock inventory saved to database!', 'success');
+      });
+    }
+
+    if (restockAllBtn) {
+      restockAllBtn.addEventListener('click', async () => {
+        const currentHosp = hospitals.find(h => h.id === activeHospitalId);
+        if (!currentHosp) return;
+        if (!currentHosp.inventory) currentHosp.inventory = {};
+
+        BLOOD_GROUPS.forEach(g => {
+          currentHosp.inventory[g] = (Number(currentHosp.inventory[g]) || 0) + 5;
+        });
+
         if (isBackendOnline && currentHosp.id) {
           await updateHospitalInventoryInAPI(currentHosp.id, currentHosp.inventory);
         }
-      }
-
-      booking.status = 'fulfilled';
-      booking.updatedAt = new Date().toISOString();
-      
-      if (isBackendOnline) {
-        await updateBookingInAPI(booking.id, { status: 'fulfilled' });
-      }
-
-      renderHospitalDashboard();
-      updateHeroStats();
-      showToast(`Booking #${booking.id} dispatched! Stock updated.`, 'success');
-    },
-
-    removeHospitalBooking: function(bookingId) {
-      if (!confirm('Remove this booking request?')) return;
-      
-      patientBookings = patientBookings.filter(b => b.id !== bookingId);
-      renderHospitalDashboard();
-      showToast('Booking dismissed', 'info');
-    },
-
-    respondToSos: function(sosId) {
-      const req = sosRequests.find(s => s.id === sosId);
-      if (!req) {
-        showToast('SOS request not found', 'error');
-        return;
-      }
-
-      showToast(`Connecting to ${req.contactName} at ${req.hospital}...`, 'info');
-      setTimeout(() => {
-        window.location.href = `tel:${req.contactPhone}`;
-      }, 500);
-    },
-
-    toggleFulfillSos: async function(sosId) {
-      const req = sosRequests.find(s => s.id === sosId);
-      if (!req) {
-        showToast('SOS request not found', 'error');
-        return;
-      }
-
-      const newStatus = req.status === 'open' ? 'fulfilled' : 'open';
-      req.status = newStatus;
-      req.updatedAt = new Date().toISOString();
-      
-      if (isBackendOnline) {
-        await updateSOSInAPI(req.id, { status: newStatus });
-      }
-      
-      renderEmergencyFeed('all');
-      showToast(`SOS #${req.id} marked as ${req.status === 'fulfilled' ? 'Fulfilled' : 'Open'}`, 'success');
-    },
-
-    shareSos: function(sosId) {
-      const req = sosRequests.find(s => s.id === sosId);
-      if (!req) {
-        showToast('SOS request not found', 'error');
-        return;
-      }
-
-      const shareText = `🚨 URGENT BLOOD NEED (SOS): ${req.units} units of ${req.bloodGroup} needed for ${req.patientName} at ${req.hospital}, ${req.city}. Contact: ${req.contactName} (${req.contactPhone}). Please share or donate via BloodConnect!`;
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(shareText).then(() => {
-          showToast('SOS details copied to clipboard! Share on WhatsApp / Socials.', 'success', 4000);
-        }).catch(() => {
-          prompt('Copy SOS alert text below:', shareText);
-        });
-      } else {
-        prompt('Copy SOS alert text below:', shareText);
-      }
-<<<<<<< HEAD
-    },
-
-    refreshData: async function() {
-      showToast('Refreshing data from database...', 'info');
-      await loadHospitals();
-      await loadDonors();
-      await loadSOSRequests();
-      await loadBookings();
-      
-      if (activeHospitalId === null && hospitals.length > 0) {
-        activeHospitalId = hospitals[0].id;
-      }
-      
-      updateHeroStats();
-      performSearch();
-      renderHospitalDashboard();
-      renderEmergencyFeed('all');
-      showToast('Data refreshed from database!', 'success');
-    },
-
-    deleteHospital: async function(hospitalId) {
-      if (!confirm('Are you sure you want to delete this hospital? This action cannot be undone.')) {
-        return;
-      }
-
-      const hospital = hospitals.find(h => h.id === hospitalId);
-      if (!hospital) {
-        showToast('Hospital not found', 'error');
-        return;
-      }
-
-      if (isBackendOnline) {
-        const result = await deleteHospitalFromAPI(hospitalId);
-        if (result) {
-          showToast(`Hospital "${hospital.name}" deleted from database`, 'success');
-        } else {
-          showToast('Failed to delete from database', 'warning');
-        }
-      }
-
-      hospitals = hospitals.filter(h => h.id !== hospitalId);
-
-      if (activeHospitalId === hospitalId) {
-        activeHospitalId = hospitals.length > 0 ? hospitals[0].id : null;
-      }
-
-      renderHospitalDashboard();
-      updateHeroStats();
-      showToast(`Hospital "${hospital.name}" removed`, 'success');
-    },
-
-    deleteDonor: async function(donorId) {
-      if (!confirm('Are you sure you want to delete this donor?')) {
-        return;
-      }
-
-      const donor = donors.find(d => d.id === donorId);
-      if (!donor) {
-        showToast('Donor not found', 'error');
-        return;
-      }
-
-      if (isBackendOnline) {
-        const result = await deleteDonorFromAPI(donorId);
-        if (result) {
-          showToast(`Donor "${donor.fullName}" deleted from database`, 'success');
-        }
-      }
-
-      donors = donors.filter(d => d.id !== donorId);
-      updateHeroStats();
-      performSearch();
-      showToast(`Donor "${donor.fullName}" removed`, 'success');
-    },
-
-    deleteSOS: async function(sosId) {
-      if (!confirm('Delete this SOS request?')) {
-        return;
-      }
-
-      const sos = sosRequests.find(s => s.id === sosId);
-      if (!sos) {
-        showToast('SOS request not found', 'error');
-        return;
-      }
-
-      if (isBackendOnline) {
-        const result = await deleteSOSFromAPI(sosId);
-        if (result) {
-          showToast('SOS deleted from database', 'success');
-        }
-      }
-
-      sosRequests = sosRequests.filter(s => s.id !== sosId);
-      renderEmergencyFeed('all');
-      showToast('SOS request removed', 'success');
-    },
-
-    getState: function() {
-      return {
-        isBackendOnline,
-        hospitals: hospitals.length,
-        donors: donors.length,
-        sosRequests: sosRequests.length,
-        patientBookings: patientBookings.length,
-        activeHospitalId
-      };
-=======
->>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
+        
+        renderHospitalDashboard();
+        updateHeroStats();
+        showToast('Added +5 units to all blood groups in database!', 'success');
+      });
     }
-  };
+
+    if (resetToDefaultBtn) {
+      resetToDefaultBtn.addEventListener('click', async () => {
+        showToast('Refreshing stock directly from database...', 'info');
+        await loadHospitals();
+        renderHospitalDashboard();
+        updateHeroStats();
+        showToast('Hospital stock refreshed from database', 'success');
+      });
+    }
+
+    if (clearFulfilledRequestsBtn) {
+      clearFulfilledRequestsBtn.addEventListener('click', () => {
+        patientBookings = patientBookings.filter(b => !(b.hospitalId === activeHospitalId && b.status === 'fulfilled'));
+        renderHospitalDashboard();
+        showToast('Cleared completed booking requests', 'info');
+      });
+    }
+  }
 
   // ==========================================
-  // 15. BOOTSTRAP APPLICATION
+  // 15. NAVIGATION EVENT LISTENERS
   // ==========================================
-<<<<<<< HEAD
+  function setupNavigation() {
+    document.querySelectorAll('[data-page]').forEach(el => {
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetPage = this.dataset.page;
+        showPage(targetPage);
+        const navLinks = document.getElementById('navLinks');
+        if (navLinks) navLinks.classList.remove('open');
+      });
+    });
+
+    const hamburger = document.getElementById('hamburger');
+    if (hamburger) {
+      hamburger.addEventListener('click', () => {
+        const navLinks = document.getElementById('navLinks');
+        if (navLinks) navLinks.classList.toggle('open');
+      });
+    }
+  }
+
+  // ==========================================
+  // 16. EMERGENCY FILTER EVENT LISTENERS
+  // ==========================================
+  function setupEmergencyFilters() {
+    document.querySelectorAll('.emergency-filter-bar .filter-chip').forEach(chip => {
+      chip.addEventListener('click', function () {
+        document.querySelectorAll('.emergency-filter-bar .filter-chip').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        const status = this.dataset.status;
+        renderEmergencyFeed(status);
+      });
+    });
+  }
+
+  // ==========================================
+  // 17. DELETE FUNCTIONS
+  // ==========================================
+  async function deleteHospital(hospitalId) {
+    if (!confirm('Are you sure you want to delete this hospital? This action cannot be undone.')) {
+      return;
+    }
+
+    const hospital = hospitals.find(h => h.id === hospitalId);
+    if (!hospital) {
+      showToast('Hospital not found', 'error');
+      return;
+    }
+
+    if (isBackendOnline) {
+      const result = await deleteHospitalFromAPI(hospitalId);
+      if (result) {
+        showToast(`Hospital "${hospital.name}" deleted from database`, 'success');
+      } else {
+        showToast('Failed to delete from database', 'warning');
+      }
+    }
+
+    hospitals = hospitals.filter(h => h.id !== hospitalId);
+
+    if (activeHospitalId === hospitalId) {
+      activeHospitalId = hospitals.length > 0 ? hospitals[0].id : null;
+    }
+
+    renderHospitalDashboard();
+    updateHeroStats();
+    showToast(`Hospital "${hospital.name}" removed`, 'success');
+  }
+
+  async function deleteDonor(donorId) {
+    if (!confirm('Are you sure you want to delete this donor?')) {
+      return;
+    }
+
+    const donor = donors.find(d => d.id === donorId);
+    if (!donor) {
+      showToast('Donor not found', 'error');
+      return;
+    }
+
+    if (isBackendOnline) {
+      const result = await deleteDonorFromAPI(donorId);
+      if (result) {
+        showToast(`Donor "${donor.fullName}" deleted from database`, 'success');
+      }
+    }
+
+    donors = donors.filter(d => d.id !== donorId);
+    updateHeroStats();
+    performSearch();
+    showToast(`Donor "${donor.fullName}" removed`, 'success');
+  }
+
+  async function deleteSOS(sosId) {
+    if (!confirm('Delete this SOS request?')) {
+      return;
+    }
+
+    const sos = sosRequests.find(s => s.id === sosId);
+    if (!sos) {
+      showToast('SOS request not found', 'error');
+      return;
+    }
+
+    if (isBackendOnline) {
+      const result = await deleteSOSFromAPI(sosId);
+      if (result) {
+        showToast('SOS deleted from database', 'success');
+      }
+    }
+
+    sosRequests = sosRequests.filter(s => s.id !== sosId);
+    renderEmergencyFeed('all');
+    showToast('SOS request removed', 'success');
+  }
+
+  // ==========================================
+  // 18. REFRESH DATA
+  // ==========================================
+  async function refreshData() {
+    showToast('Refreshing data from database...', 'info');
+    await loadHospitals();
+    await loadDonors();
+    await loadSOSRequests();
+    await loadBookings();
+    
+    if (activeHospitalId === null && hospitals.length > 0) {
+      activeHospitalId = hospitals[0].id;
+    }
+    
+    updateHeroStats();
+    performSearch();
+    renderHospitalDashboard();
+    renderEmergencyFeed('all');
+    showToast('Data refreshed from database!', 'success');
+  }
+
+  // ==========================================
+  // 19. API STATUS BADGE
+  // ==========================================
   function updateApiStatusBadge() {
     let badge = document.getElementById('backendStatusBadge');
     if (!badge) {
@@ -2316,6 +2084,23 @@
     }
   }
 
+  // ==========================================
+  // 20. GET STATE
+  // ==========================================
+  function getState() {
+    return {
+      isBackendOnline,
+      hospitals: hospitals.length,
+      donors: donors.length,
+      sosRequests: sosRequests.length,
+      patientBookings: patientBookings.length,
+      activeHospitalId
+    };
+  }
+
+  // ==========================================
+  // 21. BOOTSTRAP APPLICATION
+  // ==========================================
   async function initApp() {
     await checkBackendHealth();
 
@@ -2337,9 +2122,6 @@
       activeHospitalId = hospitals[0].id;
     }
     
-=======
-  function initApp() {
->>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
     updateHeroStats();
     initCompatibilityWidget();
     performSearch();
@@ -2350,7 +2132,6 @@
       updateDonorCardDisplay(donors[0]);
     }
 
-<<<<<<< HEAD
     const apiStatus = document.getElementById('apiStatus');
     if (apiStatus) {
       apiStatus.textContent = isBackendOnline ? '🔗 Database Connected' : '📡 Database Offline';
@@ -2370,22 +2151,60 @@
         refreshBtn.className = 'btn-outline btn-sm';
         refreshBtn.innerHTML = '<i class="fas fa-sync"></i> Refresh';
         refreshBtn.style.marginLeft = '10px';
-        refreshBtn.onclick = window.BloodConnectApp.refreshData;
+        refreshBtn.addEventListener('click', refreshData);
         navRight.appendChild(refreshBtn);
       }
     }
 
     console.log('✅ BloodConnect initialized in Database-Only Mode (NO LOCAL STORAGE)');
-    console.log('📊 Current state:', window.BloodConnectApp.getState());
-=======
-    // Default start page
-    showPage('find');
->>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
+    console.log('📊 Current state:', getState());
   }
 
+  // ==========================================
+  // 22. EXPOSE GLOBAL FUNCTIONS
+  // ==========================================
+  window.BloodConnectApp = {
+    openBookingModal: openBookingModal,
+    openContactDonorModal: openContactDonorModal,
+    changeStock: changeStock,
+    fulfillHospitalBooking: fulfillHospitalBooking,
+    removeHospitalBooking: removeHospitalBooking,
+    respondToSos: respondToSos,
+    toggleFulfillSos: toggleFulfillSos,
+    shareSos: shareSos,
+    refreshData: refreshData,
+    deleteHospital: deleteHospital,
+    deleteDonor: deleteDonor,
+    deleteSOS: deleteSOS,
+    getState: getState
+  };
+
+  // ==========================================
+  // 23. SETUP ALL EVENT LISTENERS
+  // ==========================================
+  function setupAllEventListeners() {
+    setupNavigation();
+    setupSearchEventListeners();
+    setupEmergencyModal();
+    setupBookingModal();
+    setupContactDonorModal();
+    setupAddHospitalModal();
+    setupDonorRegistration();
+    setupDashboardEventListeners();
+    setupEmergencyFilters();
+  }
+
+  // ==========================================
+  // 24. INITIALIZE
+  // ==========================================
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initApp);
+    document.addEventListener('DOMContentLoaded', function() {
+      setupAllEventListeners();
+      initApp();
+    });
   } else {
+    setupAllEventListeners();
     initApp();
   }
-  
+
+})(); A bin minus rest five happens for anti grives of localstudy that she loves a two for real server supervisor
