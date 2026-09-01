@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOS Requests | BloodConnect</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar">
+  <div class="container">
+    <div class="logo" role="button" onclick="window.location.href='index.html'" style="cursor:pointer;">
+      <i class="fas fa-droplet"></i> BloodConnect
+    </div>
+    <div class="hamburger" id="hamburger" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></div>
+    <div class="nav-links" id="navLinks">
+      <a href="find-blood.html" class="nav-link"><i class="fas fa-search-location"></i> Find Blood</a>
+      <a href="sos-requests.html" class="nav-link active"><i class="fas fa-bullhorn"></i> SOS Requests</a>
+      <a href="hospital-dashboard.html" class="nav-link"><i class="fas fa-hospital"></i> Hospital Dashboard</a>
+      <a href="about.html" class="nav-link"><i class="fas fa-circle-info"></i> About</a>
+      <a href="donor-registration.html" class="donate-btn"><i class="fas fa-heart"></i> Register as Donor</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="container main-content">
+
+  <section id="page-emergency" class="page">
+    <div class="page-header">
+      <div>
+        <h2 class="section-title"><i class="fas fa-bullhorn" style="color:var(--primary-red);"></i> Urgent SOS Blood Requests</h2>
+        <p class="section-desc">Critical, real-time blood needs submitted by families and partner hospitals.</p>
+      </div>
+      <button class="btn-emergency" id="pageSosBtn"><i class="fas fa-plus-circle"></i> Create New SOS Request</button>
+    </div>
+
+    <!-- Emergency Filter Bar -->
+    <div class="emergency-filter-bar">
+      <div class="filter-group">
+        <label>Status Filter:</label>
+        <button class="filter-chip active" data-status="all">All Requests</button>
+        <button class="filter-chip" data-status="open">Urgent & Open</button>
+        <button class="filter-chip" data-status="fulfilled">Fulfilled</button>
+      </div>
+    </div>
+
+    <!-- Emergency Cards Grid -->
+    <div id="emergencyFeedContainer" class="emergency-feed-grid">
+      <!-- dynamically populated -->
+    </div>
+  </section>
+
+</main>
+
+<!-- ========== MODALS ========== -->
+
+<!-- Emergency SOS Modal -->
+<div id="emergencyModal" class="modal-backdrop hidden">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3><i class="fas fa-triangle-exclamation" style="color:var(--primary-red);"></i> Post Emergency Blood Request (SOS)</h3>
+      <button class="modal-close-btn" id="closeEmergencyModalBtn">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="emergencyRequestForm">
+        <div class="form-row">
+          <div>
+            <label for="sosPatientName">Patient Full Name *</label>
+            <input type="text" id="sosPatientName" placeholder="e.g. Michael Smith" required>
+          </div>
+          <div>
+            <label for="sosBloodGroup">Blood Group Required *</label>
+            <select id="sosBloodGroup" required>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="sosUnits">Units Needed *</label>
+            <input type="number" id="sosUnits" value="2" min="1" max="10" required>
+          </div>
+          <div>
+            <label for="sosUrgency">Urgency Level *</label>
+            <select id="sosUrgency" required>
+              <option value="Critical (Immediate)">🚨 Critical (Immediate - next 2 hours)</option>
+              <option value="Urgent (Today)">⚡ Urgent (Within 6-12 hours)</option>
+              <option value="Standard (Within 24h)">⏳ Needed within 24 hours</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="sosHospital">Hospital / Facility Name *</label>
+            <input type="text" id="sosHospital" placeholder="e.g. AKOLA General Hospital" required>
+          </div>
+          <div>
+            <label for="sosCity">City / Location *</label>
+            <input type="text" id="sosCity" placeholder="e.g. AKOLA" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="sosContactName">Contact Person Name *</label>
+            <input type="text" id="sosContactName" placeholder="e.g. Dr. Adams / Family Member" required>
+          </div>
+          <div>
+            <label for="sosContactPhone">Contact Mobile / Phone *</label>
+            <input type="tel" id="sosContactPhone" placeholder="e.g. +1 555 987 6543" required>
+          </div>
+        </div>
+        <div>
+          <label for="sosNotes">Reason / Medical Notes (Optional)</label>
+          <textarea id="sosNotes" rows="2" placeholder="e.g. Emergency surgery, trauma ward, room 402"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-outline" id="cancelSosBtn">Cancel</button>
+          <button type="submit" class="btn-emergency"><i class="fas fa-bullhorn"></i> Broadcast SOS Alert</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="logo" style="color:white; margin-bottom:12px;">
+        <i class="fas fa-droplet" style="color:var(--primary-red);"></i> BloodConnect
+      </div>
+      <p style="font-size:0.9rem; line-height:1.6; color:#9CA3AF;">
+        A real-time humanitarian blood donation and inventory network.
+      </p>
+    </div>
+    <div>
+      <h5>Quick Links</h5>
+      <ul class="footer-links">
+        <li><a href="find-blood.html"><i class="fas fa-chevron-right"></i> Find Blood Stock</a></li>
+        <li><a href="sos-requests.html"><i class="fas fa-chevron-right"></i> SOS Emergency Requests</a></li>
+        <li><a href="hospital-dashboard.html"><i class="fas fa-chevron-right"></i> Hospital Dashboard</a></li>
+        <li><a href="donor-registration.html"><i class="fas fa-chevron-right"></i> Register as Donor</a></li>
+        <li><a href="about.html"><i class="fas fa-chevron-right"></i> About BloodConnect</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Emergency Helpline</h5>
+      <div style="font-size:1.2rem; font-weight:700; color:var(--primary-red);">
+        <i class="fas fa-phone-volume"></i> 1-800-BLOOD-HELP
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
