@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
@@ -62,3 +63,54 @@ def fulfill_booking(booking_id: str):
 
     return {"message": "Booking fulfilled and stock updated", "booking": b}
 
+=======
+from fastapi import APIRouter, HTTPException 
+ 
+from schemas.booking_schema import ( 
+    BookingRequest, 
+    BookingStatusUpdate 
+) 
+ 
+from services.booking_service import ( 
+    create_booking, 
+    get_booking, 
+    update_booking_status 
+) 
+ 
+router = APIRouter( 
+    prefix="/bookings", 
+    tags=["Bookings"] 
+) 
+ 
+ 
+@router.post("/") 
+def create_booking_request(booking: BookingRequest): 
+    return create_booking(booking.model_dump()) 
+ 
+ 
+@router.get("/{booking_id}") 
+def get_booking_request(booking_id: int): 
+    return get_booking(booking_id) 
+ 
+ 
+@router.put("/{booking_id}/status") 
+def change_booking_status( 
+    booking_id: int, 
+    data: BookingStatusUpdate 
+): 
+    booking = { 
+        "booking_id": booking_id 
+    } 
+ 
+    try: 
+        return update_booking_status( 
+            booking, 
+            data.status 
+        ) 
+ 
+    except ValueError as error: 
+        raise HTTPException( 
+            status_code=400, 
+            detail=str(error) 
+        ) 
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb

@@ -1,13 +1,30 @@
 from fastapi import APIRouter, HTTPException
+<<<<<<< HEAD
 from pydantic import BaseModel
 from typing import Optional, List, Dict
 from database import supabase
+=======
+
+from schemas.hospital_schema import (
+    HospitalCreate,
+    HospitalUpdate
+)
+
+from services.hospital_service import (
+    get_hospitals,
+    get_hospital,
+    create_hospital,
+    update_hospital
+)
+
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
 
 router = APIRouter(
     prefix="/hospitals",
     tags=["Hospitals"]
 )
 
+<<<<<<< HEAD
 DEFAULT_HOSPITALS = [
     {
         "hospital_id": "hosp-1",
@@ -175,3 +192,46 @@ def delete_hospital(hospital_id: str):
         pass
 
     return {"message": "Hospital deleted successfully", "hospital": existing}
+=======
+
+@router.get("/")
+def list_hospitals():
+    return get_hospitals()
+
+
+@router.get("/{hospital_id}")
+def get_hospital_details(hospital_id: int):
+    try:
+        return get_hospital(hospital_id)
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=404,
+            detail=str(error)
+        )
+
+
+@router.post("/")
+def register_hospital(data: HospitalCreate):
+    return create_hospital(
+        data.model_dump()
+    )
+
+
+@router.put("/{hospital_id}")
+def update_hospital_details(
+    hospital_id: int,
+    data: HospitalUpdate
+):
+    try:
+        return update_hospital(
+            hospital_id,
+            data.model_dump()
+        )
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=404,
+            detail=str(error)
+        )
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb

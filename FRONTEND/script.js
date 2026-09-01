@@ -1,8 +1,11 @@
 /**
  * ===================================================================
  * BloodConnect - Full Functional Client-Side Application
+<<<<<<< HEAD
  * With Supabase & FastAPI Integration (Database Only Mode)
  * NO LOCAL STORAGE - All data from database
+=======
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
  * ===================================================================
  */
 
@@ -10,6 +13,7 @@
   'use strict';
 
   // ==========================================
+<<<<<<< HEAD
   // 0. API & SUPABASE CONFIGURATION
   // ==========================================
   
@@ -23,6 +27,17 @@
   // ==========================================
   // ⚠️ REMOVED: All localStorage keys and functions
   // Data is stored ONLY in the database
+=======
+  // 1. DATA STORAGE & SEED INITIALIZATION
+  // ==========================================
+  const STORAGE_KEYS = {
+    HOSPITALS: 'bc_hospitals_data',
+    DONORS: 'bc_donors_data',
+    SOS_REQUESTS: 'bc_sos_requests',
+    BOOKINGS: 'bc_patient_bookings',
+    CURRENT_HOSPITAL: 'bc_active_hospital_id'
+  };
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
 
   const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -70,6 +85,7 @@
     }
   };
 
+<<<<<<< HEAD
   // ==========================================
   // 2. API INTEGRATION FUNCTIONS
   // ==========================================
@@ -171,6 +187,282 @@
     } catch (error) {
       console.error('Backend inventory update error:', error);
       return null;
+=======
+  // Seed Hospitals
+  const DEFAULT_HOSPITALS = [
+    {
+      id: 'hosp-1',
+      name: 'City General Hospital & Trauma Center',
+      city: 'New York',
+      address: '420 East 70th Street, Manhattan',
+      contact: '+1 (212) 555-0199',
+      email: 'bloodbank@citygeneral.org',
+      operatingHours: '24/7 Emergency Blood Bank',
+      inventory: {
+        'A+': 14, 'A-': 4, 'B+': 9, 'B-': 2,
+        'AB+': 6, 'AB-': 3, 'O+': 22, 'O-': 5
+      },
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: 'hosp-2',
+      name: "St. Mary's Regional Blood Center",
+      city: 'New York',
+      address: '1300 York Avenue, Manhattan',
+      contact: '+1 (212) 555-0234',
+      email: 'donations@stmarysblood.org',
+      operatingHours: '24/7 Emergency Service',
+      inventory: {
+        'A+': 8, 'A-': 0, 'B+': 12, 'B-': 1,
+        'AB+': 4, 'AB-': 0, 'O+': 18, 'O-': 2
+      },
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: 'hosp-3',
+      name: 'Brooklyn Central Medical Center',
+      city: 'Brooklyn',
+      address: '506 6th Street, Brooklyn',
+      contact: '+1 (718) 555-0456',
+      email: 'bloodservice@brooklynmed.org',
+      operatingHours: 'Mon - Sun: 24 Hours',
+      inventory: {
+        'A+': 11, 'A-': 3, 'B+': 5, 'B-': 0,
+        'AB+': 7, 'AB-': 2, 'O+': 15, 'O-': 4
+      },
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: 'hosp-4',
+      name: 'Queens Emergency Health Hospital',
+      city: 'Queens',
+      address: '82-68 164th St, Jamaica, Queens',
+      contact: '+1 (718) 555-0789',
+      email: 'blood@queenshealth.org',
+      operatingHours: '24 Hours Emergency Ward',
+      inventory: {
+        'A+': 6, 'A-': 2, 'B+': 7, 'B-': 3,
+        'AB+': 5, 'AB-': 1, 'O+': 9, 'O-': 1
+      },
+      lastUpdated: new Date().toISOString()
+    },
+    {
+      id: 'hosp-5',
+      name: 'Chicago Metropolitan Hospital',
+      city: 'Chicago',
+      address: '5841 S Maryland Ave, Chicago',
+      contact: '+1 (312) 555-0912',
+      email: 'bloodsupply@chicagometro.org',
+      operatingHours: '24/7 Rapid Response',
+      inventory: {
+        'A+': 16, 'A-': 5, 'B+': 10, 'B-': 4,
+        'AB+': 8, 'AB-': 3, 'O+': 25, 'O-': 6
+      },
+      lastUpdated: new Date().toISOString()
+    }
+  ];
+
+  // Seed Voluntary Donors
+  const DEFAULT_DONORS = [
+    {
+      id: 'BC-84920',
+      fullName: 'Sarah Jenkins',
+      age: 28,
+      gender: 'Female',
+      bloodGroup: 'O-',
+      mobile: '+1 (555) 234-5678',
+      email: 'sarah.j@example.com',
+      city: 'New York',
+      address: '742 Evergreen Terrace, Manhattan',
+      donatedBefore: 'Yes',
+      lastDonation: '2026-06-15',
+      availability: 'Anytime (24/7 SOS)',
+      preferredHospital: 'City General Hospital',
+      registeredAt: '2026-08-10'
+    },
+    {
+      id: 'BC-71822',
+      fullName: 'Marcus Vance',
+      age: 34,
+      gender: 'Male',
+      bloodGroup: 'A+',
+      mobile: '+1 (555) 345-6789',
+      email: 'marcus.v@example.com',
+      city: 'New York',
+      address: '120 West 44th St',
+      donatedBefore: 'Yes',
+      lastDonation: '2026-05-20',
+      availability: 'Evenings & Weekends',
+      preferredHospital: "St. Mary's Regional",
+      registeredAt: '2026-07-28'
+    },
+    {
+      id: 'BC-93014',
+      fullName: 'Elena Rostova',
+      age: 26,
+      gender: 'Female',
+      bloodGroup: 'B+',
+      mobile: '+1 (718) 555-7890',
+      email: 'elena.rostova@example.com',
+      city: 'Brooklyn',
+      address: '350 Ocean Parkway',
+      donatedBefore: 'No',
+      lastDonation: '',
+      availability: 'Anytime (24/7 SOS)',
+      preferredHospital: 'Brooklyn Central Medical Center',
+      registeredAt: '2026-08-20'
+    },
+    {
+      id: 'BC-48201',
+      fullName: 'David Chen',
+      age: 31,
+      gender: 'Male',
+      bloodGroup: 'AB+',
+      mobile: '+1 (718) 555-9123',
+      email: 'david.chen@example.com',
+      city: 'Queens',
+      address: '41-25 Main St, Flushing',
+      donatedBefore: 'Yes',
+      lastDonation: '2026-04-10',
+      availability: 'Weekends only',
+      preferredHospital: 'Queens Emergency Health',
+      registeredAt: '2026-08-01'
+    },
+    {
+      id: 'BC-65902',
+      fullName: 'Jessica Taylor',
+      age: 24,
+      gender: 'Female',
+      bloodGroup: 'O+',
+      mobile: '+1 (312) 555-8844',
+      email: 'jess.taylor@example.com',
+      city: 'Chicago',
+      address: '220 N Michigan Ave',
+      donatedBefore: 'Yes',
+      lastDonation: '2026-07-02',
+      availability: 'Anytime (24/7 SOS)',
+      preferredHospital: 'Chicago Metropolitan Hospital',
+      registeredAt: '2026-08-18'
+    },
+    {
+      id: 'BC-31940',
+      fullName: 'Alexander Wright',
+      age: 42,
+      gender: 'Male',
+      bloodGroup: 'A-',
+      mobile: '+1 (555) 678-1234',
+      email: 'a.wright@example.com',
+      city: 'New York',
+      address: '88 Greenwich St',
+      donatedBefore: 'Yes',
+      lastDonation: '2026-03-12',
+      availability: 'Working Hours Only',
+      preferredHospital: 'City General Hospital',
+      registeredAt: '2026-08-14'
+    },
+    {
+      id: 'BC-54219',
+      fullName: 'Amira Patel',
+      age: 29,
+      gender: 'Female',
+      bloodGroup: 'B-',
+      mobile: '+1 (718) 555-4433',
+      email: 'amira.p@example.com',
+      city: 'Brooklyn',
+      address: '85 Flatbush Ave',
+      donatedBefore: 'Yes',
+      lastDonation: '2026-06-25',
+      availability: 'Anytime (24/7 SOS)',
+      preferredHospital: 'Brooklyn Central Medical Center',
+      registeredAt: '2026-08-25'
+    },
+    {
+      id: 'BC-19483',
+      fullName: 'Carlos Rodriguez',
+      age: 38,
+      gender: 'Male',
+      bloodGroup: 'AB-',
+      mobile: '+1 (312) 555-1122',
+      email: 'carlos.r@example.com',
+      city: 'Chicago',
+      address: '1500 W Jackson Blvd',
+      donatedBefore: 'Yes',
+      lastDonation: '2026-05-18',
+      availability: 'Evenings & Weekends',
+      preferredHospital: 'Chicago Metropolitan Hospital',
+      registeredAt: '2026-08-29'
+    }
+  ];
+
+  // Seed Urgent SOS Requests
+  const DEFAULT_SOS = [
+    {
+      id: 'SOS-1049',
+      patientName: 'Michael Smith',
+      bloodGroup: 'O-',
+      units: 3,
+      urgency: 'Critical (Immediate)',
+      hospital: 'City General Hospital',
+      city: 'New York',
+      contactName: 'Dr. Katherine Adams (ICU)',
+      contactPhone: '+1 (212) 555-0199',
+      notes: 'Emergency vascular trauma surgery in Room 304. Immediate donor matching needed.',
+      status: 'open',
+      createdAt: new Date(Date.now() - 45 * 60 * 1000).toISOString() // 45m ago
+    },
+    {
+      id: 'SOS-1048',
+      patientName: 'Lucas Morales',
+      bloodGroup: 'B-',
+      units: 2,
+      urgency: 'Urgent (Today)',
+      hospital: 'Brooklyn Central Medical Center',
+      city: 'Brooklyn',
+      contactName: 'Maria Morales (Sister)',
+      contactPhone: '+1 (718) 555-9876',
+      notes: 'Scheduled bypass operation requiring B- buffer stock.',
+      status: 'open',
+      createdAt: new Date(Date.now() - 3 * 3600 * 1000).toISOString() // 3h ago
+    },
+    {
+      id: 'SOS-1045',
+      patientName: 'Sophia Reynolds',
+      bloodGroup: 'A-',
+      units: 2,
+      urgency: 'Standard (Within 24h)',
+      hospital: 'Chicago Metropolitan Hospital',
+      city: 'Chicago',
+      contactName: 'Robert Reynolds (Father)',
+      contactPhone: '+1 (312) 555-3321',
+      notes: 'Post-chemotherapy transfusion needed before tomorrow noon.',
+      status: 'open',
+      createdAt: new Date(Date.now() - 8 * 3600 * 1000).toISOString() // 8h ago
+    },
+    {
+      id: 'SOS-1040',
+      patientName: 'Daniel Vance',
+      bloodGroup: 'AB+',
+      units: 1,
+      urgency: 'Critical (Immediate)',
+      hospital: 'Queens Emergency Health',
+      city: 'Queens',
+      contactName: 'Dr. Gregory House',
+      contactPhone: '+1 (718) 555-0789',
+      notes: 'Trauma ward delivery.',
+      status: 'fulfilled',
+      createdAt: new Date(Date.now() - 24 * 3600 * 1000).toISOString()
+    }
+  ];
+
+  // Storage Helpers
+  function getStored(key, fallback) {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : fallback;
+    } catch (e) {
+      console.warn('Storage read error:', e);
+      return fallback;
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
     }
   }
 
@@ -187,6 +479,7 @@
     }
   }
 
+<<<<<<< HEAD
   // ---------- DONOR API ----------
   async function fetchDonorsFromAPI() {
     try {
@@ -393,6 +686,41 @@
       return null;
     }
   }
+=======
+  // Initialize data if not present
+  if (!localStorage.getItem(STORAGE_KEYS.HOSPITALS)) {
+    setStored(STORAGE_KEYS.HOSPITALS, DEFAULT_HOSPITALS);
+  }
+  if (!localStorage.getItem(STORAGE_KEYS.DONORS)) {
+    setStored(STORAGE_KEYS.DONORS, DEFAULT_DONORS);
+  }
+  if (!localStorage.getItem(STORAGE_KEYS.SOS_REQUESTS)) {
+    setStored(STORAGE_KEYS.SOS_REQUESTS, DEFAULT_SOS);
+  }
+  if (!localStorage.getItem(STORAGE_KEYS.BOOKINGS)) {
+    setStored(STORAGE_KEYS.BOOKINGS, [
+      {
+        id: 'BK-101',
+        hospitalId: 'hosp-1',
+        hospitalName: 'City General Hospital & Trauma Center',
+        patientName: 'Emily Clark',
+        bloodGroup: 'O+',
+        units: 2,
+        doctor: 'Dr. Adams / Surgical',
+        contact: '+1 (555) 777-8899',
+        notes: 'Room 210 pre-op reservation',
+        status: 'pending',
+        createdAt: new Date(Date.now() - 2 * 3600 * 1000).toISOString()
+      }
+    ]);
+  }
+
+  let hospitals = getStored(STORAGE_KEYS.HOSPITALS, DEFAULT_HOSPITALS);
+  let donors = getStored(STORAGE_KEYS.DONORS, DEFAULT_DONORS);
+  let sosRequests = getStored(STORAGE_KEYS.SOS_REQUESTS, DEFAULT_SOS);
+  let patientBookings = getStored(STORAGE_KEYS.BOOKINGS, []);
+  let activeHospitalId = getStored(STORAGE_KEYS.CURRENT_HOSPITAL, hospitals[0]?.id || 'hosp-1');
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
 
   // ==========================================
   // 4. DATA LOADING FUNCTIONS (DATABASE ONLY)
@@ -685,7 +1013,7 @@
   // ==========================================
   // 8. PAGE 1: FIND BLOOD & SEARCH SYSTEM
   // ==========================================
-  let currentSearchTab = 'hospitals';
+  let currentSearchTab = 'hospitals'; // 'hospitals' or 'donors'
 
   const tabHospitalsBtn = document.getElementById('tabHospitalsBtn');
   const tabDonorsBtn = document.getElementById('tabDonorsBtn');
@@ -1215,11 +1543,12 @@
 
   const hospitalInfoForm = document.getElementById('hospitalInfoForm');
   if (hospitalInfoForm) {
-    hospitalInfoForm.addEventListener('submit', async function (e) {
+    hospitalInfoForm.addEventListener('submit', function (e) {
       e.preventDefault();
       const currentHosp = hospitals.find(h => h.id === activeHospitalId);
       if (!currentHosp) return;
 
+<<<<<<< HEAD
       const updatedData = {
         name: document.getElementById('hospName').value.trim(),
         city: document.getElementById('hospCity').value.trim(),
@@ -1241,6 +1570,17 @@
         }
       }
 
+=======
+      currentHosp.name = document.getElementById('hospName').value.trim();
+      currentHosp.city = document.getElementById('hospCity').value.trim();
+      currentHosp.address = document.getElementById('hospAddress').value.trim();
+      currentHosp.contact = document.getElementById('hospContact').value.trim();
+      currentHosp.email = document.getElementById('hospEmail').value.trim();
+      currentHosp.operatingHours = document.getElementById('hospHours').value.trim();
+      currentHosp.lastUpdated = new Date().toISOString();
+
+      setStored(STORAGE_KEYS.HOSPITALS, hospitals);
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
       renderHospitalDashboard();
       updateHeroStats();
       showToast('Hospital profile updated successfully!', 'success');
@@ -1637,7 +1977,7 @@
   if (cancelAddHospBtn) cancelAddHospBtn.addEventListener('click', closeAddHospitalModal);
 
   if (addHospitalForm) {
-    addHospitalForm.addEventListener('submit', async function (e) {
+    addHospitalForm.addEventListener('submit', function (e) {
       e.preventDefault();
 
       const name = document.getElementById('newHospName').value.trim();
@@ -1665,6 +2005,7 @@
         createdAt: new Date().toISOString()
       };
 
+<<<<<<< HEAD
       if (!isBackendOnline) {
         showToast('⚠️ Backend database is offline. Please start the FastAPI server to add a hospital.', 'error', 5000);
         return;
@@ -1683,6 +2024,21 @@
       } else {
         showToast(`❌ Failed to register hospital in database.`, 'error', 5000);
       }
+=======
+      hospitals.push(newHospital);
+      setStored(STORAGE_KEYS.HOSPITALS, hospitals);
+
+      activeHospitalId = newHospital.id;
+      setStored(STORAGE_KEYS.CURRENT_HOSPITAL, activeHospitalId);
+
+      closeAddHospitalModal();
+      addHospitalForm.reset();
+
+      renderHospitalDashboard();
+      updateHeroStats();
+
+      showToast(`Registered "${name}" successfully!`, 'success');
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
     });
   }
 
@@ -1818,6 +2174,7 @@
       } else {
         prompt('Copy SOS alert text below:', shareText);
       }
+<<<<<<< HEAD
     },
 
     refreshData: async function() {
@@ -1925,12 +2282,15 @@
         patientBookings: patientBookings.length,
         activeHospitalId
       };
+=======
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
     }
   };
 
   // ==========================================
   // 15. BOOTSTRAP APPLICATION
   // ==========================================
+<<<<<<< HEAD
   function updateApiStatusBadge() {
     let badge = document.getElementById('backendStatusBadge');
     if (!badge) {
@@ -1977,6 +2337,9 @@
       activeHospitalId = hospitals[0].id;
     }
     
+=======
+  function initApp() {
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
     updateHeroStats();
     initCompatibilityWidget();
     performSearch();
@@ -1987,6 +2350,7 @@
       updateDonorCardDisplay(donors[0]);
     }
 
+<<<<<<< HEAD
     const apiStatus = document.getElementById('apiStatus');
     if (apiStatus) {
       apiStatus.textContent = isBackendOnline ? '🔗 Database Connected' : '📡 Database Offline';
@@ -2013,6 +2377,10 @@
 
     console.log('✅ BloodConnect initialized in Database-Only Mode (NO LOCAL STORAGE)');
     console.log('📊 Current state:', window.BloodConnectApp.getState());
+=======
+    // Default start page
+    showPage('find');
+>>>>>>> 193549310bf7b111bdc914f63a0f3746d4dd73fb
   }
 
   if (document.readyState === 'loading') {
@@ -2020,5 +2388,4 @@
   } else {
     initApp();
   }
-
-})();
+  
