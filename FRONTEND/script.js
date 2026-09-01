@@ -86,13 +86,21 @@
 
   async function checkBackendHealth() {
     try {
-      const response = await fetch(`${API_BASE_URL}/health`, { signal: AbortSignal.timeout(2000) });
+      const response = await fetch(`${API_BASE_URL}/health`, { signal: AbortSignal.timeout(3500) });
       if (response.ok) {
         isBackendOnline = true;
         return true;
       }
     } catch (e) {
-      console.warn('⚠️ Backend not running. Database-only mode requires FastAPI server.');
+      try {
+        const fallback = await fetch(`${API_BASE_URL}/`, { signal: AbortSignal.timeout(3500) });
+        if (fallback.ok) {
+          isBackendOnline = true;
+          return true;
+        }
+      } catch (err) {
+        console.warn('⚠️ Backend not reachable at ' + API_BASE_URL + ':', err.message);
+      }
     }
     isBackendOnline = false;
     return false;
@@ -2207,4 +2215,4 @@
     initApp();
   }
 
-})(); A bin minus rest five happens for anti grives of localstudy that she loves a two for real server supervisor
+})();
