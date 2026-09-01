@@ -32,7 +32,6 @@ def create_booking(data: dict):
 def get_booking(booking_id: int):
 
     for booking in bookings:
-
         if booking["booking_id"] == booking_id:
             return booking
 
@@ -43,7 +42,6 @@ def get_booking(booking_id: int):
 # GET ALL BOOKINGS
 # =========================
 def get_all_bookings():
-
     return bookings
 
 
@@ -58,20 +56,16 @@ def update_booking_status(
     allowed_statuses = [
         "pending",
         "approved",
-        "fulfilled",
-        "cancelled"
+        "rejected",
+        "fulfilled"
     ]
 
     if status not in allowed_statuses:
         raise ValueError(
             "Invalid booking status. "
-            "Use: pending, approved, fulfilled or cancelled"
+            "Use: pending, approved, rejected or fulfilled"
         )
 
-    booking_data = get_booking(
-        booking["booking_id"]
-    )
+    booking["status"] = status
 
-    booking_data["status"] = status
-
-    return booking_data
+    return booking

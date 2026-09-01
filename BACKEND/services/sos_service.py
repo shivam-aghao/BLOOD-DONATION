@@ -1,20 +1,9 @@
-# =========================
-# TEMPORARY SOS DATA
-# =========================
+from database import supabase
 
-sos_requests = []
-
-
-# =========================
-# CREATE SOS REQUEST
-# =========================
 
 def create_sos(data: dict):
 
-    new_id = len(sos_requests) + 1
-
-    sos = {
-        "sos_id": new_id,
+    sos_data = {
         "patient_name": data["patient_name"],
         "blood_group": data["blood_group"],
         "units": data["units"],
@@ -27,37 +16,47 @@ def create_sos(data: dict):
         "status": "open"
     }
 
-    sos_requests.append(sos)
+    response = (
+        supabase
+        .table("sos_requests")
+        .insert(sos_data)
+        .execute()
+    )
 
-    return sos
+    if not response.data:
+        return None
 
+    return response.data[0]
 
-# =========================
-# GET ALL SOS REQUESTS
-# =========================
 
 def get_sos_requests():
 
-    return sos_requests
+    response = (
+        supabase
+        .table("sos_requests")
+        .select("*")
+        .order("id")
+        .execute()
+    )
 
+    return response.data
 
-# =========================
-# GET SINGLE SOS REQUEST
-# =========================
 
 def get_sos(sos_id: int):
 
-    for sos in sos_requests:
+    response = (
+        supabase
+        .table("sos_requests")
+        .select("*")
+        .eq("id", sos_id)
+        .execute()
+    )
 
-        if sos["sos_id"] == sos_id:
-            return sos
+    if not response.data:
+        return None
 
-    raise ValueError("SOS request not found")
+    return response.data[0]
 
-
-# =========================
-# UPDATE SOS STATUS
-# =========================
 
 def update_sos_status(
     sos_id: int,
@@ -76,8 +75,15 @@ def update_sos_status(
             "Use: open, fulfilled or cancelled"
         )
 
-    sos = get_sos(sos_id)
+    response = (
+        supabase
+        .table("sos_requests")
+        .update({"status": status})
+        .eq("id", sos_id)
+        .execute()
+    )
 
-    sos["status"] = status
+    if not response.data:
+        return None
 
-    return sos
+    return response.data[0]

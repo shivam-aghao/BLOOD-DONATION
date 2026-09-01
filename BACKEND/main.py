@@ -11,7 +11,10 @@ from routes.search_routes import router as search_router
 
 app = FastAPI(
     title="BloodConnect API",
-    description="Backend API for blood donation, hospital inventory, SOS requests, bookings, donor registration and blood search",
+    description=(
+        "Backend API for blood donation, hospital inventory, "
+        "SOS requests, bookings, donor registration and blood search"
+    ),
     version="1.0.0"
 )
 

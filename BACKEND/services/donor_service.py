@@ -118,54 +118,15 @@ def normalize_donor(d):
 
 def add_donor(donor):
     donor_data = donor.model_dump()
-    name = donor_data.get("name") or donor_data.get("full_name", "")
-    phone = donor_data.get("phone") or donor_data.get("mobile", "")
 
-    # Payload matching Supabase 'donar' table columns
-    supabase_payload = {
-        "full_name": name,
-        "age": donor_data.get("age", 25),
-        "gender": donor_data.get("gender", "Other"),
-        "blood_group": donor_data.get("blood_group", "O+"),
-        "mobile": phone,
-        "email": donor_data.get("email", ""),
-        "city": donor_data.get("city", "New York"),
-        "address": donor_data.get("address", ""),
-        "donated_before": donor_data.get("donated_before", "No"),
-        "last_donation": donor_data.get("last_donation") or None,
-        "availability": donor_data.get("availability", "Anytime"),
-        "preferred_hospital": donor_data.get("preferred_hospital") or None
-    }
+    response = (
+        supabase
+        .table("donors")
+        .insert(donor_data)
+        .execute()
+    )
 
-    # Try inserting into Supabase 'donar' table or 'donors' table
-    for table_name in ["donar", "donors"]:
-        try:
-            response = supabase.table(table_name).insert(supabase_payload).execute()
-            if response.data and len(response.data) > 0:
-                created = normalize_donor(response.data[0])
-                # Also save to local cache
-                local_list = load_local_donors()
-                local_list.insert(0, created)
-                save_local_donors(local_list)
-                return created
-        except Exception:
-            continue
-
-    # Fallback to local storage if Supabase has RLS or connection restrictions
-    local_list = load_local_donors()
-    new_id = len(local_list) + 1
-    new_donor = normalize_donor({
-        "id": new_id,
-        "donar_id": new_id,
-        **supabase_payload,
-        "name": name,
-        "phone": phone,
-        "agreement": donor_data.get("agreement", True),
-        "available": True
-    })
-    local_list.insert(0, new_donor)
-    save_local_donors(local_list)
-    return new_donor
+    return response.data[0]
 
 
 def get_donors():
@@ -183,26 +144,21 @@ def get_donors():
 
 
 def search_donors(blood_group: str, city: str = None):
-    # Try Supabase query
-    for table_name in ["donar", "donors"]:
-        try:
-            query = supabase.table(table_name).select("*").eq("blood_group", blood_group)
-            if city and city.lower() != "all":
-                query = query.ilike("city", f"%{city}%")
-            response = query.execute()
-            if response.data and len(response.data) > 0:
-                return [normalize_donor(d) for d in response.data]
-        except Exception:
-            continue
 
-    # Fallback search locally
-    local_list = load_local_donors()
-    results = []
-    for d in local_list:
-        if d.get("blood_group") == blood_group:
-            if not city or city.lower() == "all" or city.lower() in d.get("city", "").lower():
-                results.append(normalize_donor(d))
-    return results
+    query = (
+        supabase
+        .table("donors")
+        .select("*")
+        .eq("blood_group", blood_group)
+        .eq("available", True)
+    )
+
+    if city and city.lower() != "all":
+        query = query.ilike("city", city)
+
+    response = query.execute()
+
+    return response.data
 
 
 def update_donor(donor_id: int, donor):

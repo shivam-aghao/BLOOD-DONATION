@@ -12,7 +12,11 @@ from services.hospital_service import (
     get_hospital,
     create_hospital,
     update_hospital,
+<<<<<<< Updated upstream
     hospitals
+=======
+    delete_hospital
+>>>>>>> Stashed changes
 )
 
 router = APIRouter(
@@ -21,19 +25,38 @@ router = APIRouter(
 )
 
 
+<<<<<<< Updated upstream
 class InventoryPayload(BaseModel):
     inventory: Dict[str, int]
 
 
+=======
+# =========================
+# GET ALL HOSPITALS
+# =========================
+>>>>>>> Stashed changes
 @router.get("/")
 def list_hospitals():
     return get_hospitals()
 
 
+# =========================
+# GET SINGLE HOSPITAL
+# =========================
 @router.get("/{hospital_id}")
+<<<<<<< Updated upstream
 def get_hospital_details(hospital_id: str):
     try:
         return get_hospital(hospital_id)
+=======
+def get_hospital_details(hospital_id: int):
+
+    try:
+        hospital = get_hospital(hospital_id)
+
+        return hospital
+
+>>>>>>> Stashed changes
     except ValueError as error:
         raise HTTPException(
             status_code=404,
@@ -41,18 +64,26 @@ def get_hospital_details(hospital_id: str):
         )
 
 
+# =========================
+# CREATE HOSPITAL
+# =========================
 @router.post("/")
 def register_hospital(data: HospitalCreate):
+
     return create_hospital(
         data.model_dump()
     )
 
 
+# =========================
+# UPDATE HOSPITAL
+# =========================
 @router.put("/{hospital_id}")
 def update_hospital_details(
     hospital_id: str,
     data: HospitalUpdate
 ):
+
     try:
         return update_hospital(
             hospital_id,
@@ -65,6 +96,7 @@ def update_hospital_details(
         )
 
 
+<<<<<<< Updated upstream
 @router.put("/{hospital_id}/inventory")
 def update_inventory(hospital_id: str, payload: InventoryPayload):
     try:
@@ -73,3 +105,19 @@ def update_inventory(hospital_id: str, payload: InventoryPayload):
         return {"message": "Inventory updated successfully", "inventory": h["inventory"]}
     except ValueError as error:
         raise HTTPException(status_code=404, detail=str(error))
+=======
+# =========================
+# DELETE HOSPITAL
+# =========================
+@router.delete("/{hospital_id}")
+def remove_hospital(hospital_id: int):
+
+    try:
+        return delete_hospital(hospital_id)
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=404,
+            detail=str(error)
+        )
+>>>>>>> Stashed changes

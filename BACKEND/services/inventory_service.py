@@ -1,6 +1,5 @@
-# =========================
-# BLOOD GROUPS
-# =========================
+from database import supabase
+
 
 BLOOD_GROUPS = [
     "A+",
@@ -14,93 +13,38 @@ BLOOD_GROUPS = [
 ]
 
 
-# =========================
-# TEMPORARY INVENTORY DATA
-# =========================
-
-inventory = [
-    {
-        "hospital_id": 1,
-        "blood_group": "A+",
-        "units": 10
-    },
-    {
-        "hospital_id": 1,
-        "blood_group": "A-",
-        "units": 5
-    },
-    {
-        "hospital_id": 1,
-        "blood_group": "B+",
-        "units": 8
-    },
-    {
-        "hospital_id": 1,
-        "blood_group": "B-",
-        "units": 4
-    },
-    {
-        "hospital_id": 1,
-        "blood_group": "AB+",
-        "units": 6
-    },
-    {
-        "hospital_id": 1,
-        "blood_group": "AB-",
-        "units": 2
-    },
-    {
-        "hospital_id": 1,
-        "blood_group": "O+",
-        "units": 12
-    },
-    {
-        "hospital_id": 1,
-        "blood_group": "O-",
-        "units": 3
-    }
-]
-
-
-# =========================
-# GET HOSPITAL INVENTORY
-# =========================
-
 def get_inventory(hospital_id: int):
 
-    return [
-        item
-        for item in inventory
-        if item["hospital_id"] == hospital_id
-    ]
+    response = (
+        supabase
+        .table("inventory")
+        .select("*")
+        .eq("hospital_id", hospital_id)
+        .execute()
+    )
+
+    return response.data
 
 
-# =========================
-# GET SPECIFIC BLOOD STOCK
-# =========================
-
-def get_stock(
-    hospital_id: int,
-    blood_group: str
-):
+def get_stock(hospital_id: int, blood_group: str):
 
     if blood_group not in BLOOD_GROUPS:
         raise ValueError("Invalid blood group")
 
-    for item in inventory:
+    response = (
+        supabase
+        .table("inventory")
+        .select("*")
+        .eq("hospital_id", hospital_id)
+        .eq("blood_group", blood_group)
+        .execute()
+    )
 
-        if (
-            item["hospital_id"] == hospital_id
-            and item["blood_group"] == blood_group
-        ):
-            return item
+    if not response.data:
+        raise ValueError("Blood stock not found")
 
-    raise ValueError("Blood stock not found")
+    return response.data[0]
 
-
-# =========================
-# UPDATE INVENTORY
-# =========================
 
 def update_inventory(
     hospital_id: int,
@@ -114,33 +58,29 @@ def update_inventory(
     if units < 0:
         raise ValueError("Units cannot be negative")
 
-    try:
+    response = (
+        supabase
+        .table("inventory")
+        .update({"units": units})
+        .eq("hospital_id", hospital_id)
+        .eq("blood_group", blood_group)
+        .execute()
+    )
 
-        stock = get_stock(
-            hospital_id,
-            blood_group
+    if not response.data:
+        response = (
+            supabase
+            .table("inventory")
+            .insert({
+                "hospital_id": hospital_id,
+                "blood_group": blood_group,
+                "units": units
+            })
+            .execute()
         )
 
-        stock["units"] = units
+    return response.data[0]
 
-        return stock
-
-    except ValueError:
-
-        new_stock = {
-            "hospital_id": hospital_id,
-            "blood_group": blood_group,
-            "units": units
-        }
-
-        inventory.append(new_stock)
-
-        return new_stock
-
-
-# =========================
-# ADD STOCK
-# =========================
 
 def add_stock(
     hospital_id: int,
@@ -152,28 +92,27 @@ def add_stock(
         raise ValueError("Units cannot be negative")
 
     try:
+        stock = get_stock(hospital_id, blood_group)
 
-        stock = get_stock(
-            hospital_id,
-            blood_group
-        )
-
-        stock["units"] += units
-
-        return stock
-
-    except ValueError:
+        new_units = stock["units"] + units
 
         return update_inventory(
             hospital_id,
             blood_group,
-            units
+            new_units
         )
 
+    except ValueError as e:
 
-# =========================
-# REMOVE STOCK
-# =========================
+        if str(e) == "Blood stock not found":
+            return update_inventory(
+                hospital_id,
+                blood_group,
+                units
+            )
+
+        raise
+
 
 def remove_stock(
     hospital_id: int,
@@ -194,6 +133,10 @@ def remove_stock(
             "Not enough blood units available"
         )
 
-    stock["units"] -= units
+    new_units = stock["units"] - units
 
-    return stock
+    return update_inventory(
+        hospital_id,
+        blood_group,
+        new_units
+    )
