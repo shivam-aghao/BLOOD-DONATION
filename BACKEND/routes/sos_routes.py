@@ -109,7 +109,3 @@ def change_sos_status(
             status_code=400,
             detail=str(error)
         )
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes

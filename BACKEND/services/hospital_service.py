@@ -1,23 +1,18 @@
-# Temporary in-memory hospital data
-
-hospitals = [
-    {
-        "hospital_id": 1,
-        "name": "City General Hospital",
-        "city": "New York",
-        "address": "100 Main Street",
-        "contact": "+1 555 100 2000",
-        "email": "citygeneral@example.com",
-        "hours": "24/7 Emergency Blood Bank"
-    }
-]
+from database import supabase
 
 
 # =========================
 # GET ALL HOSPITALS
 # =========================
 def get_hospitals():
-    return hospitals
+    response = (
+        supabase
+        .table("hospitals")
+        .select("*")
+        .execute()
+    )
+
+    return response.data
 
 
 # =========================
@@ -25,34 +20,36 @@ def get_hospitals():
 # =========================
 def get_hospital(hospital_id: int):
 
-    for hospital in hospitals:
+    response = (
+        supabase
+        .table("hospitals")
+        .select("*")
+        .eq("hospital_id", hospital_id)
+        .execute()
+    )
 
-        if hospital["hospital_id"] == hospital_id:
-            return hospital
+    if not response.data:
+        return None
 
     return response.data[0]
 
 
+# =========================
+# CREATE HOSPITAL
+# =========================
 def create_hospital(data: dict):
 
-    new_id = len(hospitals) + 1
+    response = (
+        supabase
+        .table("hospitals")
+        .insert(data)
+        .execute()
+    )
 
-    hospital = {
-        "hospital_id": new_id,
-        "name": data["name"],
-        "city": data["city"],
-        "address": data["address"],
-        "contact": data["contact"],
-        "email": data["email"],
-        "hours": data.get(
-            "hours",
-            "24/7 Emergency Blood Bank"
-        )
-    }
+    if not response.data:
+        return None
 
-    hospitals.append(hospital)
-
-    return hospital
+    return response.data[0]
 
 
 # =========================
@@ -63,8 +60,34 @@ def update_hospital(
     data: dict
 ):
 
-    hospital = get_hospital(hospital_id)
+    response = (
+        supabase
+        .table("hospitals")
+        .update(data)
+        .eq("hospital_id", hospital_id)
+        .execute()
+    )
 
-    hospital.update(data)
+    if not response.data:
+        return None
 
-    return hospital
+    return response.data[0]
+
+
+# =========================
+# DELETE HOSPITAL
+# =========================
+def delete_hospital(hospital_id: int):
+
+    response = (
+        supabase
+        .table("hospitals")
+        .delete()
+        .eq("hospital_id", hospital_id)
+        .execute()
+    )
+
+    if not response.data:
+        return None
+
+    return response.data[0]

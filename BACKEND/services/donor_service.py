@@ -1,115 +1,33 @@
-import os
-import json
 from database import supabase
-
-LOCAL_DONORS_CACHE = "local_donors.json"
-
-# In-memory and local disk fallback donors
-# DEFAULT_FALLBACK_DONORS = [
-#     {
-#         "donar_id": 1,
-#         "id": 1,
-#         "name": "Sarah Jenkins",
-#         "full_name": "Sarah Jenkins",
-#         "age": 28,
-#         "gender": "Female",
-#         "blood_group": "O-",
-#         "phone": "+1 (555) 234-5678",
-#         "mobile": "+1 (555) 234-5678",
-#         "email": "sarah.j@example.com",
-#         "city": "New York",
-#         "address": "742 Evergreen Terrace, Manhattan",
-#         "donated_before": "Yes",
-#         "last_donation": "2026-06-15",
-#         "availability": "Anytime (24/7 SOS)",
-#         "preferred_hospital": "City General Hospital",
-#         "agreement": True,
-#         "available": True
-#     },
-#     {
-#         "donar_id": 2,
-#         "id": 2,
-#         "name": "Marcus Vance",
-#         "full_name": "Marcus Vance",
-#         "age": 34,
-#         "gender": "Male",
-#         "blood_group": "A+",
-#         "phone": "+1 (555) 345-6789",
-#         "mobile": "+1 (555) 345-6789",
-#         "email": "marcus.v@example.com",
-#         "city": "New York",
-#         "address": "120 West 44th St",
-#         "donated_before": "Yes",
-#         "last_donation": "2026-05-20",
-#         "availability": "Evenings & Weekends",
-#         "preferred_hospital": "St. Mary's Regional",
-#         "agreement": True,
-#         "available": True
-#     },
-#     {
-#         "donar_id": 3,
-#         "id": 3,
-#         "name": "Elena Rostova",
-#         "full_name": "Elena Rostova",
-#         "age": 26,
-#         "gender": "Female",
-#         "blood_group": "B+",
-#         "phone": "+1 (718) 555-7890",
-#         "mobile": "+1 (718) 555-7890",
-#         "email": "elena.rostova@example.com",
-#         "city": "Brooklyn",
-#         "address": "350 Ocean Parkway",
-#         "donated_before": "No",
-#         "last_donation": "",
-#         "availability": "Anytime (24/7 SOS)",
-#         "preferred_hospital": "Brooklyn Central Medical Center",
-#         "agreement": True,
-#         "available": True
-#     }
-# ]
-
-
-def load_local_donors():
-    if os.path.exists(LOCAL_DONORS_CACHE):
-        try:
-            with open(LOCAL_DONORS_CACHE, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception:
-            pass
-    return list(DEFAULT_FALLBACK_DONORS)
-
-
-def save_local_donors(donors_list):
-    try:
-        with open(LOCAL_DONORS_CACHE, "w", encoding="utf-8") as f:
-            json.dump(donors_list, f, indent=2)
-    except Exception:
-        pass
 
 
 def normalize_donor(d):
-    """Normalize donor dict so both naming conventions exist for client compatibility."""
+    """Normalize donor fields for frontend compatibility."""
     if not isinstance(d, dict):
         return d
+
     item = dict(d)
-    
-    # ID normalization
-    donor_id = item.get("donar_id") or item.get("id") or item.get("donor_id") or 1
+
+    donor_id = (
+        item.get("donar_id")
+        or item.get("donor_id")
+        or item.get("id")
+    )
+
     item["id"] = donor_id
     item["donar_id"] = donor_id
 
-    # Name normalization
     name = item.get("full_name") or item.get("name") or "Anonymous Donor"
     item["name"] = name
     item["full_name"] = name
 
-    # Phone normalization
     phone = item.get("mobile") or item.get("phone") or ""
     item["phone"] = phone
     item["mobile"] = phone
 
     if "available" not in item:
         item["available"] = True
+
     if "agreement" not in item:
         item["agreement"] = True
 
@@ -126,25 +44,24 @@ def add_donor(donor):
         .execute()
     )
 
-    return response.data[0]
+    if not response.data:
+        return None
+
+    return normalize_donor(response.data[0])
 
 
 def get_donors():
-    # Try fetching from Supabase
-    for table_name in ["donar", "donors"]:
-        try:
-            response = supabase.table(table_name).select("*").execute()
-            if response.data and len(response.data) > 0:
-                return [normalize_donor(d) for d in response.data]
-        except Exception:
-            continue
+    response = (
+        supabase
+        .table("donors")
+        .select("*")
+        .execute()
+    )
 
-    # Return local storage list if Supabase query is empty or RLS-protected
-    return [normalize_donor(d) for d in load_local_donors()]
+    return [normalize_donor(d) for d in response.data]
 
 
 def search_donors(blood_group: str, city: str = None):
-
     query = (
         supabase
         .table("donors")
@@ -158,11 +75,12 @@ def search_donors(blood_group: str, city: str = None):
 
     response = query.execute()
 
-    return response.data
+    return [normalize_donor(d) for d in response.data]
 
 
 def update_donor(donor_id: int, donor):
     donor_data = donor.model_dump()
+
     name = donor_data.get("name") or donor_data.get("full_name")
     phone = donor_data.get("phone") or donor_data.get("mobile")
 
@@ -178,44 +96,33 @@ def update_donor(donor_id: int, donor):
         "donated_before": donor_data.get("donated_before"),
         "last_donation": donor_data.get("last_donation"),
         "availability": donor_data.get("availability"),
-        "preferred_hospital": donor_data.get("preferred_hospital")
+        "preferred_hospital": donor_data.get("preferred_hospital"),
     }
 
-    for table_name in ["donar", "donors"]:
-        for id_col in ["donar_id", "id"]:
-            try:
-                response = supabase.table(table_name).update(supabase_payload).eq(id_col, donor_id).execute()
-                if response.data and len(response.data) > 0:
-                    return normalize_donor(response.data[0])
-            except Exception:
-                continue
+    response = (
+        supabase
+        .table("donors")
+        .update(supabase_payload)
+        .eq("id", donor_id)
+        .execute()
+    )
 
-    # Local fallback
-    local_list = load_local_donors()
-    for i, d in enumerate(local_list):
-        if d.get("id") == donor_id or d.get("donar_id") == donor_id:
-            local_list[i].update(normalize_donor(donor_data))
-            save_local_donors(local_list)
-            return local_list[i]
+    if not response.data:
+        return None
 
-    return None
+    return normalize_donor(response.data[0])
 
 
 def delete_donor(donor_id: int):
-    for table_name in ["donar", "donors"]:
-        for id_col in ["donar_id", "id"]:
-            try:
-                response = supabase.table(table_name).delete().eq(id_col, donor_id).execute()
-                if response.data and len(response.data) > 0:
-                    return normalize_donor(response.data[0])
-            except Exception:
-                continue
+    response = (
+        supabase
+        .table("donors")
+        .delete()
+        .eq("id", donor_id)
+        .execute()
+    )
 
-    local_list = load_local_donors()
-    for i, d in enumerate(local_list):
-        if d.get("id") == donor_id or d.get("donar_id") == donor_id:
-            removed = local_list.pop(i)
-            save_local_donors(local_list)
-            return removed
+    if not response.data:
+        return None
 
-    return None
+    return normalize_donor(response.data[0])

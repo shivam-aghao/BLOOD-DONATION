@@ -12,11 +12,7 @@ from services.hospital_service import (
     get_hospital,
     create_hospital,
     update_hospital,
-<<<<<<< Updated upstream
-    hospitals
-=======
     delete_hospital
->>>>>>> Stashed changes
 )
 
 router = APIRouter(
@@ -25,16 +21,9 @@ router = APIRouter(
 )
 
 
-<<<<<<< Updated upstream
-class InventoryPayload(BaseModel):
-    inventory: Dict[str, int]
-
-
-=======
 # =========================
 # GET ALL HOSPITALS
 # =========================
->>>>>>> Stashed changes
 @router.get("/")
 def list_hospitals():
     return get_hospitals()
@@ -44,11 +33,6 @@ def list_hospitals():
 # GET SINGLE HOSPITAL
 # =========================
 @router.get("/{hospital_id}")
-<<<<<<< Updated upstream
-def get_hospital_details(hospital_id: str):
-    try:
-        return get_hospital(hospital_id)
-=======
 def get_hospital_details(hospital_id: int):
 
     try:
@@ -56,7 +40,6 @@ def get_hospital_details(hospital_id: int):
 
         return hospital
 
->>>>>>> Stashed changes
     except ValueError as error:
         raise HTTPException(
             status_code=404,
@@ -96,16 +79,6 @@ def update_hospital_details(
         )
 
 
-<<<<<<< Updated upstream
-@router.put("/{hospital_id}/inventory")
-def update_inventory(hospital_id: str, payload: InventoryPayload):
-    try:
-        h = get_hospital(hospital_id)
-        h["inventory"] = payload.inventory
-        return {"message": "Inventory updated successfully", "inventory": h["inventory"]}
-    except ValueError as error:
-        raise HTTPException(status_code=404, detail=str(error))
-=======
 # =========================
 # DELETE HOSPITAL
 # =========================
@@ -120,4 +93,3 @@ def remove_hospital(hospital_id: int):
             status_code=404,
             detail=str(error)
         )
->>>>>>> Stashed changes
